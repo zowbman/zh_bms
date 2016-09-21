@@ -1,9 +1,15 @@
 package com.rms.test.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.rms.test.model.po.User;
+import com.rms.test.service.ITestSerive;
 
 /**
  * 
@@ -17,6 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/test")
 public class TestController {
 	
+	@Autowired
+	private ITestSerive iTestSerive;
+	
 	@GetMapping("")
 	@ResponseBody
     public String home(){
@@ -25,6 +34,8 @@ public class TestController {
 	
 	@GetMapping("/welcome")
 	public String error(){
+		List<User> users = iTestSerive.findAll();
+		System.out.println(users.size());
 		return "welcome";
 	}
 }

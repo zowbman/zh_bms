@@ -1,7 +1,11 @@
 package com.rms;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
@@ -18,7 +22,11 @@ import org.springframework.context.annotation.Bean;
  *
  */
 @SpringBootApplication
-public class MainServer extends SpringBootServletInitializer {
+@MapperScan("com.**.mapper")
+@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
+public class MainServer extends SpringBootServletInitializer  {
+
+	
 	
     @Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
