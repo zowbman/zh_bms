@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @MapperScan("com.**.mapper")
-@ConditionalOnClass({ SqlSessionFactory.class, SqlSessionFactoryBean.class })
 public class MainServer extends SpringBootServletInitializer  {
 
 	
