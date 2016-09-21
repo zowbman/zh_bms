@@ -6,5 +6,12 @@ repositories {
 }
 
 dependencies {
-	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+	compile ("org.springframework.boot:spring-boot-starter-web:${springBootVersion}"){
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+	}
+	compile ("org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}"){
+	  exclude group: 'org.eclipse.jetty.websocket'
+	}
+	
+	compile 'org.eclipse.jetty:apache-jsp:9.3.11.v20160721'
 }

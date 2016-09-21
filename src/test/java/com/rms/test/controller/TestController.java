@@ -1,7 +1,9 @@
 package com.rms.test.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 
@@ -11,10 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @date      2016年9月21日 下午12:18:03
  *
  */
-@RestController
+@Controller
+@RequestMapping("/test")
 public class TestController {
-	 @RequestMapping("/")
-	    String home() {
-	        return "Hello World!";
-	    }
+	
+	@GetMapping("")
+	@ResponseBody
+    public String home(){
+    	return "Hello World!";
+    }
+	
+	@GetMapping("/welcome")
+	public String error(){
+		return "welcome";
+	}
 }
