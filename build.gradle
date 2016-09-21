@@ -20,6 +20,10 @@ dependencies {
 	
 	compile 'c3p0:c3p0:0.9.1.2'
 	compile 'mysql:mysql-connector-java:5.1.6'
+	
+	compile "tk.mybatis:mapper:${mapperVersion}"
+ 	compile "com.github.pagehelper:pagehelper:${pagehelperVersion}"
+ 	compile 'com.github.jsqlparser:jsqlparser:0.9.4'
 }
 
 configurations.all {
