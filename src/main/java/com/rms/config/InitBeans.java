@@ -26,7 +26,7 @@ public class InitBeans {
     public DataSource dataSource() {
         return new ComboPooledDataSource();
     }
-
+    
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
 
