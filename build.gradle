@@ -13,5 +13,16 @@ dependencies {
 	  exclude group: 'org.eclipse.jetty.websocket'
 	}
 	
-	compile 'org.eclipse.jetty:apache-jsp:9.3.11.v20160721'
+	//compile 'org.eclipse.jetty:apache-jsp:9.3.11.v20160721'
+	compile "org.eclipse.jetty:jetty-jsp:${jettyVersion}"
+	
+	compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.0.0'
+}
+
+configurations.all {
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if(details.requested.group == 'org.eclipse.jetty'){// && details.requested.name == 'jetty-server' && details.requested.version == ''
+			details.useVersion "${jettyVersion}"
+		}
+	}
 }
