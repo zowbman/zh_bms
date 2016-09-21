@@ -21,8 +21,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @MapperScan("com.**.mapper")
 public class MainServer extends SpringBootServletInitializer  {
-
-	
 	
     @Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
