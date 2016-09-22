@@ -5,12 +5,14 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
@@ -36,6 +38,10 @@ public class MainServer extends SpringBootServletInitializer  {
 	public static void main(String[] args) {
         SpringApplication.run(MainServer.class, args);
     }
+	
+	@Value("${custom.resource-base}")
+	private String resourceBase;
+	
     
     /**
      * 使用jetty容器启动
@@ -50,7 +56,7 @@ public class MainServer extends SpringBootServletInitializer  {
 				for (Handler handler : server.getHandlers()) {
 					if(handler instanceof WebAppContext){
 						WebAppContext webAppContext = (WebAppContext) handler;
-						webAppContext.setResourceBase("lib/webapp");
+						webAppContext.setResourceBase(resourceBase);
 						server.setHandler(webAppContext);
 					}
 				}
