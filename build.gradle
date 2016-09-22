@@ -19,9 +19,9 @@ dependencies {
 	  exclude group: 'org.eclipse.jetty.websocket'
 	}
 	
-	//compile 'org.eclipse.jetty:apache-jsp:9.3.11.v20160721'
+	compile 'org.eclipse.jetty:apache-jsp:9.3.11.v20160721'
 	//compile "org.eclipse.jetty:jetty-jsp:${jettyVersion}"//jetty8 \u8fd9\u4e2a\u4e0ejstl\u6574\u5408\u6709bug
-	compile group: 'org.mortbay.jetty', name: 'jsp-2.1-glassfish', version: '2.1.v20100127'
+	//compile group: 'org.mortbay.jetty', name: 'jsp-2.1-glassfish', version: '2.1.v20100127'
 	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 	
 	compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
@@ -34,13 +34,13 @@ dependencies {
  	compile 'com.github.jsqlparser:jsqlparser:0.9.4'
 }
 
-configurations.all {
+/*configurations.all {
 	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
 		if(details.requested.group == 'org.eclipse.jetty'){// && details.requested.name == 'jetty-server' && details.requested.version == ''
 			details.useVersion "${jettyVersion}"
 		}
 	}
-}
+}*/
 
 tasks.withType(JavaCompile) {  
     options.encoding = "UTF-8"  
