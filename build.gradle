@@ -1,6 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+jar{
+	from('src/main/java'){
+		include '**/mapper/*.xml'
+	}
+}
+
 repositories {
     mavenCentral()
 }
@@ -33,4 +39,23 @@ configurations.all {
 			details.useVersion "${jettyVersion}"
 		}
 	}
+}
+
+tasks.withType(JavaCompile) {  
+    options.encoding = "UTF-8"  
+}
+
+task copyLib1(type: Sync, dependsOn: jar) {
+    from configurations.compile
+    from jar.archivePath
+    into 'build/deploy'
+}
+
+task copyLib2(type: Sync, dependsOn: copyLib1) {
+    from 'src/main/webapp'
+    into 'build/deploy/webapp'
+}
+
+task deploy{
+	dependsOn  'copyLib2'
 }
