@@ -37,7 +37,7 @@ public class MainServer extends SpringBootServletInitializer  {
      * 使用jetty容器启动
      * @return
      */
-    @Bean
+	@Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory(){
     	JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
     	return factory;
