@@ -40,7 +40,6 @@ public class MainServer extends SpringBootServletInitializer  {
     @Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory(){
     	JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
-    	//factory.setPort(8080);
     	return factory;
     }
 }

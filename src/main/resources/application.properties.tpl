@@ -15,6 +15,5 @@ spring.datasource.maxIdleTime = 1800
 
 server.port = @server.port@
 server.address = @server.address@
-server.contextPath = /webapp
 
 logging.file=work/log/app.log
