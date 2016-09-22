@@ -59,3 +59,5 @@ task copyLib2(type: Sync, dependsOn: copyLib1) {
 task deploy{
 	dependsOn  'copyLib2'
 }
+
+jar.exclude 'logback-test.xml'
