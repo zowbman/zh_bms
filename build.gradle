@@ -61,3 +61,4 @@ task deploy{
 }
 
 jar.exclude 'logback-test.xml'
+jar.exclude 'application.properties'
