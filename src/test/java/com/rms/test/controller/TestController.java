@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,9 +34,12 @@ public class TestController {
     }
 	
 	@GetMapping("/welcome")
-	public String error(){
+	public String welcome(Model model){
 		List<User> users = iTestSerive.findAll();
-		System.out.println(users.size());
+		if(users != null && users.size() > 0){
+			model.addAttribute("list", users);
+			model.addAttribute("name", users.iterator().next().getUsername());
+		}
 		return "welcome";
 	}
 }
