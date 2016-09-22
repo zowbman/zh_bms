@@ -2,9 +2,9 @@ spring.mvc.view.prefix: /WEB-INF/
 spring.mvc.view.suffix: .jsp
 
 spring.datasource.type = com.mchange.v2.c3p0.ComboPooledDataSource
-spring.datasource.jdbcUrl = jdbc:mysql://localhost:3306/d_rms?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
-spring.datasource.user = root
-spring.datasource.password = 123456
+spring.datasource.jdbcUrl = @spring.datasource.jdbcUrl@
+spring.datasource.user = @spring.datasource.user@
+spring.datasource.password = @spring.datasource.password@
 spring.datasource.driverClass = com.mysql.jdbc.Driver
 spring.datasource.minPoolSize = 3
 spring.datasource.maxPoolSize = 15
@@ -13,5 +13,5 @@ spring.datasource.maxStatements = 8
 spring.datasource.maxStatementsPerConnection = 5
 spring.datasource.maxIdleTime = 1800
 
-server.port = 8080
-server.address = 0.0.0.0
+server.port = @server.port@
+server.address = @server.address@

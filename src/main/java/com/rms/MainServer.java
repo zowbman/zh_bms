@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Bean;
 @MapperScan("com.**.mapper")
 public class MainServer extends SpringBootServletInitializer  {
 	
+	
+	
     @Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(MainServer.class);
@@ -38,7 +40,7 @@ public class MainServer extends SpringBootServletInitializer  {
     @Bean
     public EmbeddedServletContainerFactory embeddedServletContainerFactory(){
     	JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
-    	factory.setPort(8080);
+    	//factory.setPort(8080);
     	return factory;
     }
 }
