@@ -12,7 +12,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
@@ -62,6 +61,7 @@ public class MainServer extends SpringBootServletInitializer  {
 				}
 			}
 		});
+    	//factory.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/404"));//非springmvc错误页，此为静态错误页，页面存放classpath:src/main/resource/public/error/下
     	return factory;
     }
 }
