@@ -1,0 +1,129 @@
+body{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/*头部*/
+#head{
+	position: absolute;
+	width:100%;
+	left:0;
+	right:0;
+	top:0;
+	background-color:#f5f5f5;
+	border-bottom: 1px solid #eee;
+	height:50px;
+	line-height: 50px;
+}
+
+#head .head-left{
+	float:left;
+}
+
+#head .head-left span{
+	padding-left:30px;
+}
+
+#head .head-right{
+	float:right;
+}
+
+#head .head-right span{
+	margin-right:10px;
+}
+
+#head .head-right a{
+	padding-right:30px;
+}
+
+/*左*/
+#content .left{
+	background-color:#EEE;
+	position: absolute;
+	top:50px;
+	left:40px;
+	bottom:0;
+	width:20%;
+	max-width:300px;
+	border-right: 1px solid #ddd;
+	overflow-x : auto;
+}
+
+/*右*/
+#content .right{
+	background-color:#fafafa;
+	position: absolute;
+	top:50px;
+	right:0;
+	width:auto;
+	bottom:0;
+}
+
+.right-iframe{
+	width:100%;
+	height:100%;
+	background-color: white;
+}
+
+/*菜单*/
+#content .nav{
+	position: absolute;
+}
+
+#content .nav ul{
+	list-style: none;
+	width: 0;
+}
+
+#content .nav ul li a{
+    float: left;
+    color: gray;
+    display: inline-block;
+    width: 40px;
+    writing-mode: vertical-rl;
+    letter-spacing: 10px;
+    padding: 10px 10px 0 0;
+    margin: -1px;
+}
+
+#content .nav ul li{
+	cursor:pointer;
+	float: left;
+	margin-left: -15px;
+	/* padding: 0 10px 0 10px; */
+	/* background-color:gray; */
+	border:1px solid #EEE;
+	margin-top: 5px;
+	-moz-border-top-left-radius: 5px;      /* Gecko browsers */
+    -webkit-border-top-left-radius: 5px;   /* Webkit browsers */
+    border-top-left-radius:5px;            /* W3C syntax */
+   	-moz-border-bottom-left-radius: 5px;      /* Gecko browsers */
+    -webkit-border-bottom-left-radius: 5px;   /* Webkit browsers */
+    border-bottom-left-radius:5px;            /* W3C syntax */
+}
+
+#content .nav ul li:hover{
+	background-color:#333;
+}
+
+#content .nav ul li a:hover{
+	color: white;
+}
+
+.nav-active {
+	background-color:#333;
+}
+
+.nav-active a{
+	color: white !important;
+}
+
+#content .nav ul li:hover,#content .nav ul li a:hover
+{
+	-webkit-transition: all 300ms ease-out;
+    -moz-transition: all 300ms ease-out;
+    -ms-transition: all 300ms ease-out;
+    -o-transition: all 300ms ease-out;
+    transition: all 300ms ease-out;
+}
+
+
