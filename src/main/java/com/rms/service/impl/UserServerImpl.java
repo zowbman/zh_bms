@@ -22,4 +22,9 @@ public class UserServerImpl extends BaseServiceImpl<TUser> implements IUserServi
 	public List<TDepartmentCustom> findAllDepartmentAndUsers() {
 		return tUserMapper.findAllDepartmentAndUsers();
 	}
+
+	@Override
+	public List<TUserCustom> findAllUserAndGroups() {
+		return tUserMapper.findAllUserAndGroups();
+	}
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rms.base.controller.BaseController;
+import com.rms.model.po.TGroup;
+import com.rms.model.po.TUserCustom;
 
 @Controller
 @RequestMapping("/rms")
@@ -50,6 +52,17 @@ public class UserController extends BaseController {
 		System.out.println(iUserService.findAllUserAndDepartment().iterator().next().getDepartment().getDepartmentname());
 		
 		System.out.println(iUserService.findAllDepartmentAndUsers().iterator().next().getUsers().size());
+		
+		System.out.println(iUserService.findAllUserAndGroups().iterator().next().getGroups().size());
+		
+		for (TUserCustom userCustom : iUserService.findAllUserAndGroups()) {
+			System.out.println(userCustom.getUseraccount());
+			for (TGroup group: userCustom.getGroups()) {
+				System.out.println("组别：" + group.getGroupname());
+			}
+			
+			System.out.println("------");
+		}
 		
 		return "welcome";
 	}

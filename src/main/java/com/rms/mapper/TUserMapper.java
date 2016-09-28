@@ -13,6 +13,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 import com.rms.model.po.TDepartment;
 import com.rms.model.po.TDepartmentCustom;
+import com.rms.model.po.TGroup;
 import com.rms.model.po.TUser;
 import com.rms.model.po.TUserCustom;
 import com.rms.sqlprovider.TUserSqlProvider;
@@ -44,7 +45,7 @@ public interface TUserMapper extends Mapper<TUser> {
 	@SelectProvider(type = TUserSqlProvider.class, method = "findUserByIdAndUseraccountSql")
 	TUser findUserByIdAndUseraccount(Integer id, String userAccount);
 	
-	//一对一
+	//一对一（用户->部门）
 	@Select("SELECT * FROM t_user")
 	@Results({
 		@Result(property = "department",
@@ -56,7 +57,7 @@ public interface TUserMapper extends Mapper<TUser> {
 	@Select("SELECT * FROM t_department WHERE id = #{departmentId}")
 	TDepartment findDepartmentById(Integer departmentId);
 	
-	//一对多
+	//一对多（部门->用户）
 	@Select("SELECT * FROM t_department")
 	@Results({
 		@Result(property = "users", 
@@ -68,5 +69,22 @@ public interface TUserMapper extends Mapper<TUser> {
 	@Select("SELECT * FROM t_user WHERE departmentId = #{departmentId}")
 	TUser findUserBydepartmentId(Integer departmentId);
 	
-	//多对多
+	//多对多(用户->组别)
+	@Select("SELECT * FROM t_user")
+	@Results({
+		@Result(property = "groups",
+				column = "id",
+				many = @Many(select = "findAllGroupsAndUsers"))
+	})
+	List<TUserCustom> findAllUserAndGroups();
+	
+	@Select("SELECT * FROM t_group tg inner join t_user_group tug on tg.id = tug.groupId inner join t_user tu on tug.userId = tu.id WHERE tu.id = #{userId}")
+	List<TGroup> findAllGroupsAndUsers(Integer userId);
+	
+	
+	
+	
+	
+	
+	
 }

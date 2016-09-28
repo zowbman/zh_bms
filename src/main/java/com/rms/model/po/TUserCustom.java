@@ -1,5 +1,7 @@
 package com.rms.model.po;
 
+import java.util.List;
+
 /**
  * 
  * Title:TUserCustom
@@ -10,6 +12,8 @@ package com.rms.model.po;
  */
 public class TUserCustom extends TUser {
 	private TDepartment department;
+	
+	private List<TGroup> groups;
 
 	public TDepartment getDepartment() {
 		return department;
@@ -18,4 +22,13 @@ public class TUserCustom extends TUser {
 	public void setDepartment(TDepartment department) {
 		this.department = department;
 	}
+
+	public List<TGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<TGroup> groups) {
+		this.groups = groups;
+	}
+	
 }

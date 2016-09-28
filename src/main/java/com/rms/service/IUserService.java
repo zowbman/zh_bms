@@ -10,6 +10,7 @@ import com.rms.model.po.TUserCustom;
 public interface IUserService extends IBaseService<TUser> {
 	
 	/**
+	 * 
 	 * 查询全部用户信息和对应部门信息
 	 * @return
 	 */
@@ -20,4 +21,10 @@ public interface IUserService extends IBaseService<TUser> {
 	 * @return
 	 */
 	List<TDepartmentCustom> findAllDepartmentAndUsers();
+	
+	/**
+	 * 查询全部用户信息和对应组别信息
+	 * @return
+	 */
+	List<TUserCustom> findAllUserAndGroups();
 }
