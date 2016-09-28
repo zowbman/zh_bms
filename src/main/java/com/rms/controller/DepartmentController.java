@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.rms.base.controller.BaseController;
 
 @Controller
-@RequestMapping("/rms")
+@RequestMapping("/rms/department")
 public class DepartmentController extends BaseController {
 
 }
