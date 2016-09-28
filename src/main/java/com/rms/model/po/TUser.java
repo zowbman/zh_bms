@@ -9,6 +9,7 @@ public class TUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
     private String useraccount;
+    private Integer departmentid;
     
 	public Integer getId() {
 		return id;
@@ -21,5 +22,11 @@ public class TUser {
 	}
 	public void setUseraccount(String useraccount) {
 		this.useraccount = useraccount;
+	}
+	public Integer getDepartmentid() {
+		return departmentid;
+	}
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
 	}
 }

@@ -24,8 +24,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   <body>
   <c:forEach items="${list}" var="item">
-  		${item.id }-${item.useraccount }
+  		${item.id }-${item.useraccount }<%-- -${item.department.departmentname} --%>
   	</c:forEach>
     welcome page ${name}. <br>
+    ${key1 }
   </body>
 </html>
