@@ -1,0 +1,61 @@
+package com.rms.model.po;
+
+/**
+ * 
+ * Title:TPrivilege
+ * Description:权限po类
+ * @author    zwb
+ * @date      2016年9月29日 上午11:30:57
+ *
+ */
+public class TPrivilege {
+    private Integer id;
+
+    private String privilegename;
+
+    private String privilegeurl;
+
+    private Integer menuid;
+
+    private Integer addtime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPrivilegename() {
+        return privilegename;
+    }
+
+    public void setPrivilegename(String privilegename) {
+        this.privilegename = privilegename == null ? null : privilegename.trim();
+    }
+
+    public String getPrivilegeurl() {
+        return privilegeurl;
+    }
+
+    public void setPrivilegeurl(String privilegeurl) {
+        this.privilegeurl = privilegeurl == null ? null : privilegeurl.trim();
+    }
+
+    public Integer getMenuid() {
+        return menuid;
+    }
+
+    public void setMenuid(Integer menuid) {
+        this.menuid = menuid;
+    }
+
+    public Integer getAddtime() {
+        return addtime;
+    }
+
+    public void setAddtime(Integer addtime) {
+        this.addtime = addtime;
+    }
+}

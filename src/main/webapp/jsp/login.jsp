@@ -12,6 +12,8 @@
 	<meta http-equiv="description" content="This is my page">
 	
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
+	<script src="/js/jquery-3.1.1.min.js"></script> 
+	<script src="/js/login.js"></script> 
   </head>
   <body id="login-body">
   	<div class="container">

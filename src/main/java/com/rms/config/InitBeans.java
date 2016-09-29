@@ -14,6 +14,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.github.pagehelper.PageHelper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.rms.listener.InitListner;
 
 /**
  * 
@@ -55,5 +56,10 @@ public class InitBeans {
         sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
         
         return sqlSessionFactoryBean.getObject();
+    }
+    
+    @Bean
+    public InitListner initListner(){
+    	return new InitListner();
     }
 }

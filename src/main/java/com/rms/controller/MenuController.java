@@ -8,5 +8,5 @@ import com.rms.base.controller.BaseController;
 @Controller
 @RequestMapping("/rms/menu")
 public class MenuController extends BaseController {
-
+	
 }

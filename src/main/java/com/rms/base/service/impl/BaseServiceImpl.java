@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.common.Mapper;
 
 import com.rms.base.service.IBaseService;
+import com.rms.mapper.TMenuMapper;
 
 @Service
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
@@ -28,6 +29,10 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	 */
 	@Autowired
 	private Mapper<T> mapper;
+	
+	@Autowired
+	protected TMenuMapper tMenuMapper;
+
 
 
 	public void save(T entity) {

@@ -1,7 +1,15 @@
 package com.rms.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
+
+import com.rms.base.service.impl.BaseServiceImpl;
+import com.rms.model.po.TMenu;
+import com.rms.model.po.TMenuCustom;
 import com.rms.service.IMenuService;
 
 /**
@@ -13,6 +21,24 @@ import com.rms.service.IMenuService;
  *
  */
 @Service
-public class MenuServiceImpl implements IMenuService {
+public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuService {
+	
+	@Override
+	public List<TMenu> findMasterMenusByStatus(Byte status) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("status", status);
+		criteria.andEqualTo("menutype", 0);
+		return tMenuMapper.selectByExample(example);
+	}
 
+	@Override
+	public List<TMenuCustom> findTopSlaveMenus() {
+/*		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("status", status);
+		criteria.andEqualTo("menutype", 1);
+		criteria.andEqualTo("parentid", null);*/
+		return tMenuMapper.findTopSlaveMenus();
+	}
 }

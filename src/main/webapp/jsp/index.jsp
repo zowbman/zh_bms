@@ -3,13 +3,19 @@
 <div id="content">
 	<div class="nav">
 		<ul>
-			<li><!-- class="nav-active" --><a href="#">权限管理</a></li>
-			<li><a href="#">我的管理</a></li>
-			<li><a href="#">你的管理</a></li>
+			<c:forEach items="${masterMenus }" var="masterMenu">
+				<li><!-- class="nav-active" --><a href="javascript:;" onclick="showSlaveMenu('topSlaveMenu_${masterMenu.id}')">${masterMenu.menuname }</a></li>
+			</c:forEach>
 		</ul>
 	</div>
 	<div class="left">
-		<ul class="mtree transit">
+		<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
+			<ul id="topSlaveMenu_${topSlaveMenu.mastermenuid }" class="mtree transit">
+				<%@ include file="public/menu.jsp"%>
+			</ul>
+		</c:forEach>
+		
+		<ul class="mtree transit" style="display:block;">
 			<li><a href="#">Africa</a>
 				<ul>
 					<li><a href="#">Algeria</a></li>
@@ -130,7 +136,7 @@
 <script src='/menu/js/jquery.velocity.min.js'></script> 
 <script src="/menu/js/mtree.js"></script> 
 <script>
-$(document).ready(function() {
+$(function(){
 	var mtree = $('ul.mtree');
 	mtree.wrap('<div class=mtree-demo></div>');
 	var skins = ['bubba','skinny','transit','jet','nix'];
@@ -153,6 +159,16 @@ $(document).ready(function() {
 	  $(this).toggleClass('active'); 
 	});
 });
+
+//菜单切换
+$(function(){
+	$('#content').find('.left').find('.mtree-demo').attr('style','display:none');
+});
+
+function showSlaveMenu(slaveMenuId){
+	$('#content').find('.left').find('.mtree-demo').attr('style','display:none');
+	$('#' + slaveMenuId).parent().attr('style','display:block;');
+}
 </script>
 <!-- content结束 -->
 <%@ include file="public/footer.jsp"%>
