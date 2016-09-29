@@ -15,7 +15,6 @@ public class InitListner implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		System.out.println("hello");
 	}
 	
 	@Override

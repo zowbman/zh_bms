@@ -34,11 +34,6 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 
 	@Override
 	public List<TMenuCustom> findTopSlaveMenus() {
-/*		Example example = new Example(TMenu.class);
-		Criteria criteria = example.createCriteria();
-		criteria.andEqualTo("status", status);
-		criteria.andEqualTo("menutype", 1);
-		criteria.andEqualTo("parentid", null);*/
 		return tMenuMapper.findTopSlaveMenus();
 	}
 }

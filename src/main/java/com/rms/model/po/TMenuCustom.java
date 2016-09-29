@@ -13,6 +13,8 @@ import java.util.List;
 public class TMenuCustom extends TMenu {
 	
 	private List<TMenuCustom> slaveChildrenMenus;//从菜单的子菜单
+	
+	private TPrivilege privilege;//权限
 
 	public List<TMenuCustom> getSlaveChildrenMenus() {
 		return slaveChildrenMenus;
@@ -20,5 +22,13 @@ public class TMenuCustom extends TMenu {
 
 	public void setSlaveChildrenMenus(List<TMenuCustom> slaveChildrenMenus) {
 		this.slaveChildrenMenus = slaveChildrenMenus;
+	}
+
+	public TPrivilege getPrivilege() {
+		return privilege;
+	}
+
+	public void setPrivilege(TPrivilege privilege) {
+		this.privilege = privilege;
 	}	
 }

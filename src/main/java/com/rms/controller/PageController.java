@@ -31,12 +31,6 @@ public class PageController extends BaseController {
 		List<TMenu> masterMenus =  iMenuService.findMasterMenusByStatus((byte)0);
 		model.addAttribute("masterMenus", masterMenus);
 		List<TMenuCustom> topSlaveMenus = iMenuService.findTopSlaveMenus();
-		for (TMenuCustom tMenuCustom : topSlaveMenus) {
-			System.out.println(tMenuCustom.getMenuname());
-			for (TMenuCustom tMenuCustom2 : tMenuCustom.getSlaveChildrenMenus()) {
-				System.out.println(tMenuCustom2.getMenuname());
-			}
-		}
 		model.addAttribute("topSlaveMenus", topSlaveMenus);
 		return "index";
 	}
