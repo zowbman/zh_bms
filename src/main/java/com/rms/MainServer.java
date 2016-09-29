@@ -1,6 +1,5 @@
 package com.rms;
 
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -14,7 +13,6 @@ import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletConta
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-
 
 /**
  * 
