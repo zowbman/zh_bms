@@ -33,7 +33,42 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 	}
 
 	@Override
-	public List<TMenuCustom> findTopSlaveMenus() {
-		return tMenuMapper.findTopSlaveMenus();
+	public List<TMenuCustom> findTopSlaveMenusAndPrivilege() {
+		return tMenuMapper.findTopSlaveMenusAndPrivilege();
+	}
+
+	@Override
+	public List<TMenu> findTopSlaveMenus() {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("menutype", 1);
+		criteria.andIsNull("parentid");
+		return tMenuMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<TMenu> findChildrenSlaveMenus(Integer parentId) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("menutype", 1);
+		criteria.andEqualTo("parentid", parentId);
+		return tMenuMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<TMenu> findSlaveMenus() {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("menutype", 1);
+		return tMenuMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<TMenu> findSlaveMenusIsNotMe(Integer menuId) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("menutype", 1);
+		criteria.andNotEqualTo("id", menuId);
+		return tMenuMapper.selectByExample(example);
 	}
 }

@@ -1,20 +1,21 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="public/head.jsp"%>
 <div id="content">
-	<div class="nav">
-		<ul>
-			<c:forEach items="${masterMenus }" var="masterMenu">
-				<li><!-- class="nav-active" --><a href="javascript:;" onclick="showSlaveMenu('topSlaveMenu_${masterMenu.id}')">${masterMenu.menuname }</a></li>
-			</c:forEach>
-		</ul>
-	</div>
 	<div class="left">
-		<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
-			<ul id="topSlaveMenu_${topSlaveMenu.mastermenuid }" class="mtree transit">
-				<%@ include file="public/menu.jsp"%>
+		<div class="master-nav">
+			<ul>
+				<c:forEach items="${masterMenus }" var="masterMenu">
+					<li><!-- class="nav-active" --><a href="javascript:;" onclick="showSlaveMenu('topSlaveMenu_${masterMenu.id}')">${masterMenu.menuname }</a></li>
+				</c:forEach>
 			</ul>
-		</c:forEach>
-		
+		</div>
+		<div class="slave-nav">
+			<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
+				<ul id="topSlaveMenu_${topSlaveMenu.mastermenuid }" class="mtree transit">
+					<%@ include file="public/menu.jsp"%>
+				</ul>
+			</c:forEach>
+		</div>
 		<ul class="mtree transit" style="display:block;">
 			<li><a href="#">Africa</a>
 				<ul>
@@ -128,7 +129,7 @@
 
 	</div>
 	<div class="right">
-		<iframe class="right-iframe" frameborder="0" src></iframe>
+		<iframe class="right-iframe" frameborder="0" src="/rms/menu/list"></iframe>
 	</div>
 </div>
 
@@ -141,7 +142,7 @@ $(function(){
 	mtree.wrap('<div class=mtree-demo></div>');
 	var skins = ['bubba','skinny','transit','jet','nix'];
 	mtree.addClass(skins[0]);
-	$('body').prepend('<div class="mtree-skin-selector"><ul class="button-group radius"></ul></div>');
+	$('body').prepend('<div class="mtree-skin-selector" style="display:none;"><ul class="button-group radius"></ul></div>');
 	var s = $('.mtree-skin-selector');
 	$.each(skins, function(index, val) {
 	  s.find('ul').append('<li><button class="small skin">' + val + '</button></li>');

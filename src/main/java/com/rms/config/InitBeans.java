@@ -14,6 +14,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.github.pagehelper.PageHelper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.rms.converter.CustomDateConvert;
 import com.rms.listener.InitListner;
 
 /**
@@ -58,8 +59,15 @@ public class InitBeans {
         return sqlSessionFactoryBean.getObject();
     }
     
+    //注册监听器
     @Bean
     public InitListner initListner(){
     	return new InitListner();
+    }
+    
+    //注册转换器
+    @Bean
+    public CustomDateConvert customDateConvert(){
+    	return new CustomDateConvert();
     }
 }

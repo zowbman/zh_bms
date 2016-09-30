@@ -30,7 +30,7 @@ public class PageController extends BaseController {
 	public String index(Model model){
 		List<TMenu> masterMenus =  iMenuService.findMasterMenusByStatus((byte)0);
 		model.addAttribute("masterMenus", masterMenus);
-		List<TMenuCustom> topSlaveMenus = iMenuService.findTopSlaveMenus();
+		List<TMenuCustom> topSlaveMenus = iMenuService.findTopSlaveMenusAndPrivilege();
 		model.addAttribute("topSlaveMenus", topSlaveMenus);
 		return "index";
 	}

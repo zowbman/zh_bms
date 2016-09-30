@@ -24,9 +24,34 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	List<TMenu> findMasterMenusByStatus(Byte status);
 	
 	/**
-	 * 根据status查询顶级从菜单
-	 * @param status
+	 * 查询顶级从菜单(关联查询子菜单权限)
 	 * @return List<TMenuCustom>
 	 */
-	List<TMenuCustom> findTopSlaveMenus();
+	List<TMenuCustom> findTopSlaveMenusAndPrivilege();
+	
+	/**
+	 * 查询顶级从菜单
+	 * @return
+	 */
+	List<TMenu> findTopSlaveMenus();
+	
+	/**
+	 * 查询子级从菜单
+	 * @param parentId 父级id
+	 * @return
+	 */
+	List<TMenu> findChildrenSlaveMenus(Integer parentId);
+	
+	/**
+	 * 查询从菜单
+	 * @return
+	 */
+	List<TMenu> findSlaveMenus();
+	
+	/**
+	 * 查询从菜单（不含自己）
+	 * @param menuId 菜单id
+	 * @return
+	 */
+	List<TMenu> findSlaveMenusIsNotMe(Integer menuId);
 }

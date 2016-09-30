@@ -37,7 +37,7 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 				column = "id",
 				one =@One(select ="findPrivilegeByMenuId"))
 	})
-	public List<TMenuCustom> findTopSlaveMenus();
+	public List<TMenuCustom> findTopSlaveMenusAndPrivilege();
 	
 	
 	/**

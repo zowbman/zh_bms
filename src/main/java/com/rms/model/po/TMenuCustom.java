@@ -2,6 +2,9 @@ package com.rms.model.po;
 
 import java.util.List;
 
+import com.rms.data.type.conversion.date.DateDataTypeConversion;
+import com.rms.data.type.conversion.date.vo.DATEFORMAT;
+
 /**
  * 
  * Title:TMenuCustom
@@ -15,6 +18,15 @@ public class TMenuCustom extends TMenu {
 	private List<TMenuCustom> slaveChildrenMenus;//从菜单的子菜单
 	
 	private TPrivilege privilege;//权限
+	
+    /**
+     * 获取添加时间戳转日期结果
+     * @param date
+     * @return
+     */
+    public String getAddTimeToDate(){
+    	return DateDataTypeConversion.timeMillisToDate(getAddtime(), true, DATEFORMAT.YYYY_MM_DD_HH_MM);
+    }
 
 	public List<TMenuCustom> getSlaveChildrenMenus() {
 		return slaveChildrenMenus;

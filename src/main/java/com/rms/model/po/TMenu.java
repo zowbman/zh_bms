@@ -11,6 +11,7 @@ import javax.persistence.Id;
  *
  */
 public class TMenu {
+	
 	@Id
     private Integer id;
 

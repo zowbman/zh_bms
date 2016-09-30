@@ -1,21 +1,15 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <title>My JSP 'menu_lst.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
-  <body>
-  	menu list page!
-  </body>
-</html>
+<%@ include file="head.jsp" %>
+<body>
+	<div style="padding:0 20px 20px 20px;height:85%;">
+		<table id="menus-table"></table>
+	</div>
+	<script type="text/javascript">		
+		$(function(){
+		    //1.初始化Table
+		    var oTable = new TableInit();
+		    oTable.Init();
+		});
+	</script>
+</body>
+<%@ include file="footer.jsp" %>

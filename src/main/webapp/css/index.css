@@ -4,11 +4,6 @@ body{
 
 /*头部*/
 #head{
-	position: absolute;
-	width:100%;
-	left:0;
-	right:0;
-	top:0;
 	background-color:#f5f5f5;
 	border-bottom: 1px solid #eee;
 	height:50px;
@@ -37,44 +32,53 @@ body{
 
 /*左*/
 #content .left{
-	background-color:#EEE;
+	border-right: 1px solid #ddd;
+	/* width: 25%; */
+	width:330px;
 	position: absolute;
 	top:50px;
-	left:40px;
 	bottom:0;
-	width:20%;
-	max-width:300px;
-	border-right: 1px solid #ddd;
-	overflow-x : auto;
+	
 }
+
+#content .left .master-nav{
+	width: 40px;
+	float: left;
+}
+
+#content .left .slave-nav{
+	background-color:#EEE;
+	height: 100%;
+	margin-left:40px;
+	overflow-x : auto; 
+}
+
 
 /*右*/
 #content .right{
-	background-color:#fafafa;
+ 	background-color:#fafafa;
 	position: absolute;
 	top:50px;
 	right:0;
+	/* left:25%; */
+	left:330px;
 	width:auto;
-	bottom:0;
+	bottom:0; 
 }
 
 .right-iframe{
-	width:100%;
+ 	width:100%;
 	height:100%;
-	background-color: white;
+	background-color: white; 
 }
 
 /*菜单*/
-#content .nav{
-	position: absolute;
-}
-
-#content .nav ul{
+#content .left .master-nav ul{
 	list-style: none;
 	width: 0;
 }
 
-#content .nav ul li a{
+#content .left .master-nav ul li a{
     float: left;
     color: gray;
     display: inline-block;
@@ -85,12 +89,10 @@ body{
     margin: -1px;
 }
 
-#content .nav ul li{
+#content .left .master-nav ul li{
 	cursor:pointer;
 	float: left;
 	margin-left: -15px;
-	/* padding: 0 10px 0 10px; */
-	/* background-color:gray; */
 	border:1px solid #EEE;
 	margin-top: 5px;
 	-moz-border-top-left-radius: 5px;      /* Gecko browsers */
@@ -101,11 +103,11 @@ body{
     border-bottom-left-radius:5px;            /* W3C syntax */
 }
 
-#content .nav ul li:hover{
+#content .left .master-nav ul li:hover{
 	background-color:#333;
 }
 
-#content .nav ul li a:hover{
+#content .left .master-nav ul li a:hover{
 	color: white;
 }
 
@@ -117,7 +119,7 @@ body{
 	color: white !important;
 }
 
-#content .nav ul li:hover,#content .nav ul li a:hover
+#content .left .master-nav ul li:hover,#content .left .master-nav ul li a:hover
 {
 	-webkit-transition: all 300ms ease-out;
     -moz-transition: all 300ms ease-out;
@@ -127,7 +129,7 @@ body{
 }
 
 /*登陆页*/
-#login-body{
+ #login-body{
 	background-color:#f5f5f5; 
 	padding-top:100px;
 }
@@ -189,4 +191,3 @@ body{
     -o-transition: all 300ms ease-out;
     transition: all 300ms ease-out;
 }
-
