@@ -2,6 +2,7 @@ package com.rms.config;
 
 import java.util.Properties;
 
+import javax.servlet.Filter;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.plugin.Interceptor;
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.github.pagehelper.PageHelper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -70,4 +72,13 @@ public class InitBeans {
     public CustomDateConvert customDateConvert(){
     	return new CustomDateConvert();
     }
+    
+    //中文乱码
+	@Bean
+	public Filter characterEncodingFilter() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding("UTF-8");
+		characterEncodingFilter.setForceEncoding(true);
+		return characterEncodingFilter;
+	}
 }
