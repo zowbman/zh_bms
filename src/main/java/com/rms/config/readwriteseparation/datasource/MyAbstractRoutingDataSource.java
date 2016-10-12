@@ -2,7 +2,11 @@ package com.rms.config.readwriteseparation.datasource;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+
+import com.rms.util.SpringContextHolder;
 
 /**
  * 
@@ -13,6 +17,9 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  *
  */
 public class MyAbstractRoutingDataSource extends AbstractRoutingDataSource {
+	
+	private static Logger logger = LoggerFactory.getLogger(SpringContextHolder.class);
+	
 	private final int dataSourceNumber;
 	private AtomicInteger count = new AtomicInteger(0);
 
@@ -23,7 +30,7 @@ public class MyAbstractRoutingDataSource extends AbstractRoutingDataSource {
 	@Override
 	protected Object determineCurrentLookupKey() {
 		String typeKey = DataSourceContextHolder.getJdbcType();
-		System.out.println("切换至 - >" + typeKey);
+		logger.info("切换至 - >" + typeKey);
 		if (typeKey.equals(DataSourceType.write.getType()))
 			return DataSourceType.write.getType();
 		// 读 简单负载均衡

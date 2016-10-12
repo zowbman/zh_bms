@@ -11,15 +11,15 @@ import javax.sql.DataSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import com.github.pagehelper.PageHelper;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.rms.util.SpringContextHolder;
 
 /**
  * 
@@ -30,82 +30,65 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  *
  */
 @Configuration
-public class DataSourceConfig {
+@AutoConfigureAfter({BaseDataSource.class})
+public class DataSourceConfig extends MybatisAutoConfiguration {
 	
-	/**
-	 * 主
-	 * @return
-	 */
 	@Bean
-	@Primary
-	@ConfigurationProperties(prefix = "datasource.read")
-	public DataSource writeDataSource() {
-		return new ComboPooledDataSource();
-	}
-	
-	/**
-     * 从
-     * @return
-     */
-	@Bean
-    @ConfigurationProperties(prefix = "datasource.read")
-    public DataSource readDataSource() {
-		return new ComboPooledDataSource();
+    public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
+
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(roundRobinDataSouceProxy());
+
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:**/mapper/*.xml"));
+        
+        //分页插件
+        PageHelper pageHelper = new PageHelper();
+        Properties properties = new Properties();
+        properties.setProperty("reasonable", "true");
+        properties.setProperty("supportMethodsArguments", "true");
+        properties.setProperty("returnPageInfo", "check");
+        properties.setProperty("params", "count=countSql");
+        pageHelper.setProperties(properties);
+        
+        //添加插件
+        sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
+        
+        return sqlSessionFactoryBean.getObject();
     }
 	
-	@Bean
-	public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-		
-		//数据源封装
-		DataSource writeDataSource = writeDataSource();//读
-		List<DataSource> readDataSources = new ArrayList<DataSource>();
-		readDataSources.add(readDataSource());
-		
-		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setDataSource(roundRobinDataSouceProxy(writeDataSource,readDataSources));
-
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-
-		sqlSessionFactoryBean
-				.setMapperLocations(resolver.getResources("classpath:**/mapper/*.xml"));
-
-		// 分页插件
-		PageHelper pageHelper = new PageHelper();
-		Properties properties = new Properties();
-		properties.setProperty("reasonable", "true");
-		properties.setProperty("supportMethodsArguments", "true");
-		properties.setProperty("returnPageInfo", "check");
-		properties.setProperty("params", "count=countSql");
-		pageHelper.setProperties(properties);
-
-		// 添加插件
-		sqlSessionFactoryBean.setPlugins(new Interceptor[] { pageHelper });
-
-		return sqlSessionFactoryBean.getObject();
-	}
-	
 	/**
-	 * 配置数据源
-	 * @param writeDataSource 主
-	 * @param readDataSource 从
+	 * 数据源
 	 * @return
 	 */
-	@Bean
-	public AbstractRoutingDataSource roundRobinDataSouceProxy(DataSource writeDataSource, List<DataSource> readDataSources) {
-	    int size = readDataSources.size();
-	    MyAbstractRoutingDataSource proxy = new MyAbstractRoutingDataSource(size);
+	//不用设置bean使用proxy.afterPropertiesSet进行初始化AbstractRoutingDataSource，否则出现循环依赖
+	//@Bean
+	public AbstractRoutingDataSource roundRobinDataSouceProxy() {
+		
+		//读数据源封装
+		List<DataSource> readDataSources = new ArrayList<DataSource>();
+		readDataSources.add(SpringContextHolder.getBean("readDataSource"));
+		//如多个读数据源则在这里添加
+		//readDataSources.add(SpringContextHolder.getBean("xxxx"));
+		//...
+		
+		//动态多数据源
+		MyAbstractRoutingDataSource proxy = new MyAbstractRoutingDataSource(readDataSources.size());
 		Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
+		DataSource writeDataSource = SpringContextHolder.getBean("writeDataSource");
 		// 写
-		targetDataSources.put(DataSourceType.write.getType(), writeDataSource);
-		// 读
-		targetDataSources.put(DataSourceType.read.getType(), readDataSources.get(0));
-/*		int index = 1;
+		targetDataSources.put(DataSourceType.write.getType(), SpringContextHolder.getBean("writeDataSource"));
+		//读
+		int index = 0;
 		for (DataSource dataSource : readDataSources) {
 			targetDataSources.put(index, dataSource);
 			index++;
-		}*/
+		}
+		
 		proxy.setDefaultTargetDataSource(writeDataSource);
 		proxy.setTargetDataSources(targetDataSources);
+		proxy.afterPropertiesSet();
 		return proxy;
 	}
 	
