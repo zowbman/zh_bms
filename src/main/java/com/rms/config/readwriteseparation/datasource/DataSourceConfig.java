@@ -78,7 +78,7 @@ public class DataSourceConfig extends MybatisAutoConfiguration {
 		Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
 		DataSource writeDataSource = SpringContextHolder.getBean("writeDataSource");
 		// 写
-		targetDataSources.put(DataSourceType.write.getType(), SpringContextHolder.getBean("writeDataSource"));
+		targetDataSources.put(DataSourceType.write.getType(), writeDataSource);
 		//读
 		int index = 0;
 		for (DataSource dataSource : readDataSources) {
