@@ -18,7 +18,7 @@ import com.rms.config.readwriteseparation.datasource.DataSourceContextHolder;
 @Component
 public class DataSourceAop {
 	
-    @Before("execution(* com.rms.**.service.impl.*.findAll(..))")
+    @Before("execution(* com.rms.service.impl.*.findChildrenSlaveMenus(..))")
     public void setWriteDataSourceType() {
         System.out.println("write aop");
         DataSourceContextHolder.write();
