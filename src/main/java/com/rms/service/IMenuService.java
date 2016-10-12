@@ -2,6 +2,7 @@ package com.rms.service;
 
 import java.util.List;
 
+import com.rms.annotation.WriteOnlyConnection;
 import com.rms.base.service.IBaseService;
 import com.rms.model.po.TMenu;
 import com.rms.model.po.TMenuCustom;

@@ -15,6 +15,6 @@ import com.rms.service.IUserService;
  *
  */
 @Service
-public class UserServerImpl extends BaseServiceImpl<TUser> implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<TUser> implements IUserService {
 
 }

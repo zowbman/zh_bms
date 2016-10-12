@@ -32,6 +32,8 @@ dependencies {
 	compile "tk.mybatis:mapper:${mapperVersion}"
  	compile "com.github.pagehelper:pagehelper:${pagehelperVersion}"
  	compile 'com.github.jsqlparser:jsqlparser:0.9.4'
+ 	
+ 	compile 'org.aspectj:aspectjweaver:1.8.9'
 }
 
 /*configurations.all {

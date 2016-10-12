@@ -2,7 +2,6 @@ package com.rms.config;
 
 import java.util.Properties;
 
-import javax.servlet.Filter;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.plugin.Interceptor;
@@ -12,12 +11,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.github.pagehelper.PageHelper;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.rms.converter.CustomDateConvert;
-import com.rms.listener.InitListner;
 
 /**
  * 
@@ -27,8 +23,8 @@ import com.rms.listener.InitListner;
  * @date      2016年9月21日 下午9:48:58
  *
  */
-@Configuration
-public class InitBeans {
+//@Configuration
+public class DataSourceConfig {
 	
     @Bean
     @ConfigurationProperties(prefix="spring.datasource")
@@ -60,25 +56,4 @@ public class InitBeans {
         
         return sqlSessionFactoryBean.getObject();
     }
-    
-    //注册监听器
-    @Bean
-    public InitListner initListner(){
-    	return new InitListner();
-    }
-    
-    //注册转换器
-    @Bean
-    public CustomDateConvert customDateConvert(){
-    	return new CustomDateConvert();
-    }
-    
-    //中文乱码
-	@Bean
-	public Filter characterEncodingFilter() {
-		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setEncoding("UTF-8");
-		characterEncodingFilter.setForceEncoding(true);
-		return characterEncodingFilter;
-	}
 }
