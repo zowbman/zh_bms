@@ -18,13 +18,13 @@ import com.rms.config.readwriteseparation.datasource.DataSourceContextHolder;
 @Component
 public class DataSourceAop {
 	
-    @Before("execution(* com.rms.service.*.findMasterMenusByStatus(..))")
+    @Before("execution(* com.rms.service.impl.*.findAll(..))")
     public void setWriteDataSourceType() {
         System.out.println("write aop");
         DataSourceContextHolder.write();
     }
     
-    @Before("execution(* com.rms.service.*.findTopSlaveMenusAndPrivilege(..))")
+    @Before("execution(* com.rms.service.impl.*.findTopSlaveMenus(..))")
     public void setReadDataSourceType() {
         System.out.println("read aop");
         DataSourceContextHolder.read();

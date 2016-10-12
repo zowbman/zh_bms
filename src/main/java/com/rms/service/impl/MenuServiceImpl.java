@@ -33,7 +33,6 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		return tMenuMapper.selectByExample(example);
 	}
 
-	@WriteOnlyConnection
 	@Override
 	public List<TMenuCustom> findTopSlaveMenusAndPrivilege() {
 		return tMenuMapper.findTopSlaveMenusAndPrivilege();
