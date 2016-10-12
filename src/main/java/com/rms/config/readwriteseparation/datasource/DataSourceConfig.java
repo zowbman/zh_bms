@@ -98,11 +98,12 @@ public class DataSourceConfig {
 		// 写
 		targetDataSources.put(DataSourceType.write.getType(), writeDataSource);
 		// 读
-		int index = 1;
+		targetDataSources.put(DataSourceType.read.getType(), readDataSources.get(0));
+/*		int index = 1;
 		for (DataSource dataSource : readDataSources) {
 			targetDataSources.put(index, dataSource);
 			index++;
-		}
+		}*/
 		proxy.setDefaultTargetDataSource(writeDataSource);
 		proxy.setTargetDataSources(targetDataSources);
 		return proxy;
