@@ -1,6 +1,8 @@
 package com.rms.config.readwriteseparation.datasource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -9,7 +11,6 @@ import javax.sql.DataSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,14 +31,14 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 @Configuration
 public class DataSourceConfig {
-
+	
 	/**
 	 * 主
 	 * @return
 	 */
 	@Bean
 	@Primary
-	@ConfigurationProperties(prefix = "datasource.write")
+	@ConfigurationProperties(prefix = "datasource.read")
 	public DataSource writeDataSource() {
 		return new ComboPooledDataSource();
 	}
@@ -49,15 +50,19 @@ public class DataSourceConfig {
 	@Bean
     @ConfigurationProperties(prefix = "datasource.read")
     public DataSource readDataSource() {
-    	return new ComboPooledDataSource();
+		return new ComboPooledDataSource();
     }
-
+	
 	@Bean
-    @ConditionalOnBean({AbstractRoutingDataSource.class})
 	public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-
+		
+		//数据源封装
+		DataSource writeDataSource = writeDataSource();//读
+		List<DataSource> readDataSources = new ArrayList<DataSource>();
+		readDataSources.add(readDataSource());
+		
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setDataSource(roundRobinDataSouceProxy());
+		sqlSessionFactoryBean.setDataSource(roundRobinDataSouceProxy(writeDataSource,readDataSources));
 
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
@@ -78,27 +83,29 @@ public class DataSourceConfig {
 
 		return sqlSessionFactoryBean.getObject();
 	}
-
+	
 	/**
 	 * 配置数据源
-	 * 
+	 * @param writeDataSource 主
+	 * @param readDataSource 从
 	 * @return
 	 */
 	@Bean
-	public AbstractRoutingDataSource roundRobinDataSouceProxy() {
-	    int size = 2;
+	public AbstractRoutingDataSource roundRobinDataSouceProxy(DataSource writeDataSource, List<DataSource> readDataSources) {
+	    int size = readDataSources.size();
 	    MyAbstractRoutingDataSource proxy = new MyAbstractRoutingDataSource(size);
 		Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
 		// 写
-		DataSource writeDataSource = writeDataSource();
 		targetDataSources.put(DataSourceType.write.getType(), writeDataSource);
 		// 读
-		DataSource readDataSource = readDataSource();
-		targetDataSources.put(DataSourceType.read.getType(), readDataSource);
-		
+		int index = 1;
+		for (DataSource dataSource : readDataSources) {
+			targetDataSources.put(index, dataSource);
+			index++;
+		}
 		proxy.setDefaultTargetDataSource(writeDataSource);
 		proxy.setTargetDataSources(targetDataSources);
 		return proxy;
 	}
-
+	
 }

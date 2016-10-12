@@ -23,6 +23,7 @@ public class MyAbstractRoutingDataSource extends AbstractRoutingDataSource {
 	@Override
 	protected Object determineCurrentLookupKey() {
 		String typeKey = DataSourceContextHolder.getJdbcType();
+		System.out.println("切换至 - >" + typeKey);
 		if (typeKey.equals(DataSourceType.write.getType()))
 			return DataSourceType.write.getType();
 		// 读 简单负载均衡

@@ -20,13 +20,11 @@ public class DataSourceAop {
 	
     @Before("execution(* com.rms.service.impl.*.findChildrenSlaveMenus(..))")
     public void setWriteDataSourceType() {
-        System.out.println("write aop");
         DataSourceContextHolder.write();
     }
     
     @Before("execution(* com.rms.service.impl.*.findTopSlaveMenus(..))")
     public void setReadDataSourceType() {
-        System.out.println("read aop");
         DataSourceContextHolder.read();
     }
 }
