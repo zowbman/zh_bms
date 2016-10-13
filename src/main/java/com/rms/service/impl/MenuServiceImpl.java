@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
 
-import com.rms.annotation.WriteOnlyConnection;
 import com.rms.base.service.impl.BaseServiceImpl;
 import com.rms.model.po.TMenu;
 import com.rms.model.po.TMenuCustom;

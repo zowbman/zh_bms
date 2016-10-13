@@ -86,7 +86,7 @@ public class DataSourceConfig extends MybatisAutoConfiguration {
 			index++;
 		}
 		
-		proxy.setDefaultTargetDataSource(writeDataSource);
+		proxy.setDefaultTargetDataSource(writeDataSource);//当
 		proxy.setTargetDataSources(targetDataSources);
 		proxy.afterPropertiesSet();
 		return proxy;

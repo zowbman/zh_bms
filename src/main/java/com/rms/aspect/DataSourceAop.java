@@ -18,12 +18,17 @@ import com.rms.config.readwriteseparation.datasource.DataSourceContextHolder;
 @Component
 public class DataSourceAop {
 	
-    @Before("execution(* com.rms.service.impl.*.findChildrenSlaveMenus(..))")
+    @Before("execution(* com.rms.mapper.*.save*(..))" + " or " +
+    		"execution(* com.rms.mapper.*.insert*(..))" + " or " +
+    		"execution(* com.rms.mapper.*.update*(..))" + " or " +
+    		"execution(* com.rms.mapper.*.delete*(..))")
     public void setWriteDataSourceType() {
         DataSourceContextHolder.write();
     }
     
-    @Before("execution(* com.rms.service.impl.*.findTopSlaveMenus(..))")
+    @Before("execution(* com.rms.mapper.*.find*(..))" + " or " +
+    		"execution(* com.rms.mapper.*.get*(..))" + " or " +
+    		"execution(* com.rms.mapper.*.select*(..))")
     public void setReadDataSourceType() {
         DataSourceContextHolder.read();
     }

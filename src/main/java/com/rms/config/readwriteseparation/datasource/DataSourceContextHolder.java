@@ -1,6 +1,5 @@
 package com.rms.config.readwriteseparation.datasource;
 
-
 /**
  * 
  * Title:DataSourceContextHolder

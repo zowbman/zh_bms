@@ -22,7 +22,6 @@ public class WriteOnlyConnectionInterceptor {
 	@Around("@annotation(writeOnlyConnection)")
 	public Object proceed(ProceedingJoinPoint proceedingJoinPoint, WriteOnlyConnection writeOnlyConnection) throws Throwable {
 		DataSourceContextHolder.write();
-		System.out.println("write annotation");
 		Object result = proceedingJoinPoint.proceed();
 		return result;
 	}
