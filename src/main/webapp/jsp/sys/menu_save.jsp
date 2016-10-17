@@ -45,7 +45,7 @@
 					</div>
 					<div class="form-group">
 				    	<label for="menusort">排序</label>
-				    	<input type="text" name="menu.sort" value="${menu.status }" class="form-control" id="menusort" placeholder="排序">
+				    	<input type="text" name="menu.sort" value="${menu.sort }" class="form-control" id="menusort" placeholder="排序">
 					</div>
 					<div class="form-group">
 				    	<label for="menustatus">状态</label>

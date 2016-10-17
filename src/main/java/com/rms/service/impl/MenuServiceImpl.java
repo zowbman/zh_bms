@@ -10,6 +10,7 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 import com.rms.base.service.impl.BaseServiceImpl;
 import com.rms.model.po.TMenu;
 import com.rms.model.po.TMenuCustom;
+import com.rms.model.vo.MenuTypeEnum;
 import com.rms.service.IMenuService;
 
 /**
@@ -31,6 +32,17 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		criteria.andEqualTo("menutype", 0);
 		return tMenuMapper.selectByExample(example);
 	}
+	
+
+	@Override
+	public List<TMenu> findMasterMenusByStatusAndNotMe(Byte status, Integer menuId) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("status", status);
+		criteria.andEqualTo("menutype", 0);
+		criteria.andNotEqualTo("id", menuId);
+		return tMenuMapper.selectByExample(example);
+	}
 
 	@Override
 	public List<TMenuCustom> findTopSlaveMenusAndPrivilege() {
@@ -38,10 +50,14 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 	}
 
 	@Override
-	public List<TMenu> findTopSlaveMenus() {
+	public List<TMenu> findTopMenus(MenuTypeEnum menuTypeEnum) {
 		Example example = new Example(TMenu.class);
 		Criteria criteria = example.createCriteria();
-		criteria.andEqualTo("menutype", 1);
+		if(MenuTypeEnum.master.equals(menuTypeEnum)){
+			criteria.andEqualTo("menutype", menuTypeEnum.getValue());
+		}else{
+			criteria.andEqualTo("menutype", menuTypeEnum.getValue());
+		}
 		criteria.andIsNull("parentid");
 		return tMenuMapper.selectByExample(example);
 	}
@@ -70,5 +86,27 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		criteria.andEqualTo("menutype", 1);
 		criteria.andNotEqualTo("id", menuId);
 		return tMenuMapper.selectByExample(example);
+	}
+
+
+	@Override
+	public List<TMenu> findParentMenusByMasterMenuIdIsNotMe(Integer masterMenuId, Integer isNotMenuId) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("mastermenuid", masterMenuId);
+		criteria.andNotEqualTo("id", isNotMenuId);
+		return tMenuMapper.selectByExample(example);
+	}
+
+
+	@Override
+	public void updateSlaveToMasterMenu(Integer masterMenuId, Integer parentMenuId) {
+		List<TMenu> childrenMenus = findChildrenSlaveMenus(parentMenuId);
+		//把当前节点的子节点的parentId为空，且把masterMenuId设置为当前节点id
+		for (TMenu tMenu : childrenMenus) {
+			tMenu.setParentid(null);
+			tMenu.setMastermenuid(masterMenuId);
+			tMenuMapper.updateByPrimaryKey(tMenu);
+		}
 	}
 }

@@ -185,7 +185,6 @@ $(function(){
 })
 
 function menuType(_target){
-	console.log($(_target));
 	if($(_target).val() == 0){
 		$('#mastermenus').parent().attr('style','display:none;');
 		$('#parentmenus').parent().attr('style','display:none;');
@@ -194,6 +193,42 @@ function menuType(_target){
 		$('#parentmenus').parent().attr('style','display:block;');
 	}
 }
+
+//菜单编辑
+$(function(){
+	//主（Master）菜单选择
+	if($('#mastermenus').length == 1){
+		masterMenusLoad($('#mastermenus').val(),$('input[name="menu.id"]').val());
+	}
+	$('#mastermenus').change(function(){
+		masterMenusLoad($('#mastermenus').val(),$('input[name="menu.id"]').val());
+	});
+	function masterMenusLoad(masterMenu,menuId){
+		if(masterMenu != -1){
+			$.ajax({
+				type: 'GET',
+				url: '/rms/menu/parentListDataByMasterMenuId/' + masterMenu + "/" + menuId,
+			    success: function(data){
+			    	if(data.code != 100000){
+			    		alert(data.msg);
+			    	}else{
+			    		$('#parentmenus').empty();
+			    		$('#parentmenus').html('<option value="-1">请选择父级菜单</option>');
+			    		$.each(data.data.list,function(i,item){
+			    			$('#parentmenus').append('<option value="'+ item.id +'">'+ item.menuname +'</option>')
+			    		});
+			    	}
+			    },
+			    error: function() {  
+			    	alert('请求异常');
+		      	}
+			});
+		}else{//清空父级菜单
+			$('#parentmenus').empty();
+			$('#parentmenus').html('<option value="-1">请选择父级菜单</option>');
+		}
+	}
+});
 
 
 

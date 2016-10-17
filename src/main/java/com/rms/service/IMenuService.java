@@ -2,10 +2,10 @@ package com.rms.service;
 
 import java.util.List;
 
-import com.rms.annotation.WriteOnlyConnection;
 import com.rms.base.service.IBaseService;
 import com.rms.model.po.TMenu;
 import com.rms.model.po.TMenuCustom;
+import com.rms.model.vo.MenuTypeEnum;
 
 
 /**
@@ -25,6 +25,13 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	List<TMenu> findMasterMenusByStatus(Byte status);
 	
 	/**
+	 * 根据status查询主菜单（不包含自己）
+	 * @param status
+	 * @return
+	 */
+	List<TMenu> findMasterMenusByStatusAndNotMe(Byte status, Integer menuId);
+	
+	/**
 	 * 查询顶级从菜单(关联查询子菜单权限)
 	 * @return List<TMenuCustom>
 	 */
@@ -34,7 +41,7 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	 * 查询顶级从菜单
 	 * @return
 	 */
-	List<TMenu> findTopSlaveMenus();
+	List<TMenu> findTopMenus(MenuTypeEnum menuTypeEnum);
 	
 	/**
 	 * 查询子级从菜单
@@ -55,4 +62,19 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	 * @return
 	 */
 	List<TMenu> findSlaveMenusIsNotMe(Integer menuId);
+	
+	/**
+	 * 根据masterMenuId查询不包含自己父级菜单
+	 * @param masterMenuId 主菜单
+	 * @param isNotMenuId 自己id
+	 * @return
+	 */
+	List<TMenu> findParentMenusByMasterMenuIdIsNotMe(Integer masterMenuId, Integer isNotMenuId);
+	
+	/**
+	 * 
+	 * @param masterMenuId 主master菜单id
+	 * @param parentMenuId 父菜单id
+	 */
+	void updateSlaveToMasterMenu(Integer masterMenuId, Integer parentMenuId);
 }

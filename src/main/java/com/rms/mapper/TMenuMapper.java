@@ -28,17 +28,30 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	 * 查询顶级从菜单（关联查询从菜单的子菜单和对应权限）
 	 * @return
 	 */
-	@Select("SELECT * FROM t_menu WHERE status = 0 AND menuType = 1 AND parentId is Null")
+	@Select("SELECT * FROM t_menu WHERE status = 0 AND menuType = 0 AND parentId is Null")
 	@Results({
+		@Result(property = "id", column="id"),
 		@Result(property = "slaveChildrenMenus", 
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusByParentId")),
+				many = @Many(select = "findTopSlaveMenusByMasterMenuId")),
 		@Result(property = "privilege",
 				column = "id",
 				one =@One(select ="findPrivilegeByMenuId"))
 	})
 	public List<TMenuCustom> findTopSlaveMenusAndPrivilege();
 	
+	/**
+	 * 根据masterMenuId查询菜单
+	 * @param masterMenuId
+	 * @return
+	 */
+	@Select("SELECT * FROM t_menu WHERE status = 0 AND masterMenuId = #{masterMenuId} AND parentId is Null")
+	@Results({
+		@Result(property = "slaveChildrenMenus",
+				column = "id",
+				many = @Many(select = "findTopSlaveMenusByParentId"))
+	})
+	public List<TMenuCustom> findTopSlaveMenusByMasterMenuId(Integer masterMenuId);
 	
 	/**
 	 * 根据父菜单id查询菜单

@@ -11,7 +11,7 @@
 		</div>
 		<div class="slave-nav">
 			<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
-				<ul id="topSlaveMenu_${topSlaveMenu.mastermenuid }" class="mtree transit">
+				<ul id="topSlaveMenu_${topSlaveMenu.id }" class="mtree transit">
 					<%@ include file="public/menu.jsp"%>
 				</ul>
 			</c:forEach>
