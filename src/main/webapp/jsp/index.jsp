@@ -2,20 +2,26 @@
 <%@ include file="public/head.jsp"%>
 <div id="content">
 	<div class="left">
-		<div class="master-nav">
-			<ul>
-				<c:forEach items="${masterMenus }" var="masterMenu">
-					<li><!-- class="nav-active" --><a href="javascript:;" onclick="showSlaveMenu('topSlaveMenu_${masterMenu.id}')">${masterMenu.menuname }</a></li>
-				</c:forEach>
-			</ul>
-		</div>
-		<div class="slave-nav">
-			<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
-				<ul id="topSlaveMenu_${topSlaveMenu.id }" class="mtree transit">
-					<%@ include file="public/menu.jsp"%>
-				</ul>
-			</c:forEach>
-		</div>
+		<table align="left" border="0" cellspacing="0" cellpadding="0" class="menu_table">
+			<tr>
+				<td style="padding-top:10px;width:20px;white-space: normal;" valign="top">
+					<c:forEach items="${masterMenus }" var="masterMenu">
+						<div class="master_menu">
+							<a href="javascript:;" onclick="showSlaveMenu('topSlaveMenu_${masterMenu.id}')">${masterMenu.menuname }</a>
+						</div>
+					</c:forEach>
+				</td>
+				<td style="background-color: #EEE;width: 100%;">
+					<div class="slave-nav">
+						<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
+							<ul id="topSlaveMenu_${topSlaveMenu.id }" class="mtree transit">
+								<%@ include file="public/menu.jsp"%>
+							</ul>
+						</c:forEach>
+					</div>
+				</td>
+			</tr>
+		</table>
 		<ul class="mtree transit" style="display:block;">
 			<li><a href="#">Africa</a>
 				<ul>
@@ -129,7 +135,7 @@
 
 	</div>
 	<div class="right">
-		<iframe class="right-iframe" frameborder="0" src="/rms/menu/list"></iframe>
+		<iframe class="right-iframe" frameborder="0" src=""></iframe>
 	</div>
 </div>
 

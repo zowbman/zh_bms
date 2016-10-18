@@ -9,7 +9,7 @@ package com.rms.model.vo;
  *
  */
 public enum MenuTypeEnum {
-	master("主菜单",(byte)0),slave("子菜单",(byte)1);
+	master("主（Master）菜单",(byte)0),slave("从（Slave）菜单",(byte)1);
 	private String type;
 	private Byte value;
 

@@ -3,11 +3,11 @@
 <body>
 	<div style="padding:20px;">
 		<div class="panel panel-default">
-			<div class="panel-heading">菜单编辑页面</div>
+			<div class="panel-heading">菜单<c:choose><c:when test="${type == 'add'}">新增</c:when><c:otherwise>编辑</c:otherwise></c:choose>页面</div>
 			<div class="panel-body">
-				<form id="menu-form" action="/rms/menu/saveSubmit/<c:choose><c:when test="${type == 'add'}">add</c:when><c:otherwise>edit</c:otherwise></c:choose>" method="POST" enctype="multipart/form-data">
+				<form id="menu-form" action="/rms/menu/saveSubmit/<c:choose><c:when test="${type == 'add'}">add</c:when><c:otherwise>edit</c:otherwise></c:choose>" method="POST" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 					<div class="form-group">
-				    	<label for=""menuname"">菜单名称</label>
+				    	<span class="font_exp">*</span><label for=""menuname"">菜单名称</label>
 				    	<input type="text" name="menu.menuname" value="${menu.menuname }" class="form-control" id="menuname" placeholder="菜单名称">
 					</div>
 					<div class="form-group">
@@ -26,7 +26,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-				    	<label for="mastermenus">主（Master）菜单</label>
+				    	<span class="font_exp">*</span><label for="mastermenus">主（Master）菜单</label>
 				    	<select id="mastermenus" name="menu.mastermenuid" class="form-control">
 				    		<option value="-1">请选择主（Master）菜单</option>
 				    		<c:forEach items="${masterMenus }" var="masterMenu">
@@ -44,7 +44,7 @@
 						</select>
 					</div>
 					<div class="form-group">
-				    	<label for="menusort">排序</label>
+				    	<span class="font_exp">*</span><label for="menusort">排序</label>
 				    	<input type="text" name="menu.sort" value="${menu.sort }" class="form-control" id="menusort" placeholder="排序">
 					</div>
 					<div class="form-group">
@@ -64,9 +64,9 @@
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-th"></span>
 							</span>
-							<span class="input-group-addon">
+							<!-- <span class="input-group-addon">
 								<span class="glyphicon glyphicon-remove"></span>
-							</span>
+							</span> -->
 							<input class="form-control" name="addtime" size="16" type="text" value="${menu.addTimeToDate}" readonly>
 						</div>
 					</div>

@@ -18,7 +18,7 @@
 </li> --%>
 
 <c:forEach items="${topSlaveMenu.slaveChildrenMenus}" var="childrenMenu">
-	<li><a href="#">${childrenMenu.menuname }</a>
+	<li><a href="javascript:;" onclick="frameLoad('${childrenMenu.privilege.privilegeurl }');">${childrenMenu.menuname }</a>
 		<c:choose>
 		<c:when test="${fn:length(childrenMenu.slaveChildrenMenus) > 0}">
 			<ul>

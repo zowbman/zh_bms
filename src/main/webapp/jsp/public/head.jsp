@@ -16,6 +16,7 @@
 	<link rel='stylesheet prefetch' href='/menu/css/foundation.css'>
 	<link href="/menu/css/mtree.css" rel="stylesheet" type="text/css">
 	<script src="/js/jquery.min.js"></script> 
+	<script src="/js/common.js"></script>
 	<style>
 		.mtree-demo .mtree {
 			background: #EEE;

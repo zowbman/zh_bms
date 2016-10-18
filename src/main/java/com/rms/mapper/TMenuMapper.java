@@ -33,10 +33,7 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 		@Result(property = "id", column="id"),
 		@Result(property = "slaveChildrenMenus", 
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusByMasterMenuId")),
-		@Result(property = "privilege",
-				column = "id",
-				one =@One(select ="findPrivilegeByMenuId"))
+				many = @Many(select = "findTopSlaveMenusByMasterMenuId"))
 	})
 	public List<TMenuCustom> findTopSlaveMenusAndPrivilege();
 	
@@ -62,7 +59,10 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	@Results({
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusByParentId"))
+				many = @Many(select = "findTopSlaveMenusByParentId")),
+		@Result(property = "privilege",
+				column = "id",
+				one =@One(select ="findPrivilegeByMenuId"))
 	})
 	public List<TMenuCustom> findTopSlaveMenusByParentId(Integer parentId);
 	
@@ -73,4 +73,11 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	 */
 	@Select("SELECT * FROM t_privilege WHERE menuId = #{menuId}")
 	public TPrivilege findPrivilegeByMenuId(Integer menuId);
+	
+	/**
+	 * 查询最大排序号
+	 * @return
+	 */
+	@Select("SELECT MAX(sort) FROM t_menu")
+	public Byte findMenuMaxSort();
 }

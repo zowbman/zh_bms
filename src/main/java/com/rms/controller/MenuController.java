@@ -1,5 +1,6 @@
 package com.rms.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rms.base.controller.BaseController;
@@ -20,6 +22,7 @@ import com.rms.model.po.TMenuCustom;
 import com.rms.model.vo.MenuTypeEnum;
 import com.rms.model.vo.PubRetrunMsg;
 import com.rms.model.vo.TMenuVo;
+import com.rms.util.BaseUtil;
 
 /**
  * 
@@ -39,9 +42,14 @@ public class MenuController extends BaseController {
 	 * @return String
 	 */
 	@GetMapping("/list")
-	public String list(Model model){
-		//List<TMenu> menus = iMenuService.findAll();
-		//model.addAttribute("menus", menus);
+	public String list(Model model,@RequestParam(defaultValue = "0" )Byte menuType){
+		if(menuType.equals(MenuTypeEnum.master.getValue())){
+			model.addAttribute("menuTypeName", MenuTypeEnum.master.getType());
+			model.addAttribute("menuTypeValue", MenuTypeEnum.master.getValue());
+		}else{
+			model.addAttribute("menuTypeName", MenuTypeEnum.slave.getType());
+			model.addAttribute("menuTypeValue", MenuTypeEnum.slave.getValue());
+		}
 		return "sys/menu_lst";
 	}
 	
@@ -49,11 +57,16 @@ public class MenuController extends BaseController {
 	 * 从菜单父级列表数据
 	 * @return PubRetrunMsg
 	 */
-	@GetMapping("/parentListData")
+	@GetMapping("/parentListData/{menuType}")
 	@ResponseBody
-	public PubRetrunMsg parentListData(){
+	public PubRetrunMsg parentListData(@PathVariable("menuType") Byte menuType){
 		Map<String, Object> data = new HashMap<String, Object>();
-		List<TMenu> menus = iMenuService.findTopMenus(MenuTypeEnum.slave);
+		List<TMenu> menus;
+		if(MenuTypeEnum.master.getValue() == menuType){
+			menus = iMenuService.findTopMenus(MenuTypeEnum.master);
+		}else{
+			menus = iMenuService.findTopMenus(MenuTypeEnum.slave);
+		}
 		data.put("list", menus);
 		return new PubRetrunMsg(CODE.D100000, data);
 	}
@@ -78,8 +91,8 @@ public class MenuController extends BaseController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/save/{type}/{id}")
-	public String save(Model model, @PathVariable("type") String type,@PathVariable("id") Integer id){
+	@GetMapping("/save/{type}")
+	public String save(Model model, @PathVariable("type") String type, Integer id){
 		if("edit".equals(type)){
 			TMenu menu = iMenuService.getById(id);
 			TMenuCustom menuCustom = new TMenuCustom();
@@ -100,7 +113,14 @@ public class MenuController extends BaseController {
 				model.addAttribute("parentMenus", parentMenus);
 			}
 		}else{//add
-			
+			TMenuCustom menu = new TMenuCustom();
+			menu.setAddtime((int)BaseUtil.currentTimeMillis());
+			menu.setMenutype((byte)0);
+			menu.setStatus((byte)0);
+			menu.setSort(iMenuService.findMenuMaxSort());
+			List<TMenu> masterMenus = iMenuService.findMasterMenusByStatus(null);
+			model.addAttribute("masterMenus", masterMenus);
+			model.addAttribute("menu", menu);
 		}
 		
 		model.addAttribute("type", type);
@@ -112,11 +132,16 @@ public class MenuController extends BaseController {
 	 * @param masterMenuId
 	 * @return
 	 */
-	@GetMapping("/parentListDataByMasterMenuId/{id}/{isNotMenuId}")
+	@GetMapping("/parentListDataByMasterMenuId/{id}")
 	@ResponseBody
-	public PubRetrunMsg parentMenuListDataByMasterMenuId(@PathVariable("id") Integer masterMenuId, @PathVariable("isNotMenuId") Integer isNotMenuId){
+	public PubRetrunMsg parentMenuListDataByMasterMenuId(@PathVariable("id") Integer masterMenuId, Integer isNotMenuId){
 		Map<String, Object> data = new HashMap<String, Object>();
-		List<TMenu> menus = iMenuService.findParentMenusByMasterMenuIdIsNotMe(masterMenuId,isNotMenuId);
+		List<TMenu> menus;
+		if(isNotMenuId != null){
+			menus = iMenuService.findParentMenusByMasterMenuIdIsNotMe(masterMenuId,isNotMenuId);
+		}else{
+			menus = iMenuService.findParentMenusByMasterMenuId(masterMenuId);
+		}
 		data.put("list", menus);
 		return new PubRetrunMsg(CODE.D100000, data);
 	}
@@ -155,7 +180,43 @@ public class MenuController extends BaseController {
 			menu.setAddtime((int) (menuVo.getAddtime().getTime() / 1000L));//添加时间修改
 			iMenuService.updateSeletive(menu);
 		}else{//add
-			
+			TMenu tMenu = new TMenu();
+			tMenu.setMenuname(menuVo.getMenu().getMenuname());
+			tMenu.setMenutype(menuVo.getMenu().getMenutype());
+			tMenu.setSort(menuVo.getMenu().getSort());
+			tMenu.setAddtime((int)(menuVo.getAddtime().getTime() / 1000L));
+			tMenu.setStatus(menuVo.getMenu().getStatus());
+			if(menuVo.getMenu().getMenutype() == MenuTypeEnum.slave.getValue()){//次菜单
+				tMenu.setParentid(menuVo.getMenu().getParentid() == -1 ? null : menuVo.getMenu().getParentid());
+				tMenu.setMastermenuid(menuVo.getMenu().getMastermenuid() == -1 ? null : menuVo.getMenu().getMastermenuid());
+			}
+			iMenuService.saveSeletive(tMenu);
+		}
+		return "result";
+	}
+	
+	/**
+	 * 删除菜单
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/deleteMenu/{id}")
+	public String deleteMenu(@PathVariable("id") Integer id){
+		List<Integer> ids = iMenuService.findMenuAndChildrenMenusForRecursion(id, new ArrayList<Integer>());
+		iMenuService.delete(ids.toArray(new Integer[ids.size()]));
+		return "result";
+	}
+	
+	/**
+	 * 批量删除菜单
+	 * @param ids
+	 * @return
+	 */
+	@PostMapping("/deleteMenus")
+	public String deleteMenus(Integer[] ids){
+		for (Integer id : ids) {
+			List<Integer> ids2 = iMenuService.findMenuAndChildrenMenusForRecursion(id, new ArrayList<Integer>());
+			iMenuService.delete(ids2.toArray(new Integer[ids2.size()]));
 		}
 		return "result";
 	}

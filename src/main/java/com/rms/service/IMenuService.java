@@ -72,9 +72,29 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	List<TMenu> findParentMenusByMasterMenuIdIsNotMe(Integer masterMenuId, Integer isNotMenuId);
 	
 	/**
-	 * 
+	 * 根据masterMenuId查询
+	 * @param masterMenuId 主菜单
+	 * @return
+	 */
+	List<TMenu> findParentMenusByMasterMenuId(Integer masterMenuId);
+	
+	/**
+	 * 更新从从菜单到主菜单
 	 * @param masterMenuId 主master菜单id
 	 * @param parentMenuId 父菜单id
 	 */
 	void updateSlaveToMasterMenu(Integer masterMenuId, Integer parentMenuId);
+	
+	/**
+	 * 查询最大排序号
+	 * @return
+	 */
+	Byte findMenuMaxSort();
+	
+	/**
+	 * 递归查询菜单和子菜单
+	 * @param id
+	 * @return
+	 */
+	 List<Integer> findMenuAndChildrenMenusForRecursion(Integer id,List<Integer> ids);
 }

@@ -38,6 +38,7 @@ body{
 	position: absolute;
 	top:50px;
 	bottom:0;
+	overflow-x:auto;
 	
 }
 
@@ -49,8 +50,8 @@ body{
 #content .left .slave-nav{
 	background-color:#EEE;
 	height: 100%;
-	margin-left:40px;
-	overflow-x : auto; 
+	/* margin-left:40px; */
+	/* overflow-x : auto;  */
 }
 
 
@@ -72,29 +73,31 @@ body{
 	background-color: white; 
 }
 
-/*菜单*/
-#content .left .master-nav ul{
-	list-style: none;
-	width: 0;
+/*新菜单*/
+#content .left .menu_table{
+	border: 0;
+	height: 100%;
+	margin-bottom: 0;
+	padding-left:5px;
+}
+#content .left .menu_table td{
+	padding: 0;
+	cursor: pointer;
 }
 
-#content .left .master-nav ul li a{
-    float: left;
+#content .left .master_menu a{
     color: gray;
-    display: inline-block;
-    width: 40px;
-    writing-mode: vertical-rl;
-    letter-spacing: 10px;
-    padding: 10px 10px 0 0;
-    margin: -1px;
+    font-size: 14px;
+    display: block;
+    padding:10px;
 }
 
-#content .left .master-nav ul li{
-	cursor:pointer;
-	float: left;
-	margin-left: -15px;
-	border:1px solid #EEE;
-	margin-top: 5px;
+#content .left .master_menu{
+	word-wrap: break-word;
+    word-break: break-all;
+    border:1px solid #EEE;
+    border-right:0;
+    margin-top: 5px;
 	-moz-border-top-left-radius: 5px;      /* Gecko browsers */
     -webkit-border-top-left-radius: 5px;   /* Webkit browsers */
     border-top-left-radius:5px;            /* W3C syntax */
@@ -103,24 +106,15 @@ body{
     border-bottom-left-radius:5px;            /* W3C syntax */
 }
 
-#content .left .master-nav ul li:hover{
+#content .left .menu_table .master_menu:hover{
 	background-color:#333;
 }
 
-#content .left .master-nav ul li a:hover{
+#content .left .menu_table .master_menu a:hover{
 	color: white;
 }
 
-.nav-active {
-	background-color:#333;
-}
-
-.nav-active a{
-	color: white !important;
-}
-
-#content .left .master-nav ul li:hover,#content .left .master-nav ul li a:hover
-{
+#content .left .menu_table .master_menu:hover,#content .left .menu_table .master_menu a:hover{
 	-webkit-transition: all 300ms ease-out;
     -moz-transition: all 300ms ease-out;
     -ms-transition: all 300ms ease-out;

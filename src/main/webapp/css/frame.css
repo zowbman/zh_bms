@@ -9,3 +9,7 @@ table{
 #menus-table td{
 	vertical-align: middle;
 }
+
+.btn-default{
+	height:34px;
+}

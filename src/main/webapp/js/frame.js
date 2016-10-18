@@ -1,18 +1,25 @@
+$(function(){
+    var oButtonInit = new ButtonInit();
+    oButtonInit.Init();
+})
 window.operateEvents = {
-    'click .menu-save': function (e, value, row, index) {
-       window.location.href = '/rms/menu/save/edit/' + row.id;
+    'click .menu-edit': function (e, value, row, index) {
+       window.location.href = '/rms/menu/save/edit?id=' + row.id;
     },
     'click .menu-delete': function (e, value, row, index) {
-      
+    	if(!confirm('确认要删除该条记录?（如有子级数据则会级联操作）'))
+    		return false;
+    	window.location.href = '/rms/menu/deleteMenu/' + row.id;
     }
 };
 //菜单表格
 var TableInit = function() {
 	var oTableInit = new Object();
-	oTableInit.Init = function() {
+	oTableInit.Init = function(menuType) {
 		$('#menus-table').bootstrapTable({
-			url : '/rms/menu/parentListData',
+			url : '/rms/menu/parentListData/' + menuType,
 			method : 'get',
+			toolbar: '#toolbar',
 			striped : true,
 			cache : false,
 			pagination : true,
@@ -22,6 +29,9 @@ var TableInit = function() {
 			pageSize : 10,
 			pageList : [ 10, 25, 50, 100 ],
 			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
 			minimumCountColumns : 2,
 			clickToSelect : true,
 			/*height : 700,*/
@@ -109,10 +119,6 @@ var ButtonInit = function() {
 			pageSize : 10,
 			pageList : [ 10, 25 ],
 			columns : [ {
-				checkbox : true,
-                align: 'center',
-                valign: 'middle'
-			}, {
 				field : 'id',
 				title : 'ID',
 				align: 'center'
@@ -160,6 +166,14 @@ var ButtonInit = function() {
 				oInit.InitSubTable(index, row, $Subdetail);
 			}
 		});
+	};
+	oInit.Init = function(){
+		$('#menuBtn_add').click(function(){
+			 window.location.href = '/rms/menu/save/add';
+		});
+		$('#menuBtn_delete').click(function(){
+			createHiddenInputs('#menus-table');
+		})
 	}
 	return oInit;
 }
@@ -168,7 +182,7 @@ var ButtonInit = function() {
 function operateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm menu-save">修改</button>',
+            '<button type="button" class="btn btn-primary btn-sm menu-edit">修改</button>',
             '<button type="button" class="btn btn-danger btn-sm menu-delete">删除</button>',
             '</div>'
     ].join('');
@@ -188,9 +202,13 @@ function menuType(_target){
 	if($(_target).val() == 0){
 		$('#mastermenus').parent().attr('style','display:none;');
 		$('#parentmenus').parent().attr('style','display:none;');
+		$('#mastermenus').parent().find('span').html('');
+		$('#parentmenus').parent().find('span').html('');
 	}else{//1
 		$('#mastermenus').parent().attr('style','display:block;');
 		$('#parentmenus').parent().attr('style','display:block;');
+		$('#mastermenus').parent().find('span').html('*');
+		$('#parentmenus').parent().find('span').html('*');
 	}
 }
 
@@ -207,7 +225,10 @@ $(function(){
 		if(masterMenu != -1){
 			$.ajax({
 				type: 'GET',
-				url: '/rms/menu/parentListDataByMasterMenuId/' + masterMenu + "/" + menuId,
+				url: '/rms/menu/parentListDataByMasterMenuId/' + masterMenu,
+				data:{
+					isNotMenuId:menuId
+				},
 			    success: function(data){
 			    	if(data.code != 100000){
 			    		alert(data.msg);

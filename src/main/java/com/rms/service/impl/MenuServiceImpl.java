@@ -109,4 +109,40 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 			tMenuMapper.updateByPrimaryKey(tMenu);
 		}
 	}
+
+
+	@Override
+	public List<TMenu> findParentMenusByMasterMenuId(Integer masterMenuId) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("mastermenuid", masterMenuId);
+		return tMenuMapper.selectByExample(example);
+	}
+
+
+	@Override
+	public Byte findMenuMaxSort() {
+		Byte maxSort = tMenuMapper.findMenuMaxSort();
+		if(maxSort == null){
+			return 1;
+		}
+		return ++maxSort;
+	}
+
+
+	@Override
+	public List<Integer> findMenuAndChildrenMenusForRecursion(Integer id, List<Integer> ids) {
+		ids.add(id);
+		Example example = new Example(TMenu.class);
+		example.selectProperties("id");
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("parentid", id);
+		List<TMenu> tMenus = tMenuMapper.selectByExample(example);
+		if(tMenus != null && tMenus.size() > 0){
+			for (TMenu tMenu : tMenus) {
+				findMenuAndChildrenMenusForRecursion(tMenu.getId(),ids);
+			}
+		}
+		return ids;
+	}
 }
