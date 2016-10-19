@@ -1,5 +1,7 @@
 package com.rms.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.rms.base.service.impl.BaseServiceImpl;
@@ -17,4 +19,8 @@ import com.rms.service.IRoleService;
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<TRole> implements IRoleService {
 
+	@Override
+	public List<Integer> findPrivilegeIdsByRoleId(Integer roleId) {
+		return tRoleMapper.findPrivilegeIdsByRoleId(roleId);
+	}
 }

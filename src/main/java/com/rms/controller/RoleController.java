@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rms.base.controller.BaseController;
 import com.rms.helper.CodeHelper.CODE;
+import com.rms.model.po.TPrivilegeCustom;
 import com.rms.model.po.TRole;
 import com.rms.model.po.TRoleCustom;
 import com.rms.model.vo.PubRetrunMsg;
@@ -126,5 +127,36 @@ public class RoleController extends BaseController {
 	public String deleteRoles(Integer[] ids){
 		iRoleService.delete(ids);
 		return "result";
+	}
+	
+	/**
+	 * 角色-权限分配
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/rolePrivilege/man")
+	public String rolePrivilegeMan(Model model){
+		//角色列表
+		List<TRole> roles = iRoleService.findAll();
+		model.addAttribute("roles", roles);
+		
+		//权限列表
+		List<TPrivilegeCustom> privileges = iPrivilegeService.findPrivilegesForRecursion();
+		model.addAttribute("privileges", privileges);
+		return "sys/rolePrivilege_man";
+	}
+	
+	/**
+	 * 根据角色查询权限
+	 * @param roleId
+	 * @return
+	 */
+	@GetMapping("/privilegeByRole/{id}")
+	@ResponseBody
+	public PubRetrunMsg privilegesByRole(@PathVariable("id") Integer roleId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> privilegeIds = iRoleService.findPrivilegeIdsByRoleId(roleId);
+		data.put("privilegeIds", privilegeIds);
+		return new PubRetrunMsg(CODE.D100000, data);
 	}
 }
