@@ -2,6 +2,8 @@ package com.rms.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.rms.base.service.impl.BaseServiceImpl;
+import com.rms.model.po.TPrivilege;
 import com.rms.service.IPrivilegeService;
 
 /**
@@ -13,6 +15,6 @@ import com.rms.service.IPrivilegeService;
  *
  */
 @Service
-public class PrivilegeServiceImpl implements IPrivilegeService {
+public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements IPrivilegeService {
 
 }
