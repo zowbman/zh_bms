@@ -1,5 +1,9 @@
 package com.rms.model.po;
 
+import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 
  * Title:TUser
@@ -9,10 +13,12 @@ package com.rms.model.po;
  *
  */
 public class TUser {
+	@Id
     private Integer id;
 
     private String useraccount;
 
+    @JsonIgnore
     private String userpassword;
 
     private Integer departmentid;
