@@ -1,5 +1,7 @@
 package com.rms.model.po;
 
+import javax.persistence.Id;
+
 /**
  * 
  * Title:TRole
@@ -9,6 +11,7 @@ package com.rms.model.po;
  *
  */
 public class TRole {
+	@Id
     private Integer id;
 
     private String rolename;
