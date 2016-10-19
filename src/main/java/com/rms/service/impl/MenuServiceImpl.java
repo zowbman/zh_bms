@@ -1,5 +1,6 @@
 package com.rms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -144,5 +145,33 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 			}
 		}
 		return ids;
+	}
+
+
+	@Override
+	public List<TMenu> findAllBottomMenus() {
+		List<TMenuCustom> tMenuCustoms = tMenuMapper.findAllForCascade();
+		List<TMenu> bottomMenus = recursionFindBottomMenus(tMenuCustoms, new ArrayList<TMenu>(),null);
+		return bottomMenus;
+	}
+	
+	/**
+	 * 递归获取底层菜单（没有子菜单的菜单）
+	 * @param menuCustoms
+	 * @param bottomMenus
+	 * @param bottomMenu
+	 * @return
+	 */
+	private List<TMenu> recursionFindBottomMenus(List<TMenuCustom> menuCustoms, List<TMenu> bottomMenus, TMenu bottomMenu) {
+		if(menuCustoms != null && menuCustoms.size() > 0){
+			for (TMenuCustom menuCustom : menuCustoms) {
+				recursionFindBottomMenus(menuCustom.getSlaveChildrenMenus(),bottomMenus,menuCustom);
+			}
+		}else{
+			if(bottomMenu != null){
+				bottomMenus.add(bottomMenu);
+			}
+		}
+		return bottomMenus;
 	}
 }
