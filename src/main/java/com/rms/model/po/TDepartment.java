@@ -1,5 +1,7 @@
 package com.rms.model.po;
 
+import javax.persistence.Id;
+
 /**
  * 
  * Title:TDepartment
@@ -9,6 +11,7 @@ package com.rms.model.po;
  *
  */
 public class TDepartment {
+	@Id
     private Integer id;
 
     private String departmentname;

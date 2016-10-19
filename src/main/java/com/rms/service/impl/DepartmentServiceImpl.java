@@ -2,6 +2,8 @@ package com.rms.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.rms.base.service.impl.BaseServiceImpl;
+import com.rms.model.po.TDepartment;
 import com.rms.service.IDepartmentService;
 
 /**
@@ -13,6 +15,6 @@ import com.rms.service.IDepartmentService;
  *
  */
 @Service
-public class DepartmentServiceImpl implements IDepartmentService{
+public class DepartmentServiceImpl extends BaseServiceImpl<TDepartment> implements IDepartmentService{
 
 }

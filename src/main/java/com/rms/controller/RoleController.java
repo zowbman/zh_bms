@@ -85,7 +85,7 @@ public class RoleController extends BaseController {
 	 * 编辑提交
 	 * @param model
 	 * @param type 编辑类型
-	 * @param privilegeVo
+	 * @param roleVo
 	 * @return
 	 */
 	@PostMapping("/saveSubmit/{type}")

@@ -8,6 +8,9 @@ $(function(){
     //角色管理按钮
     var oButtonInit = new roleButtonInit();
     oButtonInit.Init();
+    //部门管理按钮
+    var oButtonInit = new departmentButtonInit();
+    oButtonInit.Init();
     
 })
 window.operateEvents = {
@@ -37,6 +40,15 @@ window.operateEvents = {
     	if(!confirm('确认要删除该条记录?'))
     		return false;
     	window.location.href = '/rms/role/deleteRole/' + row.id;
+    },
+    //部门管理按钮
+    'click .department-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/department/save/edit?id=' + row.id;
+     },
+    'click .department-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/department/deleteDepartment/' + row.id;
     }
 };
 //菜单表格
@@ -460,6 +472,88 @@ var roleButtonInit = function() {
 	return oInit;
 }
 
+//部门表格
+var departmentTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#department-table').bootstrapTable({
+			url : '/rms/department/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'departmentname',
+				title : '部门名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: departmentOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
+
+//按钮
+function departmentOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm department-edit">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm department-delete">删除</button>',
+            '</div>'
+    ].join('');
+}
+
+var departmentButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#departmentBtn_add').click(function(){
+			 window.location.href = '/rms/department/save/add';
+		});
+		$('#departmentBtn_delete').click(function(){
+			createHiddenInputs('#department-table');
+		})
+	}
+	return oInit;
+}
 
 
 

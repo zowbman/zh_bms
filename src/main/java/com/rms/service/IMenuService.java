@@ -16,7 +16,7 @@ import com.rms.model.vo.MenuTypeEnum;
  * @date      2016年9月28日 下午6:28:45
  *
  */
-public interface IMenuService  extends IBaseService<TMenu>{
+public interface IMenuService extends IBaseService<TMenu>{
 	
 	/**
 	 * 根据status查询主菜单
