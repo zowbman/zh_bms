@@ -6,7 +6,7 @@ table{
 	font-size:14px;
 }
 
-#menus-table td,#privilege-table td{
+#menus-table td,#privilege-table td,#role-table td,#department-table td,#group-table td{
 	vertical-align: middle;
 }
 

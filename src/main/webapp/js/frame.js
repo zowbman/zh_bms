@@ -11,7 +11,9 @@ $(function(){
     //部门管理按钮
     var oButtonInit = new departmentButtonInit();
     oButtonInit.Init();
-    
+    //用户组别
+    var oButtonInit = new groupButtonInit();
+    oButtonInit.Init();
 })
 window.operateEvents = {
 	//菜单管理按钮
@@ -49,6 +51,15 @@ window.operateEvents = {
     	if(!confirm('确认要删除该条记录?'))
     		return false;
     	window.location.href = '/rms/department/deleteDepartment/' + row.id;
+    },
+    //用户组管理
+    'click .group-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/group/save/edit?id=' + row.id;
+     },
+    'click .group-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/group/deleteGroup/' + row.id;
     }
 };
 //菜单表格
@@ -554,6 +565,90 @@ var departmentButtonInit = function() {
 	}
 	return oInit;
 }
+
+//用户组别表格
+var groupTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#group-table').bootstrapTable({
+			url : '/rms/group/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'groupname',
+				title : '用户组名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: groupOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
+
+//按钮
+function groupOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm group-edit">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm group-delete">删除</button>',
+            '</div>'
+    ].join('');
+}
+
+var groupButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#groupBtn_add').click(function(){
+			 window.location.href = '/rms/group/save/add';
+		});
+		$('#groupBtn_delete').click(function(){
+			createHiddenInputs('#group-table');
+		})
+	}
+	return oInit;
+}
+
 
 
 

@@ -3,6 +3,7 @@ package com.rms.base.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rms.service.IDepartmentService;
+import com.rms.service.IGroupService;
 import com.rms.service.IMenuService;
 import com.rms.service.IPrivilegeService;
 import com.rms.service.IRoleService;
@@ -39,4 +40,10 @@ public class BaseController {
 	 */
 	@Autowired
 	protected IDepartmentService iDepartmentService;
+	
+	/**
+	 * 用户组接口
+	 */
+	@Autowired
+	protected IGroupService iGroupService;
 }

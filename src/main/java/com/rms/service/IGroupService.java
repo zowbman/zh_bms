@@ -1,5 +1,8 @@
 package com.rms.service;
 
+import com.rms.base.service.IBaseService;
+import com.rms.model.po.TGroup;
+
 /**
  * 
  * Title:IGroupService
@@ -8,6 +11,6 @@ package com.rms.service;
  * @date      2016年9月28日 下午6:28:34
  *
  */
-public interface IGroupService {
+public interface IGroupService extends IBaseService<TGroup> {
 
 }
