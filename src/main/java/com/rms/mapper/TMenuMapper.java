@@ -46,12 +46,12 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	@Results({
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusByParentId"))
+				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId"))
 	})
 	public List<TMenuCustom> findTopSlaveMenusByMasterMenuId(Integer masterMenuId);
 	
 	/**
-	 * 根据父菜单id查询菜单
+	 * 根据父菜单id查询菜单（含权限数据）
 	 * @param parentId 父菜单id
 	 * @return List<TMenuCustom>
 	 */
@@ -59,12 +59,12 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	@Results({
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusByParentId")),
+				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId")),
 		@Result(property = "privilege",
 				column = "id",
 				one =@One(select ="findPrivilegeByMenuId"))
 	})
-	public List<TMenuCustom> findTopSlaveMenusByParentId(Integer parentId);
+	public List<TMenuCustom> findTopSlaveMenusAndPrivilegeByParentId(Integer parentId);
 	
 	/**
 	 * 根据菜单id查询权限
@@ -80,4 +80,30 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	 */
 	@Select("SELECT MAX(sort) FROM t_menu")
 	public Byte findMenuMaxSort();
+	
+	/**
+	 * 级联查询
+	 * @return
+	 */
+	@Select("SELECT * FROM t_menu WHERE menuType = 1 AND parentId is NULL")
+	@Results({
+		@Result(property = "slaveChildrenMenus",
+				column = "id",
+				many = @Many(select = "findTopSlaveMenusByParentId"))
+	})
+	public List<TMenuCustom> findAllForCascade();
+	
+	/**
+	 * 根据父菜单id查询菜单
+	 * @param parentId 父菜单id
+	 * @return List<TMenuCustom>
+	 */
+	@Select("SELECT * FROM t_menu WHERE status = 0 AND parentId = #{parentId}")
+	@Results({
+		@Result(property = "id", column="id"),
+		@Result(property = "slaveChildrenMenus",
+				column = "id",
+				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId")),
+	})
+	public List<TMenuCustom> findTopSlaveMenusByParentId(Integer parentId);
 }

@@ -26,7 +26,7 @@
 	<script type="text/javascript">		
 		$(function(){
 		    //1.初始化Table
-		    var oTable = new TableInit();
+		    var oTable = new menuTableInit();
 		    oTable.Init(${menuTypeValue});
 		});
 	</script>

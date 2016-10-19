@@ -97,4 +97,10 @@ public interface IMenuService  extends IBaseService<TMenu>{
 	 * @return
 	 */
 	 List<Integer> findMenuAndChildrenMenusForRecursion(Integer id,List<Integer> ids);
+	 
+	 /**
+	  * 查询全部底层节点
+	  * @return
+	  */
+	 List<TMenu> findAllBottomMenus();
 }
