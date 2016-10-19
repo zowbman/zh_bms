@@ -55,5 +55,7 @@ function getIdSelections(table) {
 }
 
 function frameLoad(url){
+	if(url == '')
+		return;
 	$('.right-iframe').attr('src',url);
 }

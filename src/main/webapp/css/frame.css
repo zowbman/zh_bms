@@ -6,7 +6,7 @@ table{
 	font-size:14px;
 }
 
-#menus-table td{
+#menus-table td,#privilege-table td{
 	vertical-align: middle;
 }
 

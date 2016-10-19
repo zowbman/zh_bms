@@ -1,8 +1,17 @@
 $(function(){
-    var oButtonInit = new ButtonInit();
+	//菜单管理按钮
+    var oButtonInit = new menuButtonInit();
     oButtonInit.Init();
+    //权限管理按钮
+    var oButtonInit = new privilegeButtonInit();
+    oButtonInit.Init();
+    //角色管理按钮
+    var oButtonInit = new roleButtonInit();
+    oButtonInit.Init();
+    
 })
 window.operateEvents = {
+	//菜单管理按钮
     'click .menu-edit': function (e, value, row, index) {
        window.location.href = '/rms/menu/save/edit?id=' + row.id;
     },
@@ -10,10 +19,28 @@ window.operateEvents = {
     	if(!confirm('确认要删除该条记录?（如有子级数据则会级联操作）'))
     		return false;
     	window.location.href = '/rms/menu/deleteMenu/' + row.id;
+    },
+    //权限管理按钮
+    'click .privilege-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/privilege/save/edit?id=' + row.id;
+     },
+    'click .privilege-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/privilege/deletePrivilege/' + row.id;
+    },
+    //角色管理按钮
+    'click .role-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/role/save/edit?id=' + row.id;
+     },
+    'click .role-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/role/deleteRole/' + row.id;
     }
 };
 //菜单表格
-var TableInit = function() {
+var menuTableInit = function() {
 	var oTableInit = new Object();
 	oTableInit.Init = function(menuType) {
 		$('#menus-table').bootstrapTable({
@@ -43,7 +70,7 @@ var TableInit = function() {
 			},
 			//注册加载子表的事件。注意下这里的三个参数！
 			onExpandRow : function(index, row, $detail) {
-				var oButtonInit = new ButtonInit();
+				var oButtonInit = new menuButtonInit();
 				oButtonInit.InitSubTable(index, row, $detail);
 			},
 			columns : [ {
@@ -97,14 +124,14 @@ var TableInit = function() {
 				align: 'center',
 				valign: 'middle',
 				events: operateEvents,
-				formatter: operateFormatter
+				formatter: menuOperateFormatter
 			} ]
 		});
 	}
 	return oTableInit;
 }
 
-var ButtonInit = function() {
+var menuButtonInit = function() {
 	var oInit = new Object();
 	//初始化子表格(无线循环)
 	oInit.InitSubTable = function(index, row, $detail) {
@@ -155,7 +182,7 @@ var ButtonInit = function() {
 				title : '操作',
 				align: 'center',
 				events : operateEvents,
-				formatter: operateFormatter
+				formatter: menuOperateFormatter
 			} ],
 			responseHandler : function(res) {
 				if (res.code = 100000)
@@ -179,7 +206,7 @@ var ButtonInit = function() {
 }
 
 //按钮
-function operateFormatter(value, row, index) {
+function menuOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
             '<button type="button" class="btn btn-primary btn-sm menu-edit">修改</button>',
@@ -250,6 +277,189 @@ $(function(){
 		}
 	}
 });
+
+//权限表格
+var privilegeTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#privilege-table').bootstrapTable({
+			url : '/rms/privilege/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'privilegename',
+				title : '权限名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'privilegeurl',
+				title : 'URL',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'menuid',
+				title : '绑定菜单',
+				align: 'center',
+				valign: 'middle'
+					
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: privilegeOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
+
+//按钮
+function privilegeOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm privilege-edit">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm privilege-delete">删除</button>',
+            '</div>'
+    ].join('');
+}
+
+var privilegeButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#privilegeBtn_add').click(function(){
+			 window.location.href = '/rms/privilege/save/add';
+		});
+		$('#privilegeBtn_delete').click(function(){
+			createHiddenInputs('#privilege-table');
+		})
+	}
+	return oInit;
+}
+
+//角色表格
+var roleTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#role-table').bootstrapTable({
+			url : '/rms/role/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'rolename',
+				title : '角色名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'status',
+				title : '状态',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: roleOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
+
+//按钮
+function roleOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm role-edit">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm role-delete">删除</button>',
+            '</div>'
+    ].join('');
+}
+
+var roleButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#roleBtn_add').click(function(){
+			 window.location.href = '/rms/role/save/add';
+		});
+		$('#roleBtn_delete').click(function(){
+			createHiddenInputs('#role-table');
+		})
+	}
+	return oInit;
+}
+
 
 
 
