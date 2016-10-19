@@ -11,8 +11,11 @@ $(function(){
     //部门管理按钮
     var oButtonInit = new departmentButtonInit();
     oButtonInit.Init();
-    //用户组别
+    //用户组别管理按钮
     var oButtonInit = new groupButtonInit();
+    oButtonInit.Init();
+    //用户管理按钮
+    var oButtonInit = new userButtonInit();
     oButtonInit.Init();
 })
 window.operateEvents = {
@@ -60,6 +63,15 @@ window.operateEvents = {
     	if(!confirm('确认要删除该条记录?'))
     		return false;
     	window.location.href = '/rms/group/deleteGroup/' + row.id;
+    },
+    //用户管理
+    'click .user-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/user/save/edit?id=' + row.id;
+     },
+    'click .user-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/user/deleteUser/' + row.id;
     }
 };
 //菜单表格
@@ -325,6 +337,12 @@ var privilegeTableInit = function() {
 			clickToSelect : true,
 			/*height : 700,*/
 			uniqueId : "id",
+			detailView : true,
+			//注册加载子表的事件。注意下这里的三个参数！
+			onExpandRow : function(index, row, $detail) {
+				var oButtonInit = new privilegeButtonInit();
+				oButtonInit.InitSubTable(index, row, $detail);
+			},
 			responseHandler : function(res) {
 				if (res.code = 100000)
 					return res.data.list;
@@ -384,6 +402,62 @@ function privilegeOperateFormatter(value, row, index) {
 
 var privilegeButtonInit = function() {
 	var oInit = new Object();
+	//初始化子表格(无线循环)
+	oInit.InitSubTable = function(index, row, $detail) {
+		var parentid = row.id;
+		var cur_table = $detail.html('<table></table>').find('table');
+		$(cur_table).bootstrapTable({
+			url : '/rms/privilege/childrenListData/' + parentid,
+			method : 'get',
+			clickToSelect : true,
+			detailView : true,//父子表
+			uniqueId : "id",
+			pageSize : 10,
+			pageList : [ 10, 25 ],
+			columns : [{
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'privilegename',
+				title : '权限名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'privilegeurl',
+				title : 'URL',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'menuid',
+				title : '绑定菜单',
+				align: 'center',
+				valign: 'middle'
+					
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: privilegeOperateFormatter
+			} ],
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			//无线循环取子表，直到子表里面没有记录
+			onExpandRow : function(index, row, $Subdetail) {
+				oInit.InitSubTable(index, row, $Subdetail);
+			}
+		});
+	};
 	oInit.Init = function(){
 		$('#privilegeBtn_add').click(function(){
 			 window.location.href = '/rms/privilege/save/add';
@@ -482,6 +556,38 @@ var roleButtonInit = function() {
 	}
 	return oInit;
 }
+
+//角色-权限分配
+$(function(){
+	$('#roles-privileges').change(function(){
+		var _roleId = $(this).val();
+		if(_roleId == -1){
+			$('#roles-privileges-form')[0].reset();
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/role/privilegeByRole/' + _roleId,
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$.each(data.data.privilegeIds,function(i,item1){
+		    			$.each($('#privilegeTree').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	});
+})
 
 //部门表格
 var departmentTableInit = function() {
@@ -649,7 +755,91 @@ var groupButtonInit = function() {
 	return oInit;
 }
 
+//用户表格
+var userTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#user-table').bootstrapTable({
+			url : '/rms/user/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'useraccount',
+				title : '用户名',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'departmentid',
+				title : '所属部门',
+				align: 'center',
+				valign: 'middle'
+			},{
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: userOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
 
+//按钮
+function userOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm user-edit">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm user-delete">删除</button>',
+            '</div>'
+    ].join('');
+}
 
-
+var userButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#userBtn_add').click(function(){
+			 window.location.href = '/rms/user/save/add';
+		});
+		$('#userBtn_delete').click(function(){
+			createHiddenInputs('#user-table');
+		})
+	}
+	return oInit;
+}
 

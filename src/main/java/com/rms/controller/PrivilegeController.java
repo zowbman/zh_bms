@@ -52,7 +52,21 @@ public class PrivilegeController extends BaseController {
 	@ResponseBody
 	public PubRetrunMsg listData(){
 		Map<String, Object> data = new HashMap<String, Object>();
-		List<TPrivilege> privileges = iPrivilegeService.findAll();
+		List<TPrivilege> privileges = iPrivilegeService.findTopPrivileges();
+		data.put("list", privileges);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 权限子级列表数据
+	 * @param parentId 父级id
+	 * @return PubRetrunMsg
+	 */
+	@GetMapping("/childrenListData/{parentId}")
+	@ResponseBody
+	public PubRetrunMsg childrenListData(@PathVariable("parentId") Integer parentId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<TPrivilege> privileges = iPrivilegeService.findChildrenPrivileges(parentId);
 		data.put("list", privileges);
 		return new PubRetrunMsg(CODE.D100000, data);
 	}
@@ -70,6 +84,9 @@ public class PrivilegeController extends BaseController {
 		//获取底层菜单（没有子菜单的菜单）
 		List<TMenu> menus = iMenuService.findAllBottomMenus();
 		model.addAttribute("menus", menus);
+		//获取父级权限列表
+		List<TPrivilegeCustom> parentPrivileges = iPrivilegeService.findPrivilegesForRecursion();
+		model.addAttribute("parentPrivileges", parentPrivileges);
 		if("edit".equals(type)){
 			TPrivilege privilege = iPrivilegeService.getById(id);
 			TPrivilegeCustom privilegeCustom = new TPrivilegeCustom();
@@ -98,6 +115,7 @@ public class PrivilegeController extends BaseController {
 			privilege.setPrivilegename(privilegeVo.getPrivilege().getPrivilegename());
 			privilege.setPrivilegeurl(privilegeVo.getPrivilege().getPrivilegeurl());
 			privilege.setMenuid(privilegeVo.getPrivilege().getMenuid() == -1 ? null : privilegeVo.getPrivilege().getMenuid());
+			privilege.setParentid(privilegeVo.getPrivilege().getParentid() == -1 ? null : privilegeVo.getPrivilege().getParentid());
 			privilege.setAddtime((int)(privilegeVo.getAddtime().getTime() / 1000L));
 			iPrivilegeService.updateSeletive(privilege);
 		}else{//add
@@ -105,6 +123,7 @@ public class PrivilegeController extends BaseController {
 			privilege.setPrivilegename(privilegeVo.getPrivilege().getPrivilegename());
 			privilege.setPrivilegeurl(privilegeVo.getPrivilege().getPrivilegeurl());
 			privilege.setMenuid(privilegeVo.getPrivilege().getMenuid() == -1 ? null : privilegeVo.getPrivilege().getMenuid());
+			privilege.setParentid(privilegeVo.getPrivilege().getParentid() == -1 ? null : privilegeVo.getPrivilege().getParentid());
 			privilege.setAddtime((int)(privilegeVo.getAddtime().getTime() / 1000L));
 			iPrivilegeService.saveSeletive(privilege);
 		}

@@ -68,7 +68,7 @@ public class DataSourceConfig extends MybatisAutoConfiguration {
 		
 		//读数据源封装
 		List<DataSource> readDataSources = new ArrayList<DataSource>();
-		readDataSources.add(SpringContextHolder.getBean("readDataSource"));
+		readDataSources.add((DataSource) SpringContextHolder.getBean("readDataSource"));
 		//如多个读数据源则在这里添加
 		//readDataSources.add(SpringContextHolder.getBean("xxxx"));
 		//...

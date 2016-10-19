@@ -34,6 +34,8 @@ dependencies {
  	compile 'com.github.jsqlparser:jsqlparser:0.9.4'
  	
  	compile 'org.aspectj:aspectjweaver:1.8.9'
+ 	
+ 	compile 'commons-codec:commons-codec:1.10'
 }
 
 /*configurations.all {

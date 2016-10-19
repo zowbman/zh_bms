@@ -19,6 +19,8 @@ public class TPrivilege {
     private String privilegeurl;
 
     private Integer menuid;
+    
+    private Integer parentid;
 
     private Integer addtime;
 
@@ -61,4 +63,13 @@ public class TPrivilege {
     public void setAddtime(Integer addtime) {
         this.addtime = addtime;
     }
+
+	public Integer getParentid() {
+		return parentid;
+	}
+
+	public void setParentid(Integer parentid) {
+		this.parentid = parentid;
+	}
+       
 }

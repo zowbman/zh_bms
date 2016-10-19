@@ -11,8 +11,20 @@
 				    	<input type="text" name="privilege.privilegename" value="${privilege.privilegename }" class="form-control" id="privilegename" placeholder="权限名称">
 					</div>
 					<div class="form-group">
-				    	<span class="font_exp">*</span><label for="privilegeurl">URL</label>
+				    	<label for="privilegeurl">URL</label>
 				    	<input type="text" name="privilege.privilegeurl" value="${privilege.privilegeurl }" class="form-control" id="privilegeurl" placeholder="URL">
+					</div>
+					<div class="form-group">
+				    	<label for="parentprivileges">父级权限</label>
+				    	<select id="parentprivileges" name="privilege.parentid" class="form-control">
+				    		<option value="-1">请选择父级权限</option>
+				    		<%@ include file="../public/privilege_select.jsp"%>
+				    		<%-- <c:forEach items="${parentPrivileges }" var="parentPrivilege">
+				    			<c:if test="${privilege.id != parentPrivilege.id }">
+									<option value="${parentPrivilege.id }" <c:if test="${parentPrivilege.id == privilege.parentid}">selected</c:if>>${parentPrivilege.privilegename }</option>
+								</c:if>
+							</c:forEach> --%>
+						</select>
 					</div>
 					<div class="form-group">
 				    	<label for="menus">绑定菜单</label>

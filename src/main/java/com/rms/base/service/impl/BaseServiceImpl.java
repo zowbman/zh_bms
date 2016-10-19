@@ -10,6 +10,8 @@ import tk.mybatis.mapper.common.Mapper;
 
 import com.rms.base.service.IBaseService;
 import com.rms.mapper.TMenuMapper;
+import com.rms.mapper.TPrivilegeMapper;
+import com.rms.mapper.TRoleMapper;
 
 @Service
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
@@ -30,9 +32,23 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@Autowired
 	private Mapper<T> mapper;
 	
+	/**
+	 * 菜单mapper接口
+	 */
 	@Autowired
 	protected TMenuMapper tMenuMapper;
+	
+	/**
+	 * 角色mapper接口
+	 */
+	@Autowired
+	protected TRoleMapper tRoleMapper;
 
+	/**
+	 * 权限mapper接口
+	 */
+	@Autowired
+	protected TPrivilegeMapper tPrivilegeMapper;
 
 
 	public void save(T entity) {
