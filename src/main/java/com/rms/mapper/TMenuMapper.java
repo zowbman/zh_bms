@@ -106,4 +106,18 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId")),
 	})
 	public List<TMenuCustom> findTopSlaveMenusByParentId(Integer parentId);
+	
+	/**
+	 * 根据主master菜单id级联查询
+	 * @return
+	 */
+	@Select("SELECT * FROM t_menu WHERE masterMenuId = #{masterMenuId} AND parentId is NULL")
+	@Results({
+		@Result(property = "id", column="id"),
+		@Result(property = "slaveChildrenMenus",
+				column = "id",
+				many = @Many(select = "findTopSlaveMenusByParentId"))
+	})
+	public List<TMenuCustom> findMenusByMasterIdForCascade(Integer masterMenuId);
+	
 }

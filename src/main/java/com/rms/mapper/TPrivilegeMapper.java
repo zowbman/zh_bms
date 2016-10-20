@@ -33,7 +33,7 @@ public interface TPrivilegeMapper extends Mapper<TPrivilege> {
 				column = "id",
 				many = @Many(select = "findPrivilegesByParentId")),
 	})
-	public List<TPrivilegeCustom> findPrivilegesForRecursion();
+	public List<TPrivilegeCustom> findPrivilegesForCascade();
 	
 	/**
 	 * 根据父id查询权限
@@ -48,5 +48,20 @@ public interface TPrivilegeMapper extends Mapper<TPrivilege> {
 				many = @Many(select = "findPrivilegesByParentId"))
 	})
 	public List<TPrivilegeCustom> findPrivilegesByParentId(Integer parentId);
+	
+	
+	/**
+	 * 根据id递归查询权限
+	 * @param id
+	 * @return
+	 */
+	@Select("SELECT * FROM t_privilege WHERE id = #{id}")
+	@Results({
+		@Result(property = "id", column="id"),
+		@Result(property = "childrenPrivileges",
+				column = "id",
+				many = @Many(select = "findPrivilegesByParentId")),
+	})
+	public List<TPrivilegeCustom> findPrivilegeByIdForCascade(Integer id);
 	
 }

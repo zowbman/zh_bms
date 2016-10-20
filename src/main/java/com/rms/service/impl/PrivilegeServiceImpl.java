@@ -1,5 +1,6 @@
 package com.rms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 	}
 
 	@Override
-	public List<TPrivilegeCustom> findPrivilegesForRecursion() {
-		return tPrivilegeMapper.findPrivilegesForRecursion();
+	public List<TPrivilegeCustom> findPrivilegesForCascade() {
+		return tPrivilegeMapper.findPrivilegesForCascade();
 	}
 
 	@Override
@@ -42,5 +43,59 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 		Criteria criteria = example.createCriteria();
 		criteria.andIsNull("parentid");
 		return tPrivilegeMapper.selectByExample(example);
+	}
+
+	@Override
+	public void updatePrivilegeSeletive(TPrivilege tPrivilege) {
+		boolean flag = true;
+		if(tPrivilege.getParentid() != null){
+			Example example = new Example(TPrivilege.class);
+			Criteria criteria = example.createCriteria();
+			criteria.andEqualTo("id", tPrivilege.getParentid());
+			List<TPrivilege> parentPrivileges = tPrivilegeMapper.selectByExample(example);
+			if(parentPrivileges != null && parentPrivileges.size() == 1){
+				if(tPrivilege.getId().equals(parentPrivileges.get(0).getParentid())){
+					parentPrivileges.get(0).setParentid(null);
+					tPrivilegeMapper.updateByPrimaryKey(parentPrivileges.get(0));
+				}
+			}else if(parentPrivileges.size() > 1){
+				flag = false;
+			}
+		}
+		if(flag){
+			tPrivilegeMapper.updateByPrimaryKeySelective(tPrivilege);
+		}
+	}
+
+	@Override
+	public void deletePrivilegeByIdForRecursion(Integer id) {
+		List<TPrivilegeCustom> privilegeCustoms = tPrivilegeMapper.findPrivilegeByIdForCascade(id);
+		List<TPrivilege> privileges = recursionPrivilege(privilegeCustoms, new ArrayList<TPrivilege>());
+		for (TPrivilege tPrivilege : privileges) {
+			tPrivilegeMapper.deleteByPrimaryKey(tPrivilege.getId());
+		}
+	}
+	
+	@Override
+	public void deletePrivilegeByIdsForRecursion(Integer[] ids) {
+		for (Integer id : ids) {
+			deletePrivilegeByIdForRecursion(id);
+		}
+	}
+	
+	/**
+	 * 递归获取权限列表
+	 * @param privilegeCustoms 处理数据
+	 * @param resultPrivileges 结果数据
+	 * @return
+	 */
+	private List<TPrivilege> recursionPrivilege(List<TPrivilegeCustom> privilegeCustoms,List<TPrivilege> resultPrivileges){
+		if(privilegeCustoms != null && privilegeCustoms.size() > 0){
+			for (TPrivilegeCustom privilegeCustom : privilegeCustoms) {
+				resultPrivileges.add(privilegeCustom);
+				recursionPrivilege(privilegeCustom.getChildrenPrivileges(),resultPrivileges);
+			}
+		}
+		return resultPrivileges;
 	}
 }

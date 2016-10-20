@@ -85,7 +85,7 @@ public class PrivilegeController extends BaseController {
 		List<TMenu> menus = iMenuService.findAllBottomMenus();
 		model.addAttribute("menus", menus);
 		//获取父级权限列表
-		List<TPrivilegeCustom> parentPrivileges = iPrivilegeService.findPrivilegesForRecursion();
+		List<TPrivilegeCustom> parentPrivileges = iPrivilegeService.findPrivilegesForCascade();
 		model.addAttribute("parentPrivileges", parentPrivileges);
 		if("edit".equals(type)){
 			TPrivilege privilege = iPrivilegeService.getById(id);
@@ -117,7 +117,7 @@ public class PrivilegeController extends BaseController {
 			privilege.setMenuid(privilegeVo.getPrivilege().getMenuid() == -1 ? null : privilegeVo.getPrivilege().getMenuid());
 			privilege.setParentid(privilegeVo.getPrivilege().getParentid() == -1 ? null : privilegeVo.getPrivilege().getParentid());
 			privilege.setAddtime((int)(privilegeVo.getAddtime().getTime() / 1000L));
-			iPrivilegeService.updateSeletive(privilege);
+			iPrivilegeService.updatePrivilegeSeletive(privilege);
 		}else{//add
 			TPrivilege privilege = new TPrivilege();
 			privilege.setPrivilegename(privilegeVo.getPrivilege().getPrivilegename());
@@ -137,7 +137,7 @@ public class PrivilegeController extends BaseController {
 	 */
 	@GetMapping("/deletePrivilege/{id}")
 	public String deletePrivilege(@PathVariable("id") Integer id){
-		iPrivilegeService.delete(id);
+		iPrivilegeService.deletePrivilegeByIdForRecursion(id);
 		return "result";
 	}
 	
@@ -148,7 +148,7 @@ public class PrivilegeController extends BaseController {
 	 */
 	@PostMapping("/deletePrivileges")
 	public String deletePrivileges(Integer[] ids){
-		iPrivilegeService.delete(ids);
+		iPrivilegeService.deletePrivilegeByIdsForRecursion(ids);
 		return "result";
 	}
 }

@@ -33,7 +33,7 @@ window.operateEvents = {
     	window.location.href = '/rms/privilege/save/edit?id=' + row.id;
      },
     'click .privilege-delete': function (e, value, row, index) {
-    	if(!confirm('确认要删除该条记录?'))
+    	if(!confirm('确认要删除该条记录?（如有子级数据则会级联操作）'))
     		return false;
     	window.location.href = '/rms/privilege/deletePrivilege/' + row.id;
     },
@@ -278,7 +278,7 @@ function menuType(_target){
 $(function(){
 	//主（Master）菜单选择
 	if($('#mastermenus').length == 1){
-		masterMenusLoad($('#mastermenus').val(),$('input[name="menu.id"]').val());
+		//masterMenusLoad($('#mastermenus').val(),$('input[name="menu.id"]').val());
 	}
 	$('#mastermenus').change(function(){
 		masterMenusLoad($('#mastermenus').val(),$('input[name="menu.id"]').val());
@@ -298,6 +298,7 @@ $(function(){
 			    		$('#parentmenus').empty();
 			    		$('#parentmenus').html('<option value="-1">请选择父级菜单</option>');
 			    		$.each(data.data.list,function(i,item){
+			    			item.menuname = item.menuname.replace('-','&nbsp;&nbsp;&nbsp;');
 			    			$('#parentmenus').append('<option value="'+ item.id +'">'+ item.menuname +'</option>')
 			    		});
 			    	}

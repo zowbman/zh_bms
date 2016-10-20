@@ -107,11 +107,11 @@ public class MenuController extends BaseController {
 				masterMenus = iMenuService.findMasterMenusByStatus(null);
 			}
 			model.addAttribute("masterMenus", masterMenus);
-			if(menu.getParentid() != null){
-				//父级菜单
-				List<TMenu> parentMenus = iMenuService.findSlaveMenusIsNotMe(menu.getId());
-				model.addAttribute("parentMenus", parentMenus);
-			}
+			
+			//父级菜单
+			List<TMenuCustom> parentMenus = iMenuService.findMenusForCascade(menu.getMastermenuid());
+			model.addAttribute("parentMenus", parentMenus);
+			
 		}else{//add
 			TMenuCustom menu = new TMenuCustom();
 			menu.setAddtime((int)BaseUtil.currentTimeMillis());
@@ -138,9 +138,9 @@ public class MenuController extends BaseController {
 		Map<String, Object> data = new HashMap<String, Object>();
 		List<TMenu> menus;
 		if(isNotMenuId != null){
-			menus = iMenuService.findParentMenusByMasterMenuIdIsNotMe(masterMenuId,isNotMenuId);
+			menus = iMenuService.findMenusIsNotMenuForRecursion(masterMenuId, isNotMenuId);
 		}else{
-			menus = iMenuService.findParentMenusByMasterMenuId(masterMenuId);
+			menus = iMenuService.findMenusForRecursion(masterMenuId);
 		}
 		data.put("list", menus);
 		return new PubRetrunMsg(CODE.D100000, data);
@@ -178,7 +178,7 @@ public class MenuController extends BaseController {
 			menu.setSort(menuVo.getMenu().getSort());//排序
 			menu.setStatus(menuVo.getMenu().getStatus());//启用状态
 			menu.setAddtime((int) (menuVo.getAddtime().getTime() / 1000L));//添加时间修改
-			iMenuService.updateSeletive(menu);
+			iMenuService.updateMenuSeletive(menu);
 		}else{//add
 			TMenu tMenu = new TMenu();
 			tMenu.setMenuname(menuVo.getMenu().getMenuname());
@@ -202,7 +202,7 @@ public class MenuController extends BaseController {
 	 */
 	@GetMapping("/deleteMenu/{id}")
 	public String deleteMenu(@PathVariable("id") Integer id){
-		List<Integer> ids = iMenuService.findMenuAndChildrenMenusForRecursion(id, new ArrayList<Integer>());
+		List<Integer> ids = iMenuService.findMenuAndChildrenMenuIdsForRecursion(id, new ArrayList<Integer>());
 		iMenuService.delete(ids.toArray(new Integer[ids.size()]));
 		return "result";
 	}
@@ -215,7 +215,7 @@ public class MenuController extends BaseController {
 	@PostMapping("/deleteMenus")
 	public String deleteMenus(Integer[] ids){
 		for (Integer id : ids) {
-			List<Integer> ids2 = iMenuService.findMenuAndChildrenMenusForRecursion(id, new ArrayList<Integer>());
+			List<Integer> ids2 = iMenuService.findMenuAndChildrenMenuIdsForRecursion(id, new ArrayList<Integer>());
 			iMenuService.delete(ids2.toArray(new Integer[ids2.size()]));
 		}
 		return "result";

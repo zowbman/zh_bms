@@ -57,26 +57,10 @@ public interface IMenuService extends IBaseService<TMenu>{
 	List<TMenu> findSlaveMenus();
 	
 	/**
-	 * 查询从菜单（不含自己）
-	 * @param menuId 菜单id
+	 * 根据masterId级联查询从菜单
 	 * @return
 	 */
-	List<TMenu> findSlaveMenusIsNotMe(Integer menuId);
-	
-	/**
-	 * 根据masterMenuId查询不包含自己父级菜单
-	 * @param masterMenuId 主菜单
-	 * @param isNotMenuId 自己id
-	 * @return
-	 */
-	List<TMenu> findParentMenusByMasterMenuIdIsNotMe(Integer masterMenuId, Integer isNotMenuId);
-	
-	/**
-	 * 根据masterMenuId查询
-	 * @param masterMenuId 主菜单
-	 * @return
-	 */
-	List<TMenu> findParentMenusByMasterMenuId(Integer masterMenuId);
+	List<TMenuCustom> findMenusForCascade(Integer masterMenuId);
 	
 	/**
 	 * 更新从从菜单到主菜单
@@ -92,15 +76,37 @@ public interface IMenuService extends IBaseService<TMenu>{
 	Byte findMenuMaxSort();
 	
 	/**
-	 * 递归查询菜单和子菜单
-	 * @param id
+	 * 递归查询菜单和子菜单的ids
+	 * @param id 指定餐单
 	 * @return
 	 */
-	 List<Integer> findMenuAndChildrenMenusForRecursion(Integer id,List<Integer> ids);
+	 List<Integer> findMenuAndChildrenMenuIdsForRecursion(Integer id,List<Integer> ids);
 	 
 	 /**
 	  * 查询全部底层节点
 	  * @return
 	  */
 	 List<TMenu> findAllBottomMenus();
+
+	 /**
+	  * 根据主master菜单id递归查询菜单
+	  * @param masterMenuId 主master菜单
+	  * @return
+	  */
+	 List<TMenu> findMenusForRecursion(Integer masterMenuId);
+	 
+	 /**
+	  * 根据主master菜单id递归查询菜单(不包含自己)
+	  * @param masterMenuId 主master菜单
+	  * @param isNotMenuId 不含自己
+	  * @return
+	  */
+	 List<TMenu> findMenusIsNotMenuForRecursion(Integer masterMenuId, Integer isNotMenuId);
+	 
+	 /**
+	  * 更新实体
+	  * @param tMenu
+	  */
+	 void updateMenuSeletive(TMenu tMenu);
+	 
 }

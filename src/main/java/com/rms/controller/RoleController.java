@@ -141,7 +141,7 @@ public class RoleController extends BaseController {
 		model.addAttribute("roles", roles);
 		
 		//权限列表
-		List<TPrivilegeCustom> privileges = iPrivilegeService.findPrivilegesForRecursion();
+		List<TPrivilegeCustom> privileges = iPrivilegeService.findPrivilegesForCascade();
 		model.addAttribute("privileges", privileges);
 		return "sys/rolePrivilege_man";
 	}

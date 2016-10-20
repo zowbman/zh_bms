@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!-- 权限递归 -->
-<c:forEach items="${parentPrivileges}" var="parentPrivilege">
-		<c:if test="${parentPrivilege.id != privilege.id }">
-			<option value="${parentPrivilege.id }" <c:if test="${parentPrivilege.id == privilege.parentid}">selected</c:if>>
+<!-- 菜单按下拉框递归 -->
+<c:forEach items="${parentMenus}" var="parentMenu">
+		<c:if test="${parentMenu.id != menu.id}">
+			<option value="${parentMenu.id }" <c:if test="${parentMenu.id == menu.parentid}">selected</c:if>>
 			<c:forEach var="i" begin="1" end="${level }">
 				<c:choose>
 					<c:when test="${i == level}">
@@ -16,16 +16,16 @@
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
-			${parentPrivilege.privilegename }
+			${parentMenu.menuname }
 			</option>
 		</c:if>
 		<c:choose>
-			<c:when test="${fn:length(parentPrivilege.childrenPrivileges) > 0}">
-					<c:if test="${parentPrivilege.id != privilege.id}">
+			<c:when test="${fn:length(parentMenu.slaveChildrenMenus) > 0}">
+					<c:if test="${parentMenu.id != menu.id}">
 						<c:set var="level" value="${level + 1 }" scope="request" />	
 					</c:if>
-					<c:set var="parentPrivileges" value="${parentPrivilege.childrenPrivileges}" scope="request" /><!-- 注意此处，子列表覆盖treeList，在request作用域 -->
-					<c:import url="../public/privilege_select.jsp" />
+					<c:set var="parentMenus" value="${parentMenu.slaveChildrenMenus}" scope="request" /><!-- 注意此处，子列表覆盖treeList，在request作用域 -->
+					<c:import url="../public/menu_select.jsp" />
 			</c:when>
 		</c:choose>
 </c:forEach>

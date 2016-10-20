@@ -38,9 +38,10 @@
 				    	<label for="parentmenus">父级菜单</label>
 				    	<select id="parentmenus" name="menu.parentid" class="form-control">
 				    		<option value="-1">请选择父级菜单</option>
-				    		<c:forEach items="${parentMenus }" var="parentMenu">
+				    		<%@ include file="../public/menu_select.jsp"%>
+				    		<%-- <c:forEach items="${parentMenus }" var="parentMenu">
 								<option value="${parentMenu.id }" <c:if test="${parentMenu.id == menu.parentid}">selected</c:if>>${parentMenu.menuname }</option>
-							</c:forEach>
+							</c:forEach> --%>
 						</select>
 					</div>
 					<div class="form-group">

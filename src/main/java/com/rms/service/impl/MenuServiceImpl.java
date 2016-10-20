@@ -1,6 +1,7 @@
 package com.rms.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -79,26 +80,11 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		criteria.andEqualTo("menutype", 1);
 		return tMenuMapper.selectByExample(example);
 	}
-
+	
 	@Override
-	public List<TMenu> findSlaveMenusIsNotMe(Integer menuId) {
-		Example example = new Example(TMenu.class);
-		Criteria criteria = example.createCriteria();
-		criteria.andEqualTo("menutype", 1);
-		criteria.andNotEqualTo("id", menuId);
-		return tMenuMapper.selectByExample(example);
+	public List<TMenuCustom> findMenusForCascade(Integer masterMenuId) {
+		return tMenuMapper.findMenusByMasterIdForCascade(masterMenuId);
 	}
-
-
-	@Override
-	public List<TMenu> findParentMenusByMasterMenuIdIsNotMe(Integer masterMenuId, Integer isNotMenuId) {
-		Example example = new Example(TMenu.class);
-		Criteria criteria = example.createCriteria();
-		criteria.andEqualTo("mastermenuid", masterMenuId);
-		criteria.andNotEqualTo("id", isNotMenuId);
-		return tMenuMapper.selectByExample(example);
-	}
-
 
 	@Override
 	public void updateSlaveToMasterMenu(Integer masterMenuId, Integer parentMenuId) {
@@ -111,16 +97,6 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		}
 	}
 
-
-	@Override
-	public List<TMenu> findParentMenusByMasterMenuId(Integer masterMenuId) {
-		Example example = new Example(TMenu.class);
-		Criteria criteria = example.createCriteria();
-		criteria.andEqualTo("mastermenuid", masterMenuId);
-		return tMenuMapper.selectByExample(example);
-	}
-
-
 	@Override
 	public Byte findMenuMaxSort() {
 		Byte maxSort = tMenuMapper.findMenuMaxSort();
@@ -132,7 +108,7 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 
 
 	@Override
-	public List<Integer> findMenuAndChildrenMenusForRecursion(Integer id, List<Integer> ids) {
+	public List<Integer> findMenuAndChildrenMenuIdsForRecursion(Integer id, List<Integer> ids) {
 		ids.add(id);
 		Example example = new Example(TMenu.class);
 		example.selectProperties("id");
@@ -141,7 +117,7 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 		List<TMenu> tMenus = tMenuMapper.selectByExample(example);
 		if(tMenus != null && tMenus.size() > 0){
 			for (TMenu tMenu : tMenus) {
-				findMenuAndChildrenMenusForRecursion(tMenu.getId(),ids);
+				findMenuAndChildrenMenuIdsForRecursion(tMenu.getId(),ids);
 			}
 		}
 		return ids;
@@ -173,5 +149,83 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 			}
 		}
 		return bottomMenus;
+	}
+
+	@Override
+	public List<TMenu> findMenusForRecursion(Integer masterMenuId) {
+		List<TMenuCustom> menuCustoms = tMenuMapper.findMenusByMasterIdForCascade(masterMenuId);
+		return recursionMenusForSelect(menuCustoms, new ArrayList<TMenu>(),"┗",true);
+	}
+	
+	@Override
+	public List<TMenu> findMenusIsNotMenuForRecursion(Integer masterMenuId, Integer isNotMenuId) {
+		List<TMenuCustom> menuCustoms = tMenuMapper.findMenusByMasterIdForCascade(masterMenuId);
+		List<TMenu> resultMenus = recursionMenusForSelect(menuCustoms, new ArrayList<TMenu>(),"┗",true);
+		
+		//已经删除，已经更改
+		boolean trueRemove = false,trueChange = false;
+		Integer tempId = -1;
+		Iterator<TMenu> it = resultMenus.iterator();
+		while (it.hasNext()) {
+			TMenu menu = it.next();
+			
+			if(menu.getId().equals(isNotMenuId)){
+				it.remove();
+				trueRemove = true;
+				tempId = menu.getId();
+			}
+			if(tempId.equals(menu.getParentid())){
+				menu.setMenuname(menu.getMenuname().replaceAll("[-┗]", ""));
+				trueChange = false;
+			}
+			if(trueRemove && trueChange){
+				break;
+			}
+		}
+		return resultMenus;
+	}
+
+	/**
+	 * 递归获取菜单（且处理菜单名称，显得有层次感）
+	 * @param menuCustoms 处理数据
+	 * @param resultMenu 结果数据
+	 * @param str 插入字符
+	 * @param isFirst 是否一次层
+	 * @return
+	 */
+	private List<TMenu> recursionMenusForSelect(List<TMenuCustom> menuCustoms, List<TMenu> resultMenu, String str, boolean isFirst){
+		if(menuCustoms != null && menuCustoms.size() > 0){
+			for (TMenuCustom menuCustom : menuCustoms) {
+				if(!isFirst){
+					//处理
+					menuCustom.setMenuname(str + menuCustom.getMenuname());
+				}
+				resultMenu.add(menuCustom);
+				recursionMenusForSelect(menuCustom.getSlaveChildrenMenus(),resultMenu, ("-" + str), false);
+			}
+		}
+		return resultMenu;
+	}
+
+	@Override
+	public void updateMenuSeletive(TMenu tMenu) {
+		boolean flag = true;
+		if(tMenu.getParentid() != null){
+			Example example = new Example(TMenu.class);
+			Criteria criteria = example.createCriteria();
+			criteria.andEqualTo("id", tMenu.getParentid());
+			List<TMenu> parentMenus = tMenuMapper.selectByExample(example);
+			if(parentMenus != null && parentMenus.size() == 1){
+				if(tMenu.getId().equals(parentMenus.get(0).getParentid())){
+					parentMenus.get(0).setParentid(null);
+					tMenuMapper.updateByPrimaryKey(parentMenus.get(0));
+				}
+			}else if(parentMenus.size() > 1){
+				flag = false;
+			}
+		}
+		if(flag){
+			tMenuMapper.updateByPrimaryKeySelective(tMenu);
+		}
 	}
 }

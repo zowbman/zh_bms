@@ -26,11 +26,29 @@ public interface IPrivilegeService extends IBaseService<TPrivilege> {
 	 * 递归查询权限
 	 * @return
 	 */
-	List<TPrivilegeCustom> findPrivilegesForRecursion();
+	List<TPrivilegeCustom> findPrivilegesForCascade();
 	
 	/**
 	 * 查询顶级权限
 	 * @return
 	 */
 	List<TPrivilege> findTopPrivileges();
+	
+	 /**
+	  * 更新实体
+	  * @param tPrivilege
+	  */
+	 void updatePrivilegeSeletive(TPrivilege tPrivilege);
+	 
+	 /**
+	  * 根据id递归删除权限
+	  * @param id
+	  */
+	 void deletePrivilegeByIdForRecursion(Integer id);
+	 
+	 /**
+	  * 根据ids批量删除递归权限
+	  * @param ids
+	  */
+	 void deletePrivilegeByIdsForRecursion(Integer[] ids);
 }
