@@ -21,4 +21,25 @@ public interface IRoleService extends IBaseService<TRole> {
 	 * @return
 	 */
 	List<Integer> findPrivilegeIdsByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色id更新角色权限
+	 * @param roleId
+	 * @param newPrivilegeIds
+	 */
+	void updateRolePrivilegeByRoleId(Integer roleId, List<Integer> newPrivilegeIds);
+	
+	/**
+	 * 根据角色查询用户ids
+	 * @param roleId
+	 * @return
+	 */
+	List<Integer> findUserIdsByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色id更新角色用户
+	 * @param roleId
+	 * @param newUserIds
+	 */
+	void updateRoleUserByRoleId(Integer roleId, List<Integer> newUserIds);
 }

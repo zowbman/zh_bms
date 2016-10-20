@@ -86,34 +86,34 @@ public class BaseUtil {
      * 
      * @date 2016年8月26日 下午5:34:49
      */
-    public static Map<String, Object> compareArry(List<String> t1, List<String> t2) {
+    public static <T> Map<String, Object> compareArry(List<T> t1, List<T> t2) {
         /**
          * 集合A (新的数据有，旧的数据没有，即为要添加的数据)
          */
-        List<String> listA=new ArrayList<String>();
-        for (String str1:t2) {//遍历新的数组元素
-            if (!t1.contains(str1)) {//旧的数组中不包含新的元素（即为要添加的元素）
-                listA.add(str1);
+        List<T> listA = new ArrayList<T>();
+        for (T t:t2) {//遍历新的数组元素
+            if (!t1.contains(t)) {//旧的数组中不包含新的元素（即为要添加的元素）
+                listA.add(t);
             }
         }
 
         /**
          * 集合B (旧的数据中有，新的数据没有，即为要删除的数据)
          */
-        List<String> listB = new ArrayList<String>();
-        for(String str2:t1){//遍历旧的数组元素
-            if( !t2.contains(str2)){//新的数组中不包含旧的数组（即为要删除的元素）
-                listB.add(str2);
+        List<T> listB = new ArrayList<T>();
+        for(T t:t1){//遍历旧的数组元素
+            if( !t2.contains(t)){//新的数组中不包含旧的数组（即为要删除的元素）
+                listB.add(t);
             }
         }
 
         /**
          * 集合C (旧的数据中有，新的数据有，即为共同的数据)
          */
-        List<String> listC = new ArrayList<String>();
-        for(String str3:t1){//遍历旧的数组元素
-            if( t2.contains(str3)){//新的数组中包含旧的数组（即为共同的元素）
-                listC.add(str3);
+        List<T> listC = new ArrayList<T>();
+        for(T t:t1){//遍历旧的数组元素
+            if( t2.contains(t)){//新的数组中包含旧的数组（即为共同的元素）
+                listC.add(t);
             }
         }
 

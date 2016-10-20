@@ -558,17 +558,23 @@ var roleButtonInit = function() {
 	return oInit;
 }
 
-//角色-权限分配
+
 $(function(){
+	/**
+	 * 角色-权限分配
+	 */
+	//获取角色的权限
 	$('#roles-privileges').change(function(){
-		var _roleId = $(this).val();
+		loadRolesPrivileges($(this).val());
+	});
+	function loadRolesPrivileges(_roleId){
 		if(_roleId == -1){
 			$('#roles-privileges-form')[0].reset();
 		}
 		
 		$.ajax({
 			type: 'GET',
-			url: '/rms/role/privilegeByRole/' + _roleId,
+			url: '/rms/role/privilegesByRole/' + _roleId,
 		    success: function(data){
 		    	if(data.code != 100000){
 		    		alert(data.msg);
@@ -587,6 +593,93 @@ $(function(){
 		    	alert('请求异常');
 	      	}
 		});
+	}
+	//更新角色的权限
+	$('#roles-privileges-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadRolesPrivileges($('#roles-privileges').val());
+		    	}else{
+		    		alert('更新角色-权限分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+	
+	/**
+	 * 角色-用户分配
+	 */
+	//获取角色的用户
+	$('#roles-users').change(function(){
+		loadRolesUsers($(this).val());
+	});
+	function loadRolesUsers(_roleId){
+		if(_roleId == -1){
+			$('#roles-users-form')[0].reset();
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/role/usersByRole/' + _roleId,
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$.each(data.data.userIds,function(i,item1){
+		    			$.each($('#users-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新角色的用户
+	$('#roles-users-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadRolesusers($('#roles-users').val());
+		    	}else{
+		    		alert('更新角色-用户分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
 	});
 })
 
