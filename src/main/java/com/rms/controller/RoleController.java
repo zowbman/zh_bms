@@ -250,4 +250,37 @@ public class RoleController extends BaseController {
 		return "sys/roleGroup_man";
 	}
 	
+	/**
+	 * 根据角色查询用户组
+	 * @param roleId
+	 * @return
+	 */
+	@GetMapping("/groupsByRole/{id}")
+	@ResponseBody
+	public PubRetrunMsg groupsByRole(@PathVariable("id") Integer roleId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> groupIds = iRoleService.findGroupIdsByRoleId(roleId);
+		data.put("groupIds", groupIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 角色-用户组分配提交
+	 * @return
+	 */
+	@PostMapping("/roleGroup/manSubmit")
+	@ResponseBody
+	public PubRetrunMsg roleGroupManSubmit(Integer roleId, Integer[] groupIds){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> listGroupIds;
+		if(groupIds == null){
+			listGroupIds = new ArrayList<Integer>();
+		}else{
+			listGroupIds = new ArrayList<Integer>(Arrays.asList(groupIds));
+		}
+		
+		iRoleService.updateRoleGroupByRoleId(roleId,listGroupIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
 }

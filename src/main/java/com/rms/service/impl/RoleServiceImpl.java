@@ -66,4 +66,27 @@ public class RoleServiceImpl extends BaseServiceImpl<TRole> implements IRoleServ
 			tRoleMapper.deleteRoleUserByRoleId(roleId, deleteId);
 		}
 	}
+
+	@Override
+	public List<Integer> findGroupIdsByRoleId(Integer roleId) {
+		return tRoleMapper.findGroupIdsByRoleId(roleId);
+	}
+	
+	@Override
+	public void updateRoleGroupByRoleId(Integer roleId, List<Integer> newGroupIds) {
+		List<Integer> oldGroupIds = findGroupIdsByRoleId(roleId);
+		Map<String, Object> map = BaseUtil.compareArry(oldGroupIds, newGroupIds);
+		//add_arry 添加的数组
+		List<Integer> add_arry = (List<Integer>) map.get("add_arry");
+		//delete_arry 删除的数组
+		List<Integer> delete_arry = (List<Integer>) map.get("delete_arry");
+		
+		for (Integer addId : add_arry) {
+			tRoleMapper.insertRoleGroup(roleId, addId);
+		}
+		
+		for (Integer deleteId : delete_arry) {
+			tRoleMapper.deleteRoleGroupByRoleId(roleId, deleteId);
+		}
+	}
 }

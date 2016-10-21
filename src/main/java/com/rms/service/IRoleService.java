@@ -42,4 +42,18 @@ public interface IRoleService extends IBaseService<TRole> {
 	 * @param newUserIds
 	 */
 	void updateRoleUserByRoleId(Integer roleId, List<Integer> newUserIds);
+	
+	/**
+	 * 根据角色查询用户组ids
+	 * @param roleId
+	 * @return
+	 */
+	List<Integer> findGroupIdsByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色id更新角色用户组
+	 * @param roleId
+	 * @param newGroupIds
+	 */
+	void updateRoleGroupByRoleId(Integer roleId, List<Integer> newGroupIds);
 }

@@ -47,13 +47,13 @@ public interface TRoleMapper extends Mapper<TRole> {
 	public void deleteRolePrivilegeByRoleId(Integer roleId, Integer deletePrivilege);
 	
 	/**
-	 * 根据用户id查询用户ids
+	 * 根据角色id查询用户ids
 	 * @param roleId
 	 * @return
 	 */
 	@Select("SELECT tu.id FROM t_role tr "
 			+ "INNER JOIN t_user_role tur ON tr.id = tur.roleId "
-			+ "INNER JOIN t_user tu ON tur.userId = tu.id WHERE tr.id = #{roleIds}")
+			+ "INNER JOIN t_user tu ON tur.userId = tu.id WHERE tr.id = #{roleId}")
 	public List<Integer> findUserIdsByRoleId(Integer roleId);
 	
 	/**
@@ -67,8 +67,34 @@ public interface TRoleMapper extends Mapper<TRole> {
 	/**
 	 * 删除角色用户关联
 	 * @param roleId
-	 * @param deletePrivilege
+	 * @param deleteUser
 	 */
 	@Delete("DELETE FROM t_user_role WHERE roleId = #{0} AND userId = #{1}")
 	public void deleteRoleUserByRoleId(Integer roleId, Integer deleteUser);
+	
+	/**
+	 * 根据角色id查询用户组ids
+	 * @param roleId
+	 * @return
+	 */
+	@Select("SELECT tg.id FROM t_role tr "
+			+ "INNER JOIN t_group_role tgr ON tr.id = tgr.roleId "
+			+ "INNER JOIN t_group tg ON tgr.groupId = tg.id WHERE tr.id = #{roleId}")
+	public List<Integer> findGroupIdsByRoleId(Integer roleId);
+	
+	/**
+	 * 新增角色用户组关联
+	 * @param roleId
+	 * @param insertGroup
+	 */
+	@Insert("INSERT INTO t_group_role(roleId,groupId) VALUES(#{0},#{1})")
+	public void insertRoleGroup(Integer roleId, Integer insertGroup);
+	
+	/**
+	 * 删除角色用户组关联
+	 * @param roleId
+	 * @param deleteGroup
+	 */
+	@Delete("DELETE FROM t_group_role WHERE roleId = #{0} AND groupId = #{1}")
+	public void deleteRoleGroupByRoleId(Integer roleId, Integer deleteGroup);
 }
