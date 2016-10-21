@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.common.Mapper;
 
 import com.rms.base.service.IBaseService;
+import com.rms.mapper.TGroupMapper;
 import com.rms.mapper.TMenuMapper;
 import com.rms.mapper.TPrivilegeMapper;
 import com.rms.mapper.TRoleMapper;
+import com.rms.mapper.TUserMapper;
 
 @Service
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
@@ -50,6 +52,17 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	@Autowired
 	protected TPrivilegeMapper tPrivilegeMapper;
 
+	/**
+	 * 用户组mapper接口
+	 */
+	@Autowired
+	protected TGroupMapper tGroupMapper;
+	
+	/**
+	 * 用户mapper接口
+	 */
+	@Autowired
+	protected TUserMapper tUserMapper;
 
 	public void save(T entity) {
 		mapper.insert(entity);

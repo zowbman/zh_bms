@@ -470,6 +470,71 @@ var privilegeButtonInit = function() {
 	return oInit;
 }
 
+$(function(){
+	/**
+	 * 权限-角色分配
+	 */
+	//获取权限的角色
+	$('#privileges-roles').change(function(){
+		loadPrivilegesRoles($(this).val());
+	});
+	function loadPrivilegesRoles(_privilegeId){
+		if(_privilegeId == -1){
+			$('#privileges-roles-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/privilege/rolesByPrivilege/' + _privilegeId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#roles-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.roleIds,function(i,item1){
+		    			$.each($('#roles-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新权限的角色
+	$('#privileges-roles-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadPrivilegesRoles($('#privileges-roles').val());
+		    	}else{
+		    		alert('更新权限-角色分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+});
+
 //角色表格
 var roleTableInit = function() {
 	var oTableInit = new Object();
@@ -570,6 +635,7 @@ $(function(){
 	function loadRolesPrivileges(_roleId){
 		if(_roleId == -1){
 			$('#roles-privileges-form')[0].reset();
+			return;
 		}
 		
 		$.ajax({
@@ -579,6 +645,7 @@ $(function(){
 		    	if(data.code != 100000){
 		    		alert(data.msg);
 		    	}else{
+		    		$('#privilegeTree').find('input[type="checkbox"]').prop('checked',false);
 		    		$.each(data.data.privilegeIds,function(i,item1){
 		    			$.each($('#privilegeTree').find('input[type="checkbox"]'),function(j,item2){
 		    				if($(item2).val() == item1){
@@ -631,6 +698,7 @@ $(function(){
 	function loadRolesUsers(_roleId){
 		if(_roleId == -1){
 			$('#roles-users-form')[0].reset();
+			return;
 		}
 		
 		$.ajax({
@@ -640,6 +708,7 @@ $(function(){
 		    	if(data.code != 100000){
 		    		alert(data.msg);
 		    	}else{
+		    		$('#users-ckbox').find('input[type="checkbox"]').prop('checked',false);
 		    		$.each(data.data.userIds,function(i,item1){
 		    			$.each($('#users-ckbox').find('input[type="checkbox"]'),function(j,item2){
 		    				if($(item2).val() == item1){
@@ -673,6 +742,69 @@ $(function(){
 		    		loadRolesusers($('#roles-users').val());
 		    	}else{
 		    		alert('更新角色-用户分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+	
+	/**
+	 * 角色-用户组分配
+	 */
+	//获取角色的用户组
+	$('#roles-groups').change(function(){
+		loadRolesGroups($(this).val());
+	});
+	function loadRolesGroups(_roleId){
+		if(_roleId == -1){
+			$('#roles-groups-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/role/groupsByRole/' + _roleId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#groups-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.groupIds,function(i,item1){
+		    			$.each($('#groups-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新角色的用户组
+	$('#roles-groups-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadRolesGroups($('#roles-groups').val());
+		    	}else{
+		    		alert('更新角色-用户组分配成功')
 		    	}
 		    },
 		    error: function() {  
@@ -849,6 +981,134 @@ var groupButtonInit = function() {
 	return oInit;
 }
 
+$(function(){
+	/**
+	 * 用户组-角色分配
+	 */
+	//获取用户组的角色
+	$('#groups-roles').change(function(){
+		loadGroupsRoles($(this).val());
+	});
+	function loadGroupsRoles(_groupId){
+		if(_groupId == -1){
+			$('#groups-roles-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/group/rolesByGroup/' + _groupId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#roles-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.roleIds,function(i,item1){
+		    			$.each($('#roles-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新用户组的角色
+	$('#groups-roles-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadGroupsRoles($('#groups-roles').val());
+		    	}else{
+		    		alert('更新用户组-角色分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+	
+	/**
+	 * 用户组-用户分配
+	 */
+	//获取用户组的用户
+	$('#groups-users').change(function(){
+		loadGroupsUsers($(this).val());
+	});
+	function loadGroupsUsers(_groupId){
+		if(_groupId == -1){
+			$('#groups-users-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/group/usersByGroup/' + _groupId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#users-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.userIds,function(i,item1){
+		    			$.each($('#users-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新用户组的用户
+	$('#groups-users-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadGroupsUsers($('#groups-users').val());
+		    	}else{
+		    		alert('更新用户组-用户分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+});
+
 //用户表格
 var userTableInit = function() {
 	var oTableInit = new Object();
@@ -936,4 +1196,132 @@ var userButtonInit = function() {
 	}
 	return oInit;
 }
+
+$(function(){
+	/**
+	 * 用户-角色分配
+	 */
+	//获取用户的角色
+	$('#users-roles').change(function(){
+		loadUsersRoles($(this).val());
+	});
+	function loadUsersRoles(_userId){
+		if(_userId == -1){
+			$('#users-roles-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/user/rolesByUser/' + _userId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#roles-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.roleIds,function(i,item1){
+		    			$.each($('#roles-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新用户的角色
+	$('#users-roles-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadUsersRoles($('#users-roles').val());
+		    	}else{
+		    		alert('更新用户-角色分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+	
+	/**
+	 * 用户-用户组分配
+	 */
+	//获取用户的用户组
+	$('#users-groups').change(function(){
+		loadUsersGroups($(this).val());
+	});
+	function loadUsersGroups(_userId){
+		if(_userId == -1){
+			$('#users-groups-form')[0].reset();
+			return;
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: '/rms/user/groupsByUser/' + _userId, 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		$('#groups-ckbox').find('input[type="checkbox"]').prop('checked',false);
+		    		$.each(data.data.groupIds,function(i,item1){
+		    			$.each($('#groups-ckbox').find('input[type="checkbox"]'),function(j,item2){
+		    				if($(item2).val() == item1){
+		    					$(item2).prop('checked',true);
+		    					return;
+		    				}
+		    			})
+		    		});
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	//更新用户-用户组
+	$('#users-groups-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		loadUsersGroups($('#users-groups').val());
+		    	}else{
+		    		alert('更新用户-用户组分配成功')
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+});
 
