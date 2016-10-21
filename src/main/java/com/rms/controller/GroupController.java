@@ -1,5 +1,7 @@
 package com.rms.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,8 @@ import com.rms.base.controller.BaseController;
 import com.rms.helper.CodeHelper.CODE;
 import com.rms.model.po.TGroup;
 import com.rms.model.po.TGroupCustom;
+import com.rms.model.po.TRole;
+import com.rms.model.po.TUser;
 import com.rms.model.vo.PubRetrunMsg;
 import com.rms.model.vo.TGroupVo;
 import com.rms.util.BaseUtil;
@@ -123,5 +127,105 @@ public class GroupController extends BaseController {
 	public String deleteGroups(Integer[] ids){
 		iGroupService.delete(ids);
 		return "result";
+	}
+	
+	/**
+	 * 用户组-角色分配
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/groupRole/man")
+	public String groupRoleMan(Model model){
+		//获取组别列表
+		List<TGroup> groups = iGroupService.findAll();
+		model.addAttribute("groups", groups);
+		
+		//角色列表
+		List<TRole> roles = iRoleService.findAll();
+		model.addAttribute("roles", roles);
+		return "sys/groupRole_man";
+	}
+	
+	/**
+	 * 根据用户组查询角色
+	 * @param groupId
+	 * @return
+	 */
+	@GetMapping("/rolesByGroup/{id}")
+	@ResponseBody
+	public PubRetrunMsg rolesByGroup(@PathVariable("id") Integer groupId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> roleIds = iGroupService.findRoleIdsByGroupId(groupId);
+		data.put("roleIds", roleIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 用户组-角色分配提交
+	 * @return
+	 */
+	@PostMapping("/groupRole/manSubmit")
+	@ResponseBody
+	public PubRetrunMsg groupRoleManSubmit(Integer groupId, Integer[] roleIds){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> listRoleIds;
+		if(roleIds == null){
+			listRoleIds = new ArrayList<Integer>();
+		}else{
+			listRoleIds = new ArrayList<Integer>(Arrays.asList(roleIds));
+		}
+		
+		iGroupService.updateGroupRoleByGroupId(groupId, listRoleIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 用户组-用户分配
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/groupUser/man")
+	public String groupUserMan(Model model){
+		//获取组别列表
+		List<TGroup> groups = iGroupService.findAll();
+		model.addAttribute("groups", groups);
+		
+		//用户列表
+		List<TUser> users = iUserService.findAll();
+		model.addAttribute("users", users);
+		return "sys/groupUser_man";
+	}
+	
+	/**
+	 * 根据用户组查询用户
+	 * @param groupId
+	 * @return
+	 */
+	@GetMapping("/usersByGroup/{id}")
+	@ResponseBody
+	public PubRetrunMsg usersByGroup(@PathVariable("id") Integer groupId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> userIds = iGroupService.findUserIdsByGroupId(groupId);
+		data.put("userIds", userIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 用户组-用户分配提交
+	 * @return
+	 */
+	@PostMapping("/groupUser/manSubmit")
+	@ResponseBody
+	public PubRetrunMsg groupUserManSubmit(Integer groupId, Integer[] userIds){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> listUserIds;
+		if(userIds == null){
+			listUserIds = new ArrayList<Integer>();
+		}else{
+			listUserIds = new ArrayList<Integer>(Arrays.asList(userIds));
+		}
+		
+		iGroupService.updateGroupUserByGroupId(groupId, listUserIds);
+		return new PubRetrunMsg(CODE.D100000, data);
 	}
 }

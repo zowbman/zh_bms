@@ -1,5 +1,7 @@
 package com.rms.service;
 
+import java.util.List;
+
 import com.rms.base.service.IBaseService;
 import com.rms.model.po.TGroup;
 
@@ -12,5 +14,32 @@ import com.rms.model.po.TGroup;
  *
  */
 public interface IGroupService extends IBaseService<TGroup> {
-
+	 
+	/**
+	 * 根据用户组查询角色ids
+	 * @param groupId
+	 * @return
+	 */
+	List<Integer> findRoleIdsByGroupId(Integer groupId);
+	
+	/**
+	 * 根据用户组id更新角色
+	 * @param groupId
+	 * @param newRoleIds
+	 */
+	void updateGroupRoleByGroupId(Integer groupId, List<Integer> newRoleIds);
+	
+	/**
+	 * 根据用户组查询用户ids
+	 * @param groupId
+	 * @return
+	 */
+	List<Integer> findUserIdsByGroupId(Integer groupId);
+	
+	/**
+	 * 根据用户组id更新角用户
+	 * @param groupId
+	 * @param newUserIds
+	 */
+	void updateGroupUserByGroupId(Integer groupId, List<Integer> newUserIds);
 }
