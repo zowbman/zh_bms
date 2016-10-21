@@ -1,5 +1,7 @@
 package com.rms.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import com.rms.helper.CodeHelper.CODE;
 import com.rms.model.po.TMenu;
 import com.rms.model.po.TPrivilege;
 import com.rms.model.po.TPrivilegeCustom;
+import com.rms.model.po.TRole;
 import com.rms.model.vo.PubRetrunMsg;
 import com.rms.model.vo.TPrivilegeVo;
 import com.rms.util.BaseUtil;
@@ -150,5 +153,55 @@ public class PrivilegeController extends BaseController {
 	public String deletePrivileges(Integer[] ids){
 		iPrivilegeService.deletePrivilegeByIdsForRecursion(ids);
 		return "result";
+	}
+	
+	/**
+	 * 权限-角色分配
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/privilegeRole/man")
+	public String privilegeRoleMan(Model model){
+		//获取父级权限列表
+		List<TPrivilegeCustom> parentPrivileges = iPrivilegeService.findPrivilegesForCascade();
+		model.addAttribute("parentPrivileges", parentPrivileges);
+		
+		//角色列表
+		List<TRole> roles = iRoleService.findAll();
+		model.addAttribute("roles", roles);
+		return "sys/privilegeRole_man";
+	}
+	
+	/**
+	 * 根据权限查询角色
+	 * @param privilegeId
+	 * @return
+	 */
+	@GetMapping("/rolesByPrivilege/{id}")
+	@ResponseBody
+	public PubRetrunMsg rolesByPrivilege(@PathVariable("id") Integer privilegeId){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> roleIds = iPrivilegeService.findRoleIdsByPrivilegeId(privilegeId);
+		data.put("roleIds", roleIds);
+		return new PubRetrunMsg(CODE.D100000, data);
+	}
+	
+	/**
+	 * 权限-角色分配提交
+	 * @return
+	 */
+	@PostMapping("/privilegeRole/manSubmit")
+	@ResponseBody
+	public PubRetrunMsg privilegeRoleManSubmit(Integer privilegeId, Integer[] roleIds){
+		Map<String, Object> data = new HashMap<String, Object>();
+		List<Integer> listRoleIds;
+		if(roleIds == null){
+			listRoleIds = new ArrayList<Integer>();
+		}else{
+			listRoleIds = new ArrayList<Integer>(Arrays.asList(roleIds));
+		}
+		
+		iPrivilegeService.updatePrivilegeRoleByPrivilegeId(privilegeId, listRoleIds);
+		return new PubRetrunMsg(CODE.D100000, data);
 	}
 }

@@ -51,4 +51,18 @@ public interface IPrivilegeService extends IBaseService<TPrivilege> {
 	  * @param ids
 	  */
 	 void deletePrivilegeByIdsForRecursion(Integer[] ids);
+	 
+	/**
+	 * 根据权限查询角色ids
+	 * @param privilegeId
+	 * @return
+	 */
+	List<Integer> findRoleIdsByPrivilegeId(Integer privilegeId);
+	
+	/**
+	 * 根据权限id更新权限角色
+	 * @param privilegeId
+	 * @param newRoleIds
+	 */
+	void updatePrivilegeRoleByPrivilegeId(Integer privilegeId, List<Integer> newRoleIds);
 }

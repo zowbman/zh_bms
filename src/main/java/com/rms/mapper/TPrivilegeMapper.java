@@ -2,6 +2,8 @@ package com.rms.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -63,5 +65,31 @@ public interface TPrivilegeMapper extends Mapper<TPrivilege> {
 				many = @Many(select = "findPrivilegesByParentId")),
 	})
 	public List<TPrivilegeCustom> findPrivilegeByIdForCascade(Integer id);
+	
+	/**
+	 * 根据权限id查询角色ids
+	 * @param privilegeId
+	 * @return
+	 */
+	@Select("SELECT tr.id FROM t_role tr "
+			+ "INNER JOIN t_role_privilege trp ON tr.id = trp.roleId "
+			+ "INNER JOIN t_privilege tp ON trp.privilegeId = tp.id WHERE tp.id = #{privilegeId}")
+	public List<Integer> findRoleIdsByPrivilegeId(Integer privilegeId);
+	
+	/**
+	 * 新增权限角色关联
+	 * @param privilegeId
+	 * @param insertRole
+	 */
+	@Insert("INSERT INTO t_role_privilege(privilegeId,RoleId) VALUES(#{0},#{1})")
+	public void insertPrivilegeRole(Integer privilegeId, Integer insertRole);
+	
+	/**
+	 * 删除权限角色关联
+	 * @param privilegeId
+	 * @param deleteRole
+	 */
+	@Delete("DELETE FROM t_role_privilege WHERE privilegeId = #{0} AND roleId = #{1}")
+	public void deletePrivilegeRoleByPrivilegeId(Integer privilegeId, Integer deleteRole);
 	
 }

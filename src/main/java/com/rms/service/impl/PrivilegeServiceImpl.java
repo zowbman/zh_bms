@@ -2,6 +2,7 @@ package com.rms.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.rms.base.service.impl.BaseServiceImpl;
 import com.rms.model.po.TPrivilege;
 import com.rms.model.po.TPrivilegeCustom;
 import com.rms.service.IPrivilegeService;
+import com.rms.util.BaseUtil;
 
 /**
  * 
@@ -97,5 +99,28 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 			}
 		}
 		return resultPrivileges;
+	}
+	
+	@Override
+	public List<Integer> findRoleIdsByPrivilegeId(Integer privilegeId) {
+		return tPrivilegeMapper.findRoleIdsByPrivilegeId(privilegeId);
+	}
+
+	@Override
+	public void updatePrivilegeRoleByPrivilegeId(Integer privilegeId, List<Integer> newRoleIds) {
+		List<Integer> oldRoleIds = findRoleIdsByPrivilegeId(privilegeId);
+		Map<String, Object> map = BaseUtil.compareArry(oldRoleIds, newRoleIds);
+		//add_arry 添加的数组
+		List<Integer> add_arry = (List<Integer>) map.get("add_arry");
+		//delete_arry 删除的数组
+		List<Integer> delete_arry = (List<Integer>) map.get("delete_arry");
+		
+		for (Integer addId : add_arry) {
+			tPrivilegeMapper.insertPrivilegeRole(privilegeId, addId);
+		}
+		
+		for (Integer deleteId : delete_arry) {
+			tPrivilegeMapper.deletePrivilegeRoleByPrivilegeId(privilegeId, deleteId);
+		}
 	}
 }
