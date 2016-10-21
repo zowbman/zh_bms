@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>RMS|权限管理系统</title>
+    <title>boboface|后台管理系统</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -69,7 +69,7 @@
     <div>
     	<div id="head">
     		<div class="head-left">
-    			<span>RMS权限管理系统<span>
+    			<span>boboface后台管理系统<span>
     		</div>
     		<div class="head-right">
     			<span>xxx</span>
