@@ -12,7 +12,7 @@
 				<ul>
 					<c:set var="level" value="${level + 1}" scope="request" />
 					<c:set var="privileges" value="${privilege.childrenPrivileges}" scope="request" /><!-- 注意此处，子列表覆盖treeList，在request作用域 -->
-					<c:import url="../public/privilege_ckbox.jsp" />
+					<c:import url="/jsp/public/privilege_ckbox.jsp" />
 				</ul>
 			</c:when>
 		</c:choose>

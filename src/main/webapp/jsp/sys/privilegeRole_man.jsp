@@ -12,7 +12,7 @@
 						    	<span class="font_exp">*</span><label for="privileges-roles">权限</label>
 						    	<select id="privileges-roles" name="privilegeId" class="form-control">
 						    		<option value="-1">请选择权限</option>
-						    		<%@ include file="../public/privilege_select.jsp"%>
+						    		<%@ include file="/jsp/public/privilege_select.jsp"%>
 								</select>
 							</div>
 							<div class="form-group">

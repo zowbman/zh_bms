@@ -25,7 +25,7 @@
 							<div class="form-group">
 								<label>权限</label>
 								<ul id="privilegeTree">
-									<%@ include file="../public/privilege_ckbox.jsp"%>
+									<%@ include file="/jsp/public/privilege_ckbox.jsp"%>
 								</ul>
 							</div>
 						</div>

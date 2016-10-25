@@ -18,7 +18,7 @@
 				    	<label for="parentprivileges">父级权限</label>
 				    	<select id="parentprivileges" name="privilege.parentid" class="form-control">
 				    		<option value="-1">请选择父级权限</option>
-				    		<%@ include file="../public/privilege_select.jsp"%>
+				    		<%@ include file="/jsp/public/privilege_select.jsp"%>
 				    		<%-- <c:forEach items="${parentPrivileges }" var="parentPrivilege">
 				    			<c:if test="${privilege.id != parentPrivilege.id }">
 									<option value="${parentPrivilege.id }" <c:if test="${parentPrivilege.id == privilege.parentid}">selected</c:if>>${parentPrivilege.privilegename }</option>

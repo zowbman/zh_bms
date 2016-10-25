@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ include file="public/head.jsp"%>
+<%@ include file="/jsp/public/head.jsp"%>
 <div id="content">
 	<div class="left">
 		<table align="left" border="0" cellspacing="0" cellpadding="0" class="menu_table">
@@ -15,7 +15,7 @@
 					<div class="slave-nav">
 						<c:forEach items="${topSlaveMenus}" var="topSlaveMenu">
 							<ul id="topSlaveMenu_${topSlaveMenu.id }" class="mtree transit">
-								<%@ include file="public/menu.jsp"%>
+								<%@ include file="/jsp/public/menu.jsp"%>
 							</ul>
 						</c:forEach>
 					</div>
@@ -178,4 +178,4 @@ function showSlaveMenu(slaveMenuId){
 }
 </script>
 <!-- content结束 -->
-<%@ include file="public/footer.jsp"%>
+<%@ include file="/jsp/public/footer.jsp"%>
