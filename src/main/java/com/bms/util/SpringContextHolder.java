@@ -1,26 +1,25 @@
 package com.bms.util;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 
  * Title:SpringContextHolder
  * Description:SpringApplicationContext上下文静态方法
- * ApplicationContextAware 比 @Configuration 慢（目前我试验过，以后等我变大神才说明）
  * @author    zwb
  * @date      2016年10月12日 下午6:32:15
  *
  */
 @Service
-public class SpringContextHolder implements ServletContextListener, DisposableBean {
+@Lazy(false)
+public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
 
 	private static ApplicationContext applicationContext = null;
 
@@ -67,16 +66,10 @@ public class SpringContextHolder implements ServletContextListener, DisposableBe
 	public void destroy() throws Exception {
 		SpringContextHolder.clearHolder();
 	}
-	
 
 	@Override
-	public void contextInitialized(ServletContextEvent sce) {
-		this.applicationContext = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
-	}
-
-	@Override
-	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 	
 }

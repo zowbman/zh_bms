@@ -12,10 +12,10 @@
 		  		<li role="presentation"><a role="menuitem" tabindex="-1" href="/rms/menu/list?menuType=0">主（Master）菜单</a></li>
 			    <li role="presentation"><a role="menuitem" tabindex="-1" href="/rms/menu/list?menuType=1">从（Slave）菜单</a></li>
 			</ul>
-        	<button id="menuBtn_add" type="button" class="btn btn-default">
+        	<button id="menuBtn_add" type="button" class="btn btn-default access-control">
             	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
         	</button>
-	        <button id="menuBtn_delete" type="submit" class="btn btn-default">
+	        <button id="menuBtn_delete" type="submit" class="btn btn-default access-control">
 	          	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
 	       	</button>
         	<div id="hiddenInputs"></div>

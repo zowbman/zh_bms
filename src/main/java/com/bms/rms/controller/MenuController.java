@@ -22,7 +22,7 @@ import com.bms.rms.model.po.TMenuCustom;
 import com.bms.rms.model.vo.MenuTypeEnum;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TMenuVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 

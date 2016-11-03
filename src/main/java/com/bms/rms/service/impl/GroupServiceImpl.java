@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bms.base.service.impl.BaseServiceImpl;
 import com.bms.rms.model.po.TGroup;
 import com.bms.rms.service.IGroupService;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class GroupServiceImpl extends BaseServiceImpl<TGroup> implements IGroupS
 		}
 		
 		for (Integer deleteId : delete_arry) {
-			tGroupMapper.deleteGroupRoleByGroupId(groupId, deleteId);
+			tGroupMapper.deleteGroupRoleByGroupIdAndRoleId(groupId, deleteId);
 		}
 	}
 
@@ -63,7 +63,25 @@ public class GroupServiceImpl extends BaseServiceImpl<TGroup> implements IGroupS
 		}
 		
 		for (Integer deleteId : delete_arry) {
-			tGroupMapper.deleteGroupUserByGroupId(groupId, deleteId);
+			tGroupMapper.deleteGroupUserByGroupIdAndUserId(groupId, deleteId);
+		}
+	}
+
+	@Override
+	public void deleteGroup(Integer groupId) {
+		int affectRow = tGroupMapper.deleteByPrimaryKey(groupId);
+		if(affectRow > 0){
+			//用户组角色关联关系表
+			tGroupMapper.deleteGroupRoleByGroupId(groupId);
+			//用户组用户关联关系表
+			tGroupMapper.deleteGroupUserByGroupId(groupId);
+		}
+	}
+
+	@Override
+	public void deleteGroup(Integer[] groupIds) {
+		for (Integer groupId : groupIds) {
+			deleteGroup(groupId);
 		}
 	}
 }

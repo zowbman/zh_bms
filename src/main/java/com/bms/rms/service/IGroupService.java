@@ -42,4 +42,16 @@ public interface IGroupService extends IBaseService<TGroup> {
 	 * @param newUserIds
 	 */
 	void updateGroupUserByGroupId(Integer groupId, List<Integer> newUserIds);
+	
+	/**
+	 * 删除用户组
+	 * @param groupId
+	 */
+	void deleteGroup(Integer groupId);
+	
+	/**
+	 * 批量删除用户组
+	 * @param groupIds
+	 */
+	void deleteGroup(Integer[] groupIds);
 }

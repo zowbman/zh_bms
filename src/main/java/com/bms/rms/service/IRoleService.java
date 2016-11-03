@@ -56,4 +56,16 @@ public interface IRoleService extends IBaseService<TRole> {
 	 * @param newGroupIds
 	 */
 	void updateRoleGroupByRoleId(Integer roleId, List<Integer> newGroupIds);
+	
+	/**
+	 * 删除角色
+	 * @param roleId
+	 */
+	void deleteRole(Integer roleId);
+	
+	/**
+	 * 批量删除角色
+	 * @param roleIds
+	 */
+	void delteRole(Integer[] roleIds);
 }

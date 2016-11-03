@@ -30,8 +30,18 @@
 				    	<label for="menus">绑定菜单</label>
 				    	<select id="menus" name="privilege.menuid" class="form-control">
 				    		<option value="-1">请选择绑定菜单</option>
-				    		<c:forEach items="${menus }" var="menu">
+				    		<%@ include file="/jsp/public/menu_select.jsp"%>
+				    		<%-- <c:forEach items="${menus }" var="menu">
 								<option value="${menu.id }" <c:if test="${menu.id == privilege.menuid}">selected</c:if>>${menu.menuname }</option>
+							</c:forEach> --%>
+						</select>
+					</div>
+					<div class="form-group">
+				    	<label for="privilegeButtons">绑定按钮</label>
+				    	<select id="privilegeButtons" name="privilegeButtonId" class="form-control">
+				    		<option value="-1">请选择绑定按钮</option>
+				    		<c:forEach items="${privilegeButtons }" var="privilegeButton">
+								<option value="${privilegeButton.id }" <c:if test="${privilegeButton.privilegeid == privilege.id && !empty privilege.id}">selected</c:if>>${privilegeButton.nameStr }</option>
 							</c:forEach>
 						</select>
 					</div>

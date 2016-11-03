@@ -23,7 +23,7 @@ import com.bms.rms.model.po.TRole;
 import com.bms.rms.model.po.TUser;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TGroupVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -114,7 +114,7 @@ public class GroupController extends BaseController {
 	 */
 	@GetMapping("/deleteGroup/{id}")
 	public String deleteGroup(@PathVariable("id") Integer id){
-		iGroupService.delete(id);
+		iGroupService.deleteGroup(id);
 		return "result";
 	}
 	
@@ -125,7 +125,7 @@ public class GroupController extends BaseController {
 	 */
 	@PostMapping("/deleteGroups")
 	public String deleteGroups(Integer[] ids){
-		iGroupService.delete(ids);
+		iGroupService.deleteGroup(ids);
 		return "result";
 	}
 	

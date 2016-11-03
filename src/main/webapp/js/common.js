@@ -59,3 +59,37 @@ function frameLoad(url){
 		return;
 	$('.right-iframe').attr('src',url);
 }
+
+//当前用户权限
+var currentUserHasPrivileges = new Array();
+$.each($(parent.document).find('.currentUserHasPrivilege'),function(i,item){
+	var array = $(item).text().split('@');
+	if(array[0] == '' || array[1] == '')
+		return;
+	currentUserHasPrivileges.push(array[1]);
+});
+
+/*按钮级别权限控制*/
+function accessControl(){
+	if($('#currentUser').val() == 'zowbman'){
+		$('.access-control').removeClass('access-control');
+		return;
+	}
+	$.each($('.access-control'),function(i,item){
+		$.each(currentUserHasPrivileges,function(j,item2){
+			var selectDomMethod = item2.substring(0,1);
+			item2 = item2.substring(item2.indexOf(selectDomMethod) + 1,item2.length);
+			if(selectDomMethod == '.'){
+				if($(item).attr('class').indexOf(item2) > -1){
+					$(item).removeClass('access-control');
+					return;
+				}
+			}else{
+				if($(item).attr('id') != undefined && $(item).attr('id').indexOf(item2) > -1){
+					$(item).removeClass('access-control');
+					return;
+				}
+			}
+		});
+	});
+}

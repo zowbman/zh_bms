@@ -109,4 +109,10 @@ public interface IMenuService extends IBaseService<TMenu>{
 	  */
 	 void updateMenuSeletive(TMenu tMenu);
 	 
+	 
+	/**
+	 * 级联查询从菜单
+	 * @return
+	 */
+	List<TMenuCustom> findMenusForCascade();
 }

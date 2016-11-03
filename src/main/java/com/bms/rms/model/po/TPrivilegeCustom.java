@@ -17,6 +17,8 @@ public class TPrivilegeCustom extends TPrivilege {
 	
 	private List<TPrivilegeCustom> childrenPrivileges;//子权限
 	
+	private TPrivilegeButton privilegeButton;//按钮权限绑定
+	
     /**
      * 获取添加时间戳转日期结果
      * @param date
@@ -32,5 +34,13 @@ public class TPrivilegeCustom extends TPrivilege {
 
 	public void setChildrenPrivileges(List<TPrivilegeCustom> childrenPrivileges) {
 		this.childrenPrivileges = childrenPrivileges;
+	}
+
+	public TPrivilegeButton getPrivilegeButton() {
+		return privilegeButton;
+	}
+
+	public void setPrivilegeButton(TPrivilegeButton privilegeButton) {
+		this.privilegeButton = privilegeButton;
 	}
 }

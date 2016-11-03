@@ -12,13 +12,14 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-import com.bms.util.SpringContextHolder;
 import com.github.pagehelper.PageHelper;
 
 /**
@@ -32,6 +33,9 @@ import com.github.pagehelper.PageHelper;
 @Configuration
 @AutoConfigureAfter({BaseDataSource.class})
 public class DataSourceConfig extends MybatisAutoConfiguration {
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	@Bean
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
@@ -68,7 +72,8 @@ public class DataSourceConfig extends MybatisAutoConfiguration {
 		
 		//读数据源封装
 		List<DataSource> readDataSources = new ArrayList<DataSource>();
-		readDataSources.add((DataSource) SpringContextHolder.getBean("readDataSource"));
+		
+		readDataSources.add((DataSource) applicationContext.getBean("readDataSource"));
 		//如多个读数据源则在这里添加
 		//readDataSources.add(SpringContextHolder.getBean("xxxx"));
 		//...
@@ -76,7 +81,7 @@ public class DataSourceConfig extends MybatisAutoConfiguration {
 		//动态多数据源
 		MyAbstractRoutingDataSource proxy = new MyAbstractRoutingDataSource(readDataSources.size());
 		Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
-		DataSource writeDataSource = SpringContextHolder.getBean("writeDataSource");
+		DataSource writeDataSource = (DataSource) applicationContext.getBean("writeDataSource");
 		// 写
 		targetDataSources.put(DataSourceType.write.getType(), writeDataSource);
 		//读

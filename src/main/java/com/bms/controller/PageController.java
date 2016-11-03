@@ -1,4 +1,4 @@
-package com.bms.rms.controller;
+package com.bms.controller;
 
 import java.util.List;
 

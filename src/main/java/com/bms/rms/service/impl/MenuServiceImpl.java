@@ -228,4 +228,9 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 			tMenuMapper.updateByPrimaryKeySelective(tMenu);
 		}
 	}
+
+	@Override
+	public List<TMenuCustom> findMenusForCascade() {
+		return tMenuMapper.findMenusForCascade();
+	}
 }

@@ -12,4 +12,16 @@ import com.bms.rms.model.po.TDepartment;
  *
  */
 public interface IDepartmentService extends IBaseService<TDepartment> {
+	
+	/**
+	 * 根据departmentid删除部门
+	 * @param departmentId
+	 */
+	void deleteDepartment(Integer departmentId);
+	
+	/**
+	 * 根据departmentid批量删除部门
+	 * @param departmentIds
+	 */
+	void deleteDepartment(Integer[] departmentIds);
 }

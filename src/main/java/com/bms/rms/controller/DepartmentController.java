@@ -19,7 +19,7 @@ import com.bms.rms.model.po.TDepartment;
 import com.bms.rms.model.po.TDepartmentCustom;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TDepartmentVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -110,7 +110,7 @@ public class DepartmentController extends BaseController {
 	 */
 	@GetMapping("/deleteDepartment/{id}")
 	public String deleteDepartment(@PathVariable("id") Integer id){
-		iDepartmentService.delete(id);
+		iDepartmentService.deleteDepartment(id);
 		return "result";
 	}
 	
@@ -121,7 +121,7 @@ public class DepartmentController extends BaseController {
 	 */
 	@PostMapping("/deleteDepartments")
 	public String deleteDepartments(Integer[] ids){
-		iDepartmentService.delete(ids);
+		iDepartmentService.deleteDepartment(ids);
 		return "result";
 	}
 }

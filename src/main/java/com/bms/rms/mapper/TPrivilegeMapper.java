@@ -3,14 +3,17 @@ package com.bms.rms.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import tk.mybatis.mapper.common.Mapper;
 
+import com.bms.rms.mapper.provider.TPrivilegeSqlProvider;
 import com.bms.rms.model.po.TPrivilege;
 import com.bms.rms.model.po.TPrivilegeCustom;
 
@@ -91,5 +94,12 @@ public interface TPrivilegeMapper extends Mapper<TPrivilege> {
 	 */
 	@Delete("DELETE FROM t_role_privilege WHERE privilegeId = #{0} AND roleId = #{1}")
 	public void deletePrivilegeRoleByPrivilegeId(Integer privilegeId, Integer deleteRole);
+	
+	/**
+	 * 根据权限ids删除权限角色关联表
+	 * @param privilegeIds
+	 */
+	@DeleteProvider(type = TPrivilegeSqlProvider.class, method = "deletePrivilegeRoleByPrivilegeIdsSql")
+	public void deletePrivilegeRoleByPrivilegeIds(@Param("privilegeIds")List<Integer> privilegeIds);
 	
 }

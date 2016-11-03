@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bms.base.service.impl.BaseServiceImpl;
 import com.bms.rms.model.po.TRole;
 import com.bms.rms.service.IRoleService;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class RoleServiceImpl extends BaseServiceImpl<TRole> implements IRoleServ
 		}
 		
 		for (Integer deleteId : delete_arry) {
-			tRoleMapper.deleteRolePrivilegeByRoleId(roleId, deleteId);
+			tRoleMapper.deleteRolePrivilegeByRoleIdAndPrivilegeId(roleId, deleteId);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class RoleServiceImpl extends BaseServiceImpl<TRole> implements IRoleServ
 		}
 		
 		for (Integer deleteId : delete_arry) {
-			tRoleMapper.deleteRoleUserByRoleId(roleId, deleteId);
+			tRoleMapper.deleteRoleUserByRoleIdAndUserId(roleId, deleteId);
 		}
 	}
 
@@ -86,7 +86,27 @@ public class RoleServiceImpl extends BaseServiceImpl<TRole> implements IRoleServ
 		}
 		
 		for (Integer deleteId : delete_arry) {
-			tRoleMapper.deleteRoleGroupByRoleId(roleId, deleteId);
+			tRoleMapper.deleteRoleGroupByRoleIdAndGroupId(roleId, deleteId);
+		}
+	}
+
+	@Override
+	public void deleteRole(Integer roleId) {
+		int affectRow = tRoleMapper.deleteByPrimaryKey(roleId);
+		if(affectRow > 0){
+			//角色权限关联关系表
+			tRoleMapper.deleteRolePrivilegeByRoleId(roleId);
+			//角色用户关联关系表
+			tRoleMapper.deleteRoleUserByRoleId(roleId);
+			//角色用户组关联关系表
+			tRoleMapper.deleteRoleGroupByRoleId(roleId);
+		}
+	}
+
+	@Override
+	public void delteRole(Integer[] roleIds) {
+		for (Integer roleId : roleIds) {
+			deleteRole(roleId);
 		}
 	}
 }

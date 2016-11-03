@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bms.base.service.IBaseService;
 import com.bms.rms.model.po.TUser;
+import com.bms.rms.model.po.TUserCustom;
 
 /**
  * 
@@ -48,5 +49,17 @@ public interface IUserService extends IBaseService<TUser> {
 	 * @param userPassword 密码
 	 * @return
 	 */
-	TUser findUserByUserAccountAndUserPassword(String userAccount,String userPassword);
+	TUserCustom findUserByUserAccountAndUserPassword(String userAccount,String userPassword);
+	
+	/**
+	 * 删除用户
+	 * @param userId
+	 */
+	void deleteUser(Integer userId);
+	
+	/**
+	 * 批量删除用户
+	 * @param userIds
+	 */
+	void deleteUser(Integer[] userIds);
 }

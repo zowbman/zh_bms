@@ -1,7 +1,14 @@
 package com.bms.listener;
 
+import java.util.List;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.bms.rms.service.IPrivilegeService;
 
 /**
  * 
@@ -15,7 +22,11 @@ public class InitListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		
+		//获取所有权限
+		ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
+		IPrivilegeService iPrivilegeService = (IPrivilegeService) ac.getBean("privilegeServiceImpl");
+		List<String> allPrivilegeUrl = iPrivilegeService.findAllPrivilege();
+		sce.getServletContext().setAttribute("allPrivilegeUrl", allPrivilegeUrl);
 	}
 	
 	@Override

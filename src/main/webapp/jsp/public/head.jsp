@@ -66,13 +66,20 @@
   </head>
   
   <body>
+  	<ul style="display:none;">
+  		<c:forEach items='${sessionScope.currentUser.hasPrivileges}' var='hasPrivilege'>
+  			<c:if test="${!empty hasPrivilege.privilegeurl}">
+  				<li class="currentUserHasPrivilege">${hasPrivilege.privilegeurl}@<c:choose><c:when test="${hasPrivilege.privilegeButton.selectdommethod == 0}">#${hasPrivilege.privilegeButton.selectdomname}</c:when><c:when test="${hasPrivilege.privilegeButton.selectdommethod == 1}">.${hasPrivilege.privilegeButton.selectdomname}</c:when></c:choose></li>
+  			</c:if>
+		</c:forEach>
+  	</ul>
     <div>
     	<div id="head">
     		<div class="head-left">
     			<span>boboface后台管理系统<span>
     		</div>
     		<div class="head-right">
-    			<span>xxx</span>
-    			<a href="#">退出</a>
+    			<span>欢迎，${sessionScope.currentUser.useraccount}</span>
+    			<a href="/logout">退出</a>
     		</div>
     	</div><!-- head结束 -->

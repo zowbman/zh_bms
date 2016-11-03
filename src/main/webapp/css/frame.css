@@ -6,10 +6,14 @@ table{
 	font-size:14px;
 }
 
-#menus-table td,#privilege-table td,#role-table td,#department-table td,#group-table td{
+#menus-table td,#privilege-table td,#role-table td,#department-table td,#group-table td,#privilegeButton-table td,#user-table td{
 	vertical-align: middle;
 }
 
 .btn-default{
 	height:34px;
+}
+
+.access-control{
+	display: none !important;
 }

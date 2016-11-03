@@ -17,4 +17,18 @@ import com.bms.rms.service.IDepartmentService;
 @Service
 public class DepartmentServiceImpl extends BaseServiceImpl<TDepartment> implements IDepartmentService{
 
+	@Override
+	public void deleteDepartment(Integer departmentId) {
+		int affectRow = tDepartmentMapper.deleteByPrimaryKey(departmentId);
+		if(affectRow > 0){
+			tUserMapper.updateClearUserDepartment(departmentId);
+		}
+	}
+
+	@Override
+	public void deleteDepartment(Integer[] departmentIds) {
+		for (Integer departmentId : departmentIds) {
+			deleteDepartment(departmentId);
+		}
+	}
 }

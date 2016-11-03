@@ -16,6 +16,8 @@ public class TPrivilegeVo {
 
 	private TPrivilege privilege;
 	
+	private Integer privilegeButtonId;
+	
 	private Date addtime;//添加时间
 
 	public TPrivilege getPrivilege() {
@@ -33,6 +35,13 @@ public class TPrivilegeVo {
 	public void setAddtime(Date addtime) {
 		this.addtime = addtime;
 	}
-	
+
+	public Integer getPrivilegeButtonId() {
+		return privilegeButtonId;
+	}
+
+	public void setPrivilegeButtonId(Integer privilegeButtonId) {
+		this.privilegeButtonId = privilegeButtonId;
+	}
 	
 }

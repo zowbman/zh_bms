@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.bms.helper.CodeHelper;
 import com.bms.helper.CodeHelper.CODE;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**

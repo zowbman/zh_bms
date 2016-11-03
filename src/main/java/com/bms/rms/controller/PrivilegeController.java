@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bms.base.controller.BaseController;
 import com.bms.helper.CodeHelper.CODE;
-import com.bms.rms.model.po.TMenu;
+import com.bms.rms.model.po.TMenuCustom;
 import com.bms.rms.model.po.TPrivilege;
+import com.bms.rms.model.po.TPrivilegeButtonCustom;
 import com.bms.rms.model.po.TPrivilegeCustom;
 import com.bms.rms.model.po.TRole;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TPrivilegeVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -85,8 +86,17 @@ public class PrivilegeController extends BaseController {
 		//...参数校验
 		
 		//获取底层菜单（没有子菜单的菜单）
-		List<TMenu> menus = iMenuService.findAllBottomMenus();
-		model.addAttribute("menus", menus);
+		//List<TMenu> menus = iMenuService.findAllBottomMenus();
+		//model.addAttribute("menus", menus);
+		
+		//父级菜单
+		List<TMenuCustom> parentMenus = iMenuService.findMenusForCascade();
+		model.addAttribute("parentMenus", parentMenus);
+		
+		//绑定的按钮
+		List<TPrivilegeButtonCustom> privilegeButtons = iPrivilegeButtonService.findAllPrivilegeButton();
+		model.addAttribute("privilegeButtons", privilegeButtons);
+		
 		//获取父级权限列表
 		List<TPrivilegeCustom> parentPrivileges = iPrivilegeService.findPrivilegesForCascade();
 		model.addAttribute("parentPrivileges", parentPrivileges);
@@ -120,15 +130,15 @@ public class PrivilegeController extends BaseController {
 			privilege.setMenuid(privilegeVo.getPrivilege().getMenuid() == -1 ? null : privilegeVo.getPrivilege().getMenuid());
 			privilege.setParentid(privilegeVo.getPrivilege().getParentid() == -1 ? null : privilegeVo.getPrivilege().getParentid());
 			privilege.setAddtime((int)(privilegeVo.getAddtime().getTime() / 1000L));
-			iPrivilegeService.updatePrivilegeSeletive(privilege);
+			iPrivilegeService.updatePrivilege(privilege, privilegeVo.getPrivilegeButtonId() == -1 ? null : privilegeVo.getPrivilegeButtonId());
 		}else{//add
 			TPrivilege privilege = new TPrivilege();
 			privilege.setPrivilegename(privilegeVo.getPrivilege().getPrivilegename());
-			privilege.setPrivilegeurl(privilegeVo.getPrivilege().getPrivilegeurl());
+			privilege.setPrivilegeurl(privilegeVo.getPrivilege().getPrivilegeurl().length() == 0 ? null : privilegeVo.getPrivilege().getPrivilegeurl());
 			privilege.setMenuid(privilegeVo.getPrivilege().getMenuid() == -1 ? null : privilegeVo.getPrivilege().getMenuid());
 			privilege.setParentid(privilegeVo.getPrivilege().getParentid() == -1 ? null : privilegeVo.getPrivilege().getParentid());
 			privilege.setAddtime((int)(privilegeVo.getAddtime().getTime() / 1000L));
-			iPrivilegeService.saveSeletive(privilege);
+			iPrivilegeService.savePrivilege(privilege, privilegeVo.getPrivilegeButtonId() == -1 ? null : privilegeVo.getPrivilegeButtonId());
 		}
 		return "result";
 	}

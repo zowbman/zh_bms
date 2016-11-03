@@ -25,7 +25,7 @@ import com.bms.rms.model.po.TUser;
 import com.bms.rms.model.po.TUserCustom;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TUserVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 @Controller
 @RequestMapping("/rms/user")
@@ -96,18 +96,18 @@ public class UserController extends BaseController {
 		if("edit".equals(type)){
 			TUser user = iUserService.getById(userVo.getUser().getId());
 			user.setUseraccount(userVo.getUser().getUseraccount());
-			user.setDepartmentid(userVo.getUser().getDepartmentid());
+			user.setDepartmentid(userVo.getUser().getDepartmentid() == -1 ? null : userVo.getUser().getDepartmentid());
 			user.setAddtime((int)(userVo.getAddtime().getTime() / 1000L));
-			iUserService.updateSeletive(user);
+			iUserService.update(user);
 		}else{//add
 			//二次密码校验
 			
 			TUser user = new TUser();
 			user.setUseraccount(userVo.getUser().getUseraccount());
-			user.setDepartmentid(userVo.getUser().getDepartmentid());
+			user.setDepartmentid(userVo.getUser().getDepartmentid() == -1 ? null : userVo.getUser().getDepartmentid());
 			user.setAddtime((int)(userVo.getAddtime().getTime() / 1000L));
 			user.setUserpassword(DigestUtils.md5Hex(userVo.getUserpassword()));
-			iUserService.saveSeletive(user);
+			iUserService.save(user);
 		}
 		return "result";
 	}
@@ -119,7 +119,7 @@ public class UserController extends BaseController {
 	 */
 	@GetMapping("/deleteUser/{id}")
 	public String deleteUser(@PathVariable("id") Integer id){
-		iUserService.delete(id);
+		iUserService.deleteUser(id);
 		return "result";
 	}
 	

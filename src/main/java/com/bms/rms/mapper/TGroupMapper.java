@@ -43,7 +43,7 @@ public interface TGroupMapper extends Mapper<TGroup>{
 	 * @param deleteRole
 	 */
 	@Delete("DELETE FROM t_group_role WHERE groupId = #{0} AND roleId = #{1}")
-	public void deleteGroupRoleByGroupId(Integer groupId, Integer deleteRole);
+	public void deleteGroupRoleByGroupIdAndRoleId(Integer groupId, Integer roleId);
 	
 	/**
 	 * 根据用户组id查询用户ids
@@ -69,5 +69,19 @@ public interface TGroupMapper extends Mapper<TGroup>{
 	 * @param deleteUser
 	 */
 	@Delete("DELETE FROM t_user_group WHERE groupId = #{0} AND userId = #{1}")
-	public void deleteGroupUserByGroupId(Integer groupId, Integer deleteUser);
+	public void deleteGroupUserByGroupIdAndUserId(Integer groupId, Integer userId);
+	
+	/**
+	 * 根据用户组id删除用户组角色关联关系
+	 * @param groupId
+	 */
+	@Delete("DELETE FROM t_group_role WHERE groupId = #{0}")
+	public void deleteGroupRoleByGroupId(Integer groupId);
+	
+	/**
+	 * 根据用户组id删除用户组用户关联关系
+	 * @param groupId
+	 */
+	@Delete("DELETE FROM t_user_group WHERE groupId = #{0}")
+	public void deleteGroupUserByGroupId(Integer groupId);
 }

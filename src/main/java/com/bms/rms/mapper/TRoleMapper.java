@@ -41,10 +41,10 @@ public interface TRoleMapper extends Mapper<TRole> {
 	/**
 	 * 删除角色权限关联
 	 * @param roleId
-	 * @param deletePrivilege
+	 * @param privilegeId
 	 */
 	@Delete("DELETE FROM t_role_privilege WHERE roleId = #{0} AND privilegeId = #{1}")
-	public void deleteRolePrivilegeByRoleId(Integer roleId, Integer deletePrivilege);
+	public void deleteRolePrivilegeByRoleIdAndPrivilegeId(Integer roleId, Integer privilegeId);
 	
 	/**
 	 * 根据角色id查询用户ids
@@ -70,7 +70,7 @@ public interface TRoleMapper extends Mapper<TRole> {
 	 * @param deleteUser
 	 */
 	@Delete("DELETE FROM t_user_role WHERE roleId = #{0} AND userId = #{1}")
-	public void deleteRoleUserByRoleId(Integer roleId, Integer deleteUser);
+	public void deleteRoleUserByRoleIdAndUserId(Integer roleId, Integer userId);
 	
 	/**
 	 * 根据角色id查询用户组ids
@@ -96,5 +96,26 @@ public interface TRoleMapper extends Mapper<TRole> {
 	 * @param deleteGroup
 	 */
 	@Delete("DELETE FROM t_group_role WHERE roleId = #{0} AND groupId = #{1}")
-	public void deleteRoleGroupByRoleId(Integer roleId, Integer deleteGroup);
+	public void deleteRoleGroupByRoleIdAndGroupId(Integer roleId, Integer groupId);
+	
+	/**
+	 * 根据角色id删除角色权限关联关系表
+	 * @param roleId
+	 */
+	@Delete("DELETE FROM t_role_privilege WHERE roleId = #{0}")
+	public void deleteRolePrivilegeByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色id删除角色用户关联关系表
+	 * @param userId
+	 */
+	@Delete("DELETE FROM t_user_role WHERE roleId = #{0}")
+	public void deleteRoleUserByRoleId(Integer roleId);
+	
+	/**
+	 * 根据角色id删除角色用户组关联关系表
+	 * @param roleId
+	 */
+	@Delete("DELETE FROM t_group_role WHERE roleId = #{0}")
+	public void deleteRoleGroupByRoleId(Integer roleId);
 }

@@ -44,6 +44,7 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	 */
 	@Select("SELECT * FROM t_menu WHERE status = 0 AND masterMenuId = #{masterMenuId} AND parentId is Null")
 	@Results({
+		@Result(property ="id",column="id"),
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
 				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId"))
@@ -57,6 +58,7 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	 */
 	@Select("SELECT * FROM t_menu WHERE status = 0 AND parentId = #{parentId}")
 	@Results({
+		@Result(property = "id",column="id"),
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
 				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId")),
@@ -119,5 +121,18 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 				many = @Many(select = "findTopSlaveMenusByParentId"))
 	})
 	public List<TMenuCustom> findMenusByMasterIdForCascade(Integer masterMenuId);
+	
+	/**
+	 * 级联查询
+	 * @return
+	 */
+	@Select("SELECT * FROM t_menu WHERE parentId is NULL")
+	@Results({
+		@Result(property = "id", column="id"),
+		@Result(property = "slaveChildrenMenus",
+				column = "id",
+				many = @Many(select = "findTopSlaveMenusByParentId"))
+	})
+	public List<TMenuCustom> findMenusForCascade();
 	
 }

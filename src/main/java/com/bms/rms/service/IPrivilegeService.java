@@ -34,11 +34,12 @@ public interface IPrivilegeService extends IBaseService<TPrivilege> {
 	 */
 	List<TPrivilege> findTopPrivileges();
 	
-	 /**
-	  * 更新实体
-	  * @param tPrivilege
-	  */
-	 void updatePrivilegeSeletive(TPrivilege tPrivilege);
+	/**
+	 * 更新实体
+	 * @param tPrivilege 权限
+	 * @param privilegeButtonId 按钮级别绑定权限
+	 */
+	 void updatePrivilege(TPrivilege tPrivilege, Integer privilegeButtonId);
 	 
 	 /**
 	  * 根据id递归删除权限
@@ -65,4 +66,17 @@ public interface IPrivilegeService extends IBaseService<TPrivilege> {
 	 * @param newRoleIds
 	 */
 	void updatePrivilegeRoleByPrivilegeId(Integer privilegeId, List<Integer> newRoleIds);
+	
+	/**
+	 * 查询全部权限
+	 * @return
+	 */
+	List<String> findAllPrivilege();
+	
+	/**
+	 * 保存实体
+	 * @param tPrivilege 权限
+	 * @param privilegeButtonId 按钮级别绑定权限
+	 */
+	 void savePrivilege(TPrivilege tPrivilege, Integer privilegeButtonId);
 }

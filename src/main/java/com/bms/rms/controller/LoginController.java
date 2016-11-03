@@ -1,13 +1,17 @@
 package com.bms.rms.controller;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.bms.base.controller.BaseController;
-import com.bms.rms.model.po.TUser;
+import com.bms.rms.model.po.TUserCustom;
+import com.boboface.base.util.WebUtil;
 
 /**
  * 
@@ -34,19 +38,21 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@PostMapping("/loginSubmit")
-	public String loginSubmit(Model model,String useraccount, String userpassword){
+	public String loginSubmit(Model model, HttpSession httpSession, 
+			@CookieValue(value = "JSESSIONID", defaultValue = "") String sessionId,
+			HttpServletResponse resp, String useraccount, String userpassword){
 		//校验参数
-		TUser user = iUserService.findUserByUserAccountAndUserPassword(useraccount,userpassword);
+		TUserCustom user = iUserService.findUserByUserAccountAndUserPassword(useraccount,userpassword);
 		
 		if(user == null){
 			model.addAttribute("error", "*您输入的帐号或密码有误");
 			return "login";
 		}
-		System.out.println(user.getId());
 		
-		
+		//存session
+		httpSession.setAttribute("currentUser", user);
+		WebUtil.addCookie(resp, "currentUserId", sessionId, 30 * 60);
 		return "redirect:";
-		
 	}
 	
 	/**
@@ -54,7 +60,8 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/logout")
-	public String loginOut(){
-		return "loginOut";
+	public String loginOut(HttpSession httpSession){
+		httpSession.removeAttribute("currentUser");
+		return "result";
 	}
 }

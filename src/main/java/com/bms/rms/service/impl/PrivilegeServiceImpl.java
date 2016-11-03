@@ -11,9 +11,10 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 
 import com.bms.base.service.impl.BaseServiceImpl;
 import com.bms.rms.model.po.TPrivilege;
+import com.bms.rms.model.po.TPrivilegeButton;
 import com.bms.rms.model.po.TPrivilegeCustom;
 import com.bms.rms.service.IPrivilegeService;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -48,7 +49,7 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 	}
 
 	@Override
-	public void updatePrivilegeSeletive(TPrivilege tPrivilege) {
+	public void updatePrivilege(TPrivilege tPrivilege, Integer privilegeButtonId) {
 		boolean flag = true;
 		if(tPrivilege.getParentid() != null){
 			Example example = new Example(TPrivilege.class);
@@ -65,7 +66,23 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 			}
 		}
 		if(flag){
-			tPrivilegeMapper.updateByPrimaryKeySelective(tPrivilege);
+			tPrivilegeMapper.updateByPrimaryKey(tPrivilege);
+		}
+		
+		if(privilegeButtonId == null){
+			Example example = new Example(TPrivilegeButton.class);
+			example.createCriteria().andEqualTo("privilegeid", tPrivilege.getId());
+			List<TPrivilegeButton> privilegeButtons = tPrivilegeButtonMapper.selectByExample(example);
+			if(privilegeButtons != null && privilegeButtons.size() == 1){
+				privilegeButtons.get(0).setPrivilegeid(null);
+				tPrivilegeButtonMapper.updateByPrimaryKey(privilegeButtons.get(0));
+			}	
+		}else{
+			TPrivilegeButton privilegeButton = tPrivilegeButtonMapper.selectByPrimaryKey(privilegeButtonId);
+			if(privilegeButton != null){
+				privilegeButton.setPrivilegeid(tPrivilege.getId());
+				tPrivilegeButtonMapper.updateByPrimaryKeySelective(privilegeButton);
+			}
 		}
 	}
 
@@ -73,9 +90,15 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 	public void deletePrivilegeByIdForRecursion(Integer id) {
 		List<TPrivilegeCustom> privilegeCustoms = tPrivilegeMapper.findPrivilegeByIdForCascade(id);
 		List<TPrivilege> privileges = recursionPrivilege(privilegeCustoms, new ArrayList<TPrivilege>());
+		List<Integer> privilegeIds = new ArrayList<Integer>();
 		for (TPrivilege tPrivilege : privileges) {
 			tPrivilegeMapper.deleteByPrimaryKey(tPrivilege.getId());
+			privilegeIds.add(tPrivilege.getId());
 		}
+		//权限-角色删除
+		tPrivilegeMapper.deletePrivilegeRoleByPrivilegeIds(privilegeIds);
+		//按钮级别权限
+		tPrivilegeButtonMapper.updateClearPrivilegeButtonByPrivilegeIds(privilegeIds);
 	}
 	
 	@Override
@@ -121,6 +144,31 @@ public class PrivilegeServiceImpl extends BaseServiceImpl<TPrivilege> implements
 		
 		for (Integer deleteId : delete_arry) {
 			tPrivilegeMapper.deletePrivilegeRoleByPrivilegeId(privilegeId, deleteId);
+		}
+	}
+
+	@Override
+	public List<String> findAllPrivilege() {
+		Example example = new Example(TPrivilege.class);
+		example.selectProperties("privilegeurl");
+		example.createCriteria().andIsNotNull("privilegeurl");
+		List<TPrivilege> privileges = tPrivilegeMapper.selectByExample(example);
+		List<String> allPrivilegeUrl = new ArrayList<String>();
+		for (TPrivilege privilege : privileges) {
+			allPrivilegeUrl.add(privilege.getPrivilegeurl());
+		}
+		return allPrivilegeUrl; 
+	}
+
+	@Override
+	public void savePrivilege(TPrivilege tPrivilege, Integer privilegeButtonId) {
+		tPrivilegeMapper.insertSelective(tPrivilege);
+		if(privilegeButtonId != null){
+			TPrivilegeButton privilegeButton = tPrivilegeButtonMapper.selectByPrimaryKey(privilegeButtonId);
+			if(privilegeButton != null){
+				privilegeButton.setPrivilegeid(tPrivilege.getId());
+				tPrivilegeButtonMapper.updateByPrimaryKey(privilegeButton);
+			}
 		}
 	}
 }

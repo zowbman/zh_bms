@@ -24,7 +24,7 @@ import com.bms.rms.model.po.TRoleCustom;
 import com.bms.rms.model.po.TUser;
 import com.bms.rms.model.vo.PubRetrunMsg;
 import com.bms.rms.model.vo.TRoleVo;
-import com.bms.util.BaseUtil;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -118,7 +118,7 @@ public class RoleController extends BaseController {
 	 */
 	@GetMapping("/deleteRole/{id}")
 	public String deleteRole(@PathVariable("id") Integer id){
-		iRoleService.delete(id);
+		iRoleService.deleteRole(id);
 		return "result";
 	}
 	
@@ -129,7 +129,7 @@ public class RoleController extends BaseController {
 	 */
 	@PostMapping("/deleteRoles")
 	public String deleteRoles(Integer[] ids){
-		iRoleService.delete(ids);
+		iRoleService.delteRole(ids);
 		return "result";
 	}
 	

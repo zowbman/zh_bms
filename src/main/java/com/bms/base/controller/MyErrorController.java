@@ -23,7 +23,7 @@ public class MyErrorController implements ErrorController {
 	 */
 	@GetMapping(value = PATH)
 	public String myError(){
-		return "welcome";
+		return "result";
 	}
 	
 	@Override

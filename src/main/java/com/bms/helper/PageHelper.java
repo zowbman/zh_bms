@@ -1,8 +1,5 @@
 package com.bms.helper;
 
-import java.io.ObjectInputStream.GetField;
-
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 
 /**

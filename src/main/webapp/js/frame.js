@@ -17,6 +17,9 @@ $(function(){
     //用户管理按钮
     var oButtonInit = new userButtonInit();
     oButtonInit.Init();
+    //按钮级别权限管理按钮
+    var oButtonInit = new privilegeButtonButtonInit();
+    oButtonInit.Init();
 })
 window.operateEvents = {
 	//菜单管理按钮
@@ -72,6 +75,15 @@ window.operateEvents = {
     	if(!confirm('确认要删除该条记录?'))
     		return false;
     	window.location.href = '/rms/user/deleteUser/' + row.id;
+    },
+    //按钮级别权限控制管理
+    'click .privilegeButton-edit': function (e, value, row, index) {
+    	window.location.href = '/rms/privilegeButton/save/edit?id=' + row.id;
+     },
+    'click .privilegeButton-delete': function (e, value, row, index) {
+    	if(!confirm('确认要删除该条记录?'))
+    		return false;
+    	window.location.href = '/rms/privilegeButton/delete/' + row.id;
     }
 };
 //菜单表格
@@ -99,6 +111,9 @@ var menuTableInit = function() {
 			/*height : 700,*/
 			uniqueId : "id",
 			detailView : true,
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			responseHandler : function(res) {
 				if (res.code = 100000)
 					return res.data.list;
@@ -180,6 +195,9 @@ var menuButtonInit = function() {
 			uniqueId : "id",
 			pageSize : 10,
 			pageList : [ 10, 25 ],
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			columns : [ {
 				field : 'id',
 				title : 'ID',
@@ -244,8 +262,8 @@ var menuButtonInit = function() {
 function menuOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm menu-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm menu-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm menu-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm menu-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -339,6 +357,9 @@ var privilegeTableInit = function() {
 			/*height : 700,*/
 			uniqueId : "id",
 			detailView : true,
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			//注册加载子表的事件。注意下这里的三个参数！
 			onExpandRow : function(index, row, $detail) {
 				var oButtonInit = new privilegeButtonInit();
@@ -395,8 +416,8 @@ var privilegeTableInit = function() {
 function privilegeOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm privilege-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm privilege-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm privilege-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm privilege-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -415,6 +436,9 @@ var privilegeButtonInit = function() {
 			uniqueId : "id",
 			pageSize : 10,
 			pageList : [ 10, 25 ],
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			columns : [{
 				field : 'id',
 				title : 'ID',
@@ -559,6 +583,9 @@ var roleTableInit = function() {
 			clickToSelect : true,
 			/*height : 700,*/
 			uniqueId : "id",
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			responseHandler : function(res) {
 				if (res.code = 100000)
 					return res.data.list;
@@ -604,8 +631,8 @@ var roleTableInit = function() {
 function roleOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm role-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm role-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm role-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm role-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -837,6 +864,9 @@ var departmentTableInit = function() {
 			showToggle:true,    
 			minimumCountColumns : 2,
 			clickToSelect : true,
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			/*height : 700,*/
 			uniqueId : "id",
 			responseHandler : function(res) {
@@ -879,8 +909,8 @@ var departmentTableInit = function() {
 function departmentOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm department-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm department-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm department-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm department-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -920,6 +950,9 @@ var groupTableInit = function() {
 			showToggle:true,    
 			minimumCountColumns : 2,
 			clickToSelect : true,
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			/*height : 700,*/
 			uniqueId : "id",
 			responseHandler : function(res) {
@@ -962,8 +995,8 @@ var groupTableInit = function() {
 function groupOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm group-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm group-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm group-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm group-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -1132,6 +1165,9 @@ var userTableInit = function() {
 			minimumCountColumns : 2,
 			clickToSelect : true,
 			/*height : 700,*/
+			onLoadSuccess:function(data){
+				accessControl();
+			},
 			uniqueId : "id",
 			responseHandler : function(res) {
 				if (res.code = 100000)
@@ -1178,8 +1214,8 @@ var userTableInit = function() {
 function userOperateFormatter(value, row, index) {
     return [
             '<div class="btn-group">',
-            '<button type="button" class="btn btn-primary btn-sm user-edit">修改</button>',
-            '<button type="button" class="btn btn-danger btn-sm user-delete">删除</button>',
+            '<button type="button" class="btn btn-primary btn-sm user-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm user-delete access-control">删除</button>',
             '</div>'
     ].join('');
 }
@@ -1324,4 +1360,101 @@ $(function(){
 		return false;
 	});
 });
+
+//部门表格
+var privilegeButtonTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$('#privilegeButton-table').bootstrapTable({
+			url : '/rms/privilegeButton/listData',
+			method : 'get',
+			toolbar: '#toolbar',
+			striped : true,
+			cache : false,
+			pagination : true,
+			//queryParams: oTableInit.queryParams,//传递参数（*）
+			sidePagination : "client",//分页方式：client客户端分页，server服务端分页（*）
+			pageNumber : 1,
+			pageSize : 10,
+			pageList : [ 10, 25, 50, 100 ],
+			showRefresh : true,
+			search: true,  
+			showColumns: true,
+			showToggle:true,    
+			minimumCountColumns : 2,
+			clickToSelect : true,
+			/*height : 700,*/
+			uniqueId : "id",
+			onLoadSuccess:function(data){
+				accessControl();
+			},
+			responseHandler : function(res) {
+				if (res.code = 100000)
+					return res.data.list;
+			},
+			columns : [ {
+                checkbox: true,
+                align: 'center',
+                valign: 'middle'
+			}, {
+				field : 'id',
+				title : 'ID',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'name',
+				title : '功能名称',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'selectdommethod',
+				title : '选择元素方式',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'selectdomname',
+				title : '选择元素名',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'addtime',
+				title : '添加时间',
+				align: 'center',
+				valign: 'middle'
+			}, {
+				field : 'operate',
+				title : '操作',
+				align: 'center',
+				valign: 'middle',
+				events: operateEvents,
+				formatter: privilegeButtonOperateFormatter
+			} ]
+		});
+	}
+	return oTableInit;
+}
+
+//按钮
+function privilegeButtonOperateFormatter(value, row, index) {
+    return [
+            '<div class="btn-group">',
+            '<button type="button" class="btn btn-primary btn-sm privilegeButton-edit access-control">修改</button>',
+            '<button type="button" class="btn btn-danger btn-sm privilegeButton-delete access-control">删除</button>',
+            '</div>'
+    ].join('');
+}
+
+var privilegeButtonButtonInit = function() {
+	var oInit = new Object();
+	oInit.Init = function(){
+		$('#privilegeButtonBtn_add').click(function(){
+			 window.location.href = '/rms/privilegeButton/save/add';
+		});
+		$('#privilegeButtonBtn_delete').click(function(){
+			createHiddenInputs('#privilegeButton-table');
+		})
+	}
+	return oInit;
+}
+
 

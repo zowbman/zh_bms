@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bms.rms.service.IDepartmentService;
 import com.bms.rms.service.IGroupService;
 import com.bms.rms.service.IMenuService;
+import com.bms.rms.service.IPrivilegeButtonService;
 import com.bms.rms.service.IPrivilegeService;
 import com.bms.rms.service.IRoleService;
 import com.bms.rms.service.IUserService;
@@ -46,4 +47,10 @@ public class BaseController {
 	 */
 	@Autowired
 	protected IGroupService iGroupService;
+	
+	/**
+	 * 按钮级别权限控制接口
+	 */
+	@Autowired
+	protected IPrivilegeButtonService iPrivilegeButtonService;
 }
