@@ -111,6 +111,9 @@ var menuTableInit = function() {
 			/*height : 700,*/
 			uniqueId : "id",
 			detailView : true,
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -195,6 +198,9 @@ var menuButtonInit = function() {
 			uniqueId : "id",
 			pageSize : 10,
 			pageList : [ 10, 25 ],
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -357,6 +363,9 @@ var privilegeTableInit = function() {
 			/*height : 700,*/
 			uniqueId : "id",
 			detailView : true,
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -436,6 +445,9 @@ var privilegeButtonInit = function() {
 			uniqueId : "id",
 			pageSize : 10,
 			pageList : [ 10, 25 ],
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -583,6 +595,9 @@ var roleTableInit = function() {
 			clickToSelect : true,
 			/*height : 700,*/
 			uniqueId : "id",
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -864,6 +879,9 @@ var departmentTableInit = function() {
 			showToggle:true,    
 			minimumCountColumns : 2,
 			clickToSelect : true,
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -950,6 +968,9 @@ var groupTableInit = function() {
 			showToggle:true,    
 			minimumCountColumns : 2,
 			clickToSelect : true,
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -1165,6 +1186,9 @@ var userTableInit = function() {
 			minimumCountColumns : 2,
 			clickToSelect : true,
 			/*height : 700,*/
+			onPageChange:function(number, size){
+				accessControl();
+			},
 			onLoadSuccess:function(data){
 				accessControl();
 			},
@@ -1361,7 +1385,7 @@ $(function(){
 	});
 });
 
-//部门表格
+//按钮级别权限表格
 var privilegeButtonTableInit = function() {
 	var oTableInit = new Object();
 	oTableInit.Init = function() {
@@ -1386,6 +1410,9 @@ var privilegeButtonTableInit = function() {
 			/*height : 700,*/
 			uniqueId : "id",
 			onLoadSuccess:function(data){
+				accessControl();
+			},
+			onPageChange:function(number, size){
 				accessControl();
 			},
 			responseHandler : function(res) {
