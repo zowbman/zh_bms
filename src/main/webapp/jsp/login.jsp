@@ -15,8 +15,13 @@
 	<link rel="stylesheet" type="text/css" href="/css/index.css">
 	<script src="/js/jquery.min.js"></script> 
 	<script src="/js/login.js"></script> 
+	<!-- 引入 Particleground.js -->
+    <script src="/particlegroundjs/production/particleground.js"></script>
+    <!-- 引入 粒子特效js -->
+    <script src="/particlegroundjs/production/particle.js"></script>
   </head>
   <body id="login-body">
+  	<section class="bg" style="position:absolute;top:0;left:0;bottom:0;right:0;"></section>
   	<div class="container">
   		<form id="form-sigin" method="post" class="form-sigin" action="/loginSubmit">
   			<c:if test="${error != null }">
@@ -29,5 +34,21 @@
 	  		<button class="login-btn" type="submit">登陆</button>
   		</form>
   	<div>
+  	<script>
+	     $(function(){
+	        var settings = {
+	           eventElem: document
+	        };
+	        if( window.isMobile ){
+	            settings.opacity = .6;
+	            settings.distance = 60;
+	            settings.range = 200;
+	            settings.maxR = 4;
+	            settings.num = .14;
+	            settings.maxSpeed = .6;
+	        }
+	        new Particleground.particle( '.bg', settings );
+	    });
+    </script>
   </body>
 </html>

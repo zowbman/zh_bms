@@ -76,7 +76,7 @@
     <div>
     	<div id="head">
     		<div class="head-left">
-    			<span>boboface后台管理系统<span>
+    			<span>boboface's后台管理系统<span>
     		</div>
     		<div class="head-right">
     			<span>欢迎，${sessionScope.currentUser.useraccount}</span>
