@@ -30,6 +30,7 @@ public class LoginController extends BaseController {
 	 */
 	@GetMapping("/login")
 	public String login(){
+		System.out.println(redisClient.get("foo"));
 		return "login";
 	}	
 	
