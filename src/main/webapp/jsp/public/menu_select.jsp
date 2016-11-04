@@ -5,7 +5,7 @@
 <!-- 菜单按下拉框递归 -->
 <c:forEach items="${parentMenus}" var="parentMenu">
 		<c:if test="${parentMenu.id != menu.id}">
-			<option value="${parentMenu.id }" <c:if test="${parentMenu.id == menu.parentid}">selected</c:if>>
+			<option value="${parentMenu.id }" <c:if test="${parentMenu.id == privilege.menuid }">selected</c:if>>
 			<c:forEach var="i" begin="1" end="${level }">
 				<c:choose>
 					<c:when test="${i == level}">
