@@ -33,4 +33,22 @@ public class TPrivilegeSqlProvider {
 			WHERE(whereStr);
 		}}.toString();
 	}
+	
+	/**
+	 * 权限根据按钮id去除绑定的按钮
+	 * @param map
+	 * @return
+	 */
+	public String updateClearMenuByMenuIdsSql(Map<String, Object> map){
+		final List<Integer> menuIds =   (List<Integer>) map.get("menuIds");
+		return new SQL(){{
+			String whereStr = "1 = 0";
+			if (menuIds != null && menuIds.size() > 0) {	
+				whereStr = "menuId in (" + StringTypeConversion.listStrToString(menuIds, ",") + ")";
+			}
+			UPDATE("t_privilege");
+			SET("menuId = NULL");
+			WHERE(whereStr);
+		}}.toString();
+	}
 }

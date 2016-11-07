@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import tk.mybatis.mapper.common.Mapper;
 
@@ -101,5 +102,12 @@ public interface TPrivilegeMapper extends Mapper<TPrivilege> {
 	 */
 	@DeleteProvider(type = TPrivilegeSqlProvider.class, method = "deletePrivilegeRoleByPrivilegeIdsSql")
 	public void deletePrivilegeRoleByPrivilegeIds(@Param("privilegeIds")List<Integer> privilegeIds);
+	
+	/**
+	 * 权限根据按钮id去除绑定的按钮
+	 * @param menuIds
+	 */
+	@UpdateProvider(type = TPrivilegeSqlProvider.class, method = "updateClearMenuByMenuIdsSql")
+	public void updateClearMenuByMenuIds(@Param("menuIds")List<Integer> menuIds);
 	
 }

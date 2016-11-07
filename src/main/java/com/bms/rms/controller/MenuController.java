@@ -203,7 +203,7 @@ public class MenuController extends BaseController {
 	@GetMapping("/deleteMenu/{id}")
 	public String deleteMenu(@PathVariable("id") Integer id){
 		List<Integer> ids = iMenuService.findMenuAndChildrenMenuIdsForRecursion(id, new ArrayList<Integer>());
-		iMenuService.delete(ids.toArray(new Integer[ids.size()]));
+		iMenuService.deleteMenu(ids.toArray(new Integer[ids.size()]));
 		return "result";
 	}
 	
@@ -216,7 +216,7 @@ public class MenuController extends BaseController {
 	public String deleteMenus(Integer[] ids){
 		for (Integer id : ids) {
 			List<Integer> ids2 = iMenuService.findMenuAndChildrenMenuIdsForRecursion(id, new ArrayList<Integer>());
-			iMenuService.delete(ids2.toArray(new Integer[ids2.size()]));
+			iMenuService.deleteMenu(ids2.toArray(new Integer[ids2.size()]));
 		}
 		return "result";
 	}

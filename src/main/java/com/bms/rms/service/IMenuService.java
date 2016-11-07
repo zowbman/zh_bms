@@ -115,4 +115,11 @@ public interface IMenuService extends IBaseService<TMenu>{
 	 * @return
 	 */
 	List<TMenuCustom> findMenusForCascade();
+	
+	
+	/**
+	 * 删除菜单
+	 * @param ids
+	 */
+	void deleteMenu(Integer[] ids);
 }

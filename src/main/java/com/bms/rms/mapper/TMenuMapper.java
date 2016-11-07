@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import tk.mybatis.mapper.common.Mapper;
 
+import com.bms.rms.mapper.provider.TMenuSqlProvider;
 import com.bms.rms.model.po.TMenu;
 import com.bms.rms.model.po.TMenuCustom;
 import com.bms.rms.model.po.TPrivilege;
@@ -135,4 +138,10 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 	})
 	public List<TMenuCustom> findMenusForCascade();
 	
+	/**
+	 * 清除主菜单绑定
+	 * @param masterMenuId
+	 */
+	@UpdateProvider(type = TMenuSqlProvider.class, method = "updateClearMasterMenuByMasterMenuIdsSql")
+	public void updateClearMasterMenuByMasterMenuIds(@Param("masterMenuIds")List<Integer> masterMenuIds);
 }

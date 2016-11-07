@@ -1,6 +1,7 @@
 package com.bms.rms.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -232,5 +233,19 @@ public class MenuServiceImpl extends BaseServiceImpl<TMenu> implements IMenuServ
 	@Override
 	public List<TMenuCustom> findMenusForCascade() {
 		return tMenuMapper.findMenusForCascade();
+	}
+
+	@Override
+	public void deleteMenu(Integer[] ids) {
+		Example example = new Example(TMenu.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andIn("id", Arrays.asList(ids));
+		tMenuMapper.deleteByExample(example);
+		//这个id作为主菜单全部为NULL
+		tMenuMapper.updateClearMasterMenuByMasterMenuIds(Arrays.asList(ids));	
+		//权限
+		tPrivilegeMapper.updateClearMenuByMenuIds(Arrays.asList(ids));
+		
+		//...后续可以选择级联删除功能
 	}
 }
