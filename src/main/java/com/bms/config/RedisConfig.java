@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.bms.redis.RedisClient;
+import com.bms.redis.cluster.RedisClusterClientFactory;
 
 /**
  * 
@@ -17,9 +17,15 @@ import com.bms.redis.RedisClient;
 @Configuration
 public class RedisConfig {
 	
-	@Bean
+	/*@Bean
 	@ConfigurationProperties(prefix="redis")
 	public RedisClient redisClient(){
 		return new RedisClient();
+	}*/
+	
+	@Bean
+	@ConfigurationProperties(prefix="redis")
+	public RedisClusterClientFactory redisClusterClient(){
+		return new RedisClusterClientFactory();
 	}
 }

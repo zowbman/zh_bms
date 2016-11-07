@@ -45,3 +45,5 @@ server.address = @server.address@
 custom.resource-base = @custom.resource-base@
 
 logging.file=work/log/app.log
+
+redis.server=@redis.server@
