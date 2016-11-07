@@ -2,7 +2,6 @@ package com.bms.base.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bms.redis.RedisClient;
 import com.bms.rms.service.IDepartmentService;
 import com.bms.rms.service.IGroupService;
 import com.bms.rms.service.IMenuService;
@@ -55,6 +54,6 @@ public class BaseController {
 	@Autowired
 	protected IPrivilegeButtonService iPrivilegeButtonService;
 	
-	@Autowired
-	protected RedisClient redisClient;
+	/*@Autowired
+	protected RedisClient redisClient;*/
 }
