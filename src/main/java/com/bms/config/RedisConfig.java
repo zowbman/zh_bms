@@ -24,14 +24,14 @@ public class RedisConfig {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Value("${redis.type}")
-	private static String REDIS_CLIENT_OBJECT;
+	private String redis_client_type;
 	
 	@Bean(name = "redisClient")
 	@ConfigurationProperties(prefix="redis")
 	public Object redisClient(){
 		Class clazz = null;
 		try {
-			clazz = Class.forName(REDIS_CLIENT_OBJECT);
+			clazz = Class.forName(redis_client_type);
 		} catch (ClassNotFoundException e) {
 			logger.error("ClassNotFoundException catch:", e);
 		}
