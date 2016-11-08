@@ -3,6 +3,8 @@ package com.bms.rms.controller;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,12 +26,15 @@ import com.boboface.base.util.WebUtil;
 @Controller
 public class LoginController extends BaseController {
 	
+	private Logger log = LoggerFactory.getLogger(getClass());
+	
 	/**
 	 * 登陆页
 	 * @return
 	 */
 	@GetMapping("/login")
 	public String login(){
+		log.error(redisClient.get("foo"));
 		return "login";
 	}	
 	

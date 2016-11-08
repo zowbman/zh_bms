@@ -1,9 +1,13 @@
 package com.bms.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.bms.redis.RedisClient;
 import com.bms.redis.cluster.RedisClusterClientFactory;
 
 /**
@@ -17,15 +21,29 @@ import com.bms.redis.cluster.RedisClusterClientFactory;
 @Configuration
 public class RedisConfig {
 	
-	/*@Bean
-	@ConfigurationProperties(prefix="redis")
-	public RedisClient redisClient(){
-		return new RedisClient();
-	}*/
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Bean
+	@Value("${redis.type}")
+	private static String REDIS_CLIENT_OBJECT;
+	
+	@Bean(name = "redisClient")
 	@ConfigurationProperties(prefix="redis")
-	public RedisClusterClientFactory redisClusterClient(){
-		return new RedisClusterClientFactory();
+	public Object redisClient(){
+		Class clazz = null;
+		try {
+			clazz = Class.forName(REDIS_CLIENT_OBJECT);
+		} catch (ClassNotFoundException e) {
+			logger.error("ClassNotFoundException catch:", e);
+		}
+		if(RedisClient.class != clazz && RedisClusterClientFactory.class != clazz){
+			logger.error("No in accordance with RedisClient.class or RedisClusterClientFactory.class");
+			return null;
+		}
+		try {
+			return clazz.newInstance();
+		} catch (Exception e) {
+			logger.error("clazz.newInstance() case to object error!", e);
+		}
+		return null;
 	}
 }

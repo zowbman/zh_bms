@@ -2,7 +2,7 @@ package com.bms.base.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bms.redis.RedisClient;
+import com.bms.base.component.RedisClientComponent;
 import com.bms.redis.cluster.RedisClusterInterface;
 import com.bms.rms.service.IDepartmentService;
 import com.bms.rms.service.IGroupService;
@@ -12,7 +12,7 @@ import com.bms.rms.service.IPrivilegeService;
 import com.bms.rms.service.IRoleService;
 import com.bms.rms.service.IUserService;
 
-public class BaseController {
+public class BaseController extends RedisClientComponent<RedisClusterInterface> {
 	
 	/**
 	 * 用户service接口
@@ -55,16 +55,4 @@ public class BaseController {
 	 */
 	@Autowired
 	protected IPrivilegeButtonService iPrivilegeButtonService;
-	
-/*	*//**
-	 * redis client
-	 *//*
-	@Autowired
-	protected RedisClient redisClient;*/
-	
-	/**
-	 * redis client
-	 */
-	@Autowired
-	protected RedisClusterInterface redisClusterClient;
 }

@@ -46,4 +46,5 @@ custom.resource-base = @custom.resource-base@
 
 logging.file=work/log/app.log
 
+redis.type=@redis.type@
 redis.server=@redis.server@
