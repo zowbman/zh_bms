@@ -94,27 +94,7 @@ public class RedisClusterClientFactory implements FactoryBean<RedisClusterInterf
             if (method.getName() == "toString"){
                 return this.toString();
             }
-			Object result= null;
-			/*Timer.Context context = null;
-			com.dianping.cat.message.Transaction t = Cat.newTransaction("Cache.redis" , method.getName()) ;
-			try {
-				Timer timer = MetricHelper.timer(RedisClusterInterface.class , method.getName());
-				context = timer.time();
-				result = method.invoke(jedisCluster, args);
-				Cat.logEvent("Cache.redis", method.getName());
-	            if(result == null){
-	                Cat.logEvent("Cache.redis", method.getName() + ":miss"); 
-	            }
-				t.setStatus(com.dianping.cat.message.Transaction.SUCCESS);
-			} catch (Exception e) {
-				t.setStatus(e);
-				throw e ;
-			}finally{
-				if(context!=null){
-					context.close();
-				}
-				t.complete();
-			}*/
+			Object result = method.invoke(jedisCluster, args);;
             return result;
         }
     }

@@ -34,8 +34,6 @@ public class LoginController extends BaseController {
 	 */
 	@GetMapping("/login")
 	public String login(){
-		log.error(redisClient.get("foo"));
-		log.error(redisClient.get("say"));
 		redisClient.set("name","zowbman");
 		log.error(redisClient.get("name"));
 		return "login";

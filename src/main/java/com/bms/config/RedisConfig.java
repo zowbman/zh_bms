@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.bms.redis.RedisClient;
+import com.bms.redis.RedisShardedClientFactory;
 import com.bms.redis.cluster.RedisClusterClientFactory;
 
 /**
@@ -35,7 +35,7 @@ public class RedisConfig {
 		} catch (ClassNotFoundException e) {
 			logger.error("ClassNotFoundException catch:", e);
 		}
-		if(RedisClient.class != clazz && RedisClusterClientFactory.class != clazz){
+		if(RedisShardedClientFactory.class != clazz && RedisClusterClientFactory.class != clazz){
 			logger.error("No in accordance with RedisClient.class or RedisClusterClientFactory.class");
 			return null;
 		}
