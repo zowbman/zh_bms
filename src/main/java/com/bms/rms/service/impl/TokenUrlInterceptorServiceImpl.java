@@ -2,6 +2,7 @@ package com.bms.rms.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import tk.mybatis.mapper.entity.Example;
 import com.bms.base.service.impl.BaseServiceImpl;
 import com.bms.rms.model.po.TTokenUrlInterceptor;
 import com.bms.rms.service.ITokenUrlInterceptorService;
+import com.boboface.base.util.BaseUtil;
 
 /**
  * 
@@ -41,5 +43,27 @@ public class TokenUrlInterceptorServiceImpl extends BaseServiceImpl<TTokenUrlInt
 		Example example = new Example(TTokenUrlInterceptor.class);
 		example.createCriteria().andIsNull("privilegeid");
 		return tTokenUrlInterceptorMapper.selectByExample(example);
+	}
+
+	@Override
+	public void saveSysDefaultUrlTokenInterceptor(List<Integer> newPrivilegeIds) {
+		List<Integer> oldPrivilegeIds = tTokenUrlInterceptorMapper.findAllPrivilegeIds();
+		Map<String, Object> map = BaseUtil.compareArry(oldPrivilegeIds, newPrivilegeIds);
+		//add_arry 添加的数组
+		List<Integer> add_arry = (List<Integer>) map.get("add_arry");
+		//delete_arry 删除的数组
+		List<Integer> delete_arry = (List<Integer>) map.get("delete_arry");
+		if(add_arry != null && add_arry.size() > 0){
+			tTokenUrlInterceptorMapper.saveSysDefaultUrlTokenInterceptor(add_arry);//添加
+		}
+		tTokenUrlInterceptorMapper.deleteByPrivilegeIds(delete_arry);//删除
+	}
+
+	@Override
+	public boolean deleteTokenUrlInterceptor(Integer id) {
+		int effectRow = tTokenUrlInterceptorMapper.deleteByPrimaryKey(id);
+		if(effectRow > 0)
+			return true;
+		return false;
 	}
 }

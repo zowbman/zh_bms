@@ -5,14 +5,16 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">TokenUrl拦截管理</div>
 			<div class="panel-body">
-				<form id="roles-privileges-form" action="/rms/role/rolePrivilege/manSubmit" method="POST" enctype="multipart/form-data">
-					<div class="row">
-						<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-6">
+						<form id="customTokenUrls-form" action="/rms/tokenUrlInterceptorMan/customUrls/saveSubmit" method="POST" enctype="multipart/form-data">
 							<div class="form-group">
 						    	<div class="input-group">
-							    	<input type="text" class="form-control" placeholder="拦截名称，权限URL">
+						    		<span class="font_exp" style="display:none;">*</span><label style="display:none;">拦截名称、权限URL</label>
+						    		<input type="text" name="tokenUrlInterceptor.name" class="form-control" style="width:50%;" placeholder="拦截名称">
+							    	<input type="text" name="tokenUrlInterceptor.interceptorurl" class="form-control" style="width:50%;" placeholder="权限URL">
 							    	<span class="input-group-btn">
-							        	<button class="btn btn-default" type="button">添加</button>
+							        	<button class="btn btn-default" type="submit">添加</button>
 							     	</span>
 							    </div><!-- /input-group -->
 							</div>
@@ -21,10 +23,12 @@
 								<table id="customTokenUrls" class="table table-striped">
 								</table>
 							</div>
-						</div>
-						<div class="col-md-6">
+						</form>
+					</div>
+					<div class="col-md-6">	
+						<form id="sysDefaultUrls-form" action="/rms/tokenUrlInterceptorMan/sysDefaultUrls/saveSubmit" method="POST" enctype="multipart/form-data">
 							<div class="form-group">
-								<button class="btn btn-default btn-block" type="button">保存</button>
+								<button class="btn btn-default btn-block" type="submit">保存</button>
 							</div>
 							<div class="form-group">
 								<label>默认权限</label>
@@ -32,9 +36,9 @@
 									<%@ include file="/jsp/public/tokenPrivilege_ckbox.jsp"%>
 								</ul>
 							</div>
-						</div>
+						</form>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>

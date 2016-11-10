@@ -26,4 +26,18 @@ public interface ITokenUrlInterceptorService extends IBaseService<TTokenUrlInter
 	 * @return
 	 */
 	public List<TTokenUrlInterceptor> findAllCustomUrlTokenInterceptor();
+	
+	/**
+	 * 保存系统默认urlToken拦截
+	 * @param privilegeIds
+	 */
+	public void saveSysDefaultUrlTokenInterceptor(List<Integer> newPrivilegeIds);
+	
+	
+	/**
+	 * 删除token url 拦截
+	 * @param id
+	 * @return
+	 */
+	public boolean deleteTokenUrlInterceptor(Integer id);
 }

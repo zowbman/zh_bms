@@ -1503,7 +1503,7 @@ var tokenUrlInterceptorTableInit = function() {
 		    			_html+='<td>'+item.name+'</td>';
 		    			_html+='<td>'+item.interceptorurl+'</td>';
 		    			_html+='<td>';
-		    			_html+='<button type="button" class="btn btn-danger btn-xs tokenUrlInterceptorButton-delete">删除</button>';
+		    			_html+='<button type="button" class="btn btn-danger btn-xs tokenUrlInterceptorButton-delete" value="'+item.id+'">删除</button>';
 		    			_html+='</td>';
 		    			_html+='</tr>';							
 		    		});
@@ -1519,12 +1519,92 @@ var tokenUrlInterceptorTableInit = function() {
 }
 $(function(){
 	//tokenurl拦截管理
+	//添加自定义tokenurl拦截
+	$('#customTokenUrls-form').submit(function(){
+		var _checkFormResult = checkForm(this);
+		if(_checkFormResult == false){
+			return _checkFormResult;
+		}
+		
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		alert('添加自定义tokenUrl拦截成功');
+		    		//table处理
+		    		var _html;
+		    		_html+='<tr>';
+	    			_html+='<td>'+data.data.tokenUrlInterceptor.id+'</td>';
+	    			_html+='<td>'+data.data.tokenUrlInterceptor.name+'</td>';
+	    			_html+='<td>'+data.data.tokenUrlInterceptor.interceptorurl+'</td>';
+	    			_html+='<td>';
+	    			_html+='<button type="button" class="btn btn-danger btn-xs tokenUrlInterceptorButton-delete" value="'+data.data.tokenUrlInterceptor.id+'">删除</button>';
+	    			_html+='</td>';
+	    			_html+='</tr>';		
+		    		$('#customTokenUrls').prepend(_html);
+		    		
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
+	
+	//删除自定义tokenUrl拦截
 	$('#customTokenUrls').on('click','.tokenUrlInterceptorButton-delete',function(){
 		if(!confirm('确认要删除该条记录?'))
 			return false;
 		//删除
-	})
+		var _this = $(this);
+		$.ajax({
+			type: 'GET',
+			url: '/rms/tokenUrlInterceptorMan/delete/' + $(_this).val(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		if(data.data.isDelete){
+		    			$(_this).parent().parent().remove();
+		    		}		    		
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	});
+	
+	//添加系统权限tokenurl拦截
+	$('#sysDefaultUrls-form').submit(function(){
+		var _form = $(this);
+		$.ajax({
+			type: 'POST',
+			url: $(_form).attr('action'),
+			data: $(_form).serialize(),
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    		$(_form)[0].reset();
+		    	}else{
+		    		alert('添加系统权限tokenUrl拦截成功');
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+		return false;
+	});
 })
+
+
 
 
 
