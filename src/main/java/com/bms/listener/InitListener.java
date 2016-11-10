@@ -8,6 +8,9 @@ import javax.servlet.ServletContextListener;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.bms.helper.TokenHelper;
+import com.bms.redis.RedisShardedInterface;
+import com.bms.redis.cluster.RedisClusterInterface;
 import com.bms.rms.service.IPrivilegeService;
 
 /**
@@ -27,6 +30,20 @@ public class InitListener implements ServletContextListener {
 		IPrivilegeService iPrivilegeService = (IPrivilegeService) ac.getBean("privilegeServiceImpl");
 		List<String> allPrivilegeUrl = iPrivilegeService.findAllPrivilege();
 		sce.getServletContext().setAttribute("allPrivilegeUrl", allPrivilegeUrl);
+		tokenRedisClientInit(ac);
+	}
+	
+	/**
+	 * token redis-client 初始化
+	 * @param ac
+	 */
+	private void tokenRedisClientInit(ApplicationContext ac){
+		Object redisClient = ac.getBean("redisClient");
+		if(redisClient instanceof RedisShardedInterface){
+			TokenHelper.setRedisClient((RedisShardedInterface)redisClient);
+		}else if(redisClient instanceof RedisClusterInterface){
+			TokenHelper.setRedisClient((RedisClusterInterface)redisClient);
+		}
 	}
 	
 	@Override

@@ -15,6 +15,7 @@ import com.bms.rms.mapper.TMenuMapper;
 import com.bms.rms.mapper.TPrivilegeButtonMapper;
 import com.bms.rms.mapper.TPrivilegeMapper;
 import com.bms.rms.mapper.TRoleMapper;
+import com.bms.rms.mapper.TTokenUrlInterceptorMapper;
 import com.bms.rms.mapper.TUserMapper;
 import com.bms.rms.model.po.TDepartment;
 
@@ -78,6 +79,12 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 	 */
 	@Autowired
 	protected TDepartmentMapper tDepartmentMapper;
+	
+	/**
+	 * tokenurl拦截mapper接口
+	 */
+	@Autowired
+	protected TTokenUrlInterceptorMapper tTokenUrlInterceptorMapper;
 
 	public void save(T entity) {
 		mapper.insert(entity);

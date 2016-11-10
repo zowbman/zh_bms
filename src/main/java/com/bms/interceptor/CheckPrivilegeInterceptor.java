@@ -3,13 +3,13 @@ package com.bms.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bms.rms.common.CurrentUser;
 import com.bms.rms.model.po.TUserCustom;
+import com.boboface.base.util.WebUtil;
 
 /**
  * 
@@ -32,7 +32,7 @@ public class CheckPrivilegeInterceptor implements HandlerInterceptor  {
 			return true;
 		
 		if(user == null){//未登陆
-			if(isAjaxRequest(request)){
+			if(WebUtil.isAjaxRequest(request)){
 				
 			}else{//普通请求
 				if(requestURI.startsWith("/login")){//如果是去登陆则放行
@@ -60,19 +60,5 @@ public class CheckPrivilegeInterceptor implements HandlerInterceptor  {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
 			Object handler, Exception ex) throws Exception {
-	}
-	
-	/**
-	 * 判断是否为ajax请求
-	 * @param request
-	 * @return
-	 */
-	private static boolean isAjaxRequest(HttpServletRequest request){
-		String requestType = request.getHeader("X-Requested-With");//请求类型（普通请求、ajax请求）
-		if(StringUtils.isBlank(requestType) && "XMLHttpRequest".equalsIgnoreCase(requestType)){
-			return true;
-		}else{
-			return false;
-		}
 	}
 }

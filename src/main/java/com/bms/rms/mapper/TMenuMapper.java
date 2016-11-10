@@ -50,7 +50,10 @@ public interface TMenuMapper extends Mapper<TMenu>  {
 		@Result(property ="id",column="id"),
 		@Result(property = "slaveChildrenMenus",
 				column = "id",
-				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId"))
+				many = @Many(select = "findTopSlaveMenusAndPrivilegeByParentId")),
+		@Result(property = "privilege",
+				column = "id",
+				one =@One(select ="findPrivilegeByMenuId"))
 	})
 	public List<TMenuCustom> findTopSlaveMenusByMasterMenuId(Integer masterMenuId);
 	

@@ -1484,4 +1484,48 @@ var privilegeButtonButtonInit = function() {
 	return oInit;
 }
 
+//Token令牌拦截管理
+//Token自定义url拦截列表
+var tokenUrlInterceptorTableInit = function() {
+	var oTableInit = new Object();
+	oTableInit.Init = function() {
+		$.ajax({
+			type: 'GET',
+			url: '/rms/tokenUrlInterceptorMan/customUrls', 
+		    success: function(data){
+		    	if(data.code != 100000){
+		    		alert(data.msg);
+		    	}else{
+		    		var _html;
+		    		$.each(data.data.customUrls,function(i,item){
+		    			_html+='<tr>';
+		    			_html+='<td>'+item.id+'</td>';
+		    			_html+='<td>'+item.name+'</td>';
+		    			_html+='<td>'+item.interceptorurl+'</td>';
+		    			_html+='<td>';
+		    			_html+='<button type="button" class="btn btn-danger btn-xs tokenUrlInterceptorButton-delete">删除</button>';
+		    			_html+='</td>';
+		    			_html+='</tr>';							
+		    		});
+		    		$('#customTokenUrls').html(_html);
+		    	}
+		    },
+		    error: function() {  
+		    	alert('请求异常');
+	      	}
+		});
+	}
+	return oTableInit;
+}
+$(function(){
+	//tokenurl拦截管理
+	$('#customTokenUrls').on('click','.tokenUrlInterceptorButton-delete',function(){
+		if(!confirm('确认要删除该条记录?'))
+			return false;
+		//删除
+	})
+})
+
+
+
 

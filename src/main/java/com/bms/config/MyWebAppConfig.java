@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.bms.exception.CustomExceptionResolver;
 import com.bms.interceptor.CheckPrivilegeInterceptor;
+import com.bms.interceptor.TokenInterceptor;
 
 /**
  * 
@@ -26,7 +27,8 @@ public class MyWebAppConfig extends WebMvcConfigurerAdapter {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new CheckPrivilegeInterceptor()).addPathPatterns("/**");
+		registry.addInterceptor(new CheckPrivilegeInterceptor()).addPathPatterns("/**");//权限拦截器
+		registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**");//token拦截器
 	}
 
 	/**
